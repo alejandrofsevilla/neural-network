@@ -9,16 +9,20 @@ public:
 
   static std::unique_ptr<CostFunction> instance(Type type);
 
-  virtual double operator()(double input) const = 0;
-  virtual double derivative(double input) const = 0;
+  virtual double operator()(double value, double target) const = 0;
+  virtual double derivative(double value, double target) const = 0;
 };
 
 class QuadraticCostFunction : public CostFunction {
 public:
-  double operator()(double input) const override;
-  double derivative(double input) const override;
+  double operator()(double value, double target) const override;
+  double derivative(double value, double target) const override;
 };
 
-// TODO: LinearCostFunction, Sigmoid...
+class CostEntropyCostFunction : public CostFunction {
+public:
+  double operator()(double value, double target) const override;
+  double derivative(double value, double target) const override;
+};
 
 #endif

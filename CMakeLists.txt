@@ -6,10 +6,16 @@ project(neural-network LANGUAGES CXX)
 
 add_library(${PROJECT_NAME} SHARED
   ActivationFunction.h
+  ActivationFunction.cpp
+  CostFunction.h
+  CostFunction.cpp
   Layer.h
   Layer.cpp
+  Network.h
   Neuron.h
   Neuron.cpp
+  Optimization.h
+  Optimization.cpp
   )
 
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)

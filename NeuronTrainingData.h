@@ -4,9 +4,11 @@
 #include <vector>
 
 struct NeuronTrainingData {
-  std::vector<double> outputs;
-  std::vector<double> outputDerivatives;
-  std::vector<double> targets;
+  double output;
+  double outputDerivative;
+  double target;
 };
+
+using NeuronTrainingDataBatch = std::vector<NeuronTrainingData>;
 
 #endif

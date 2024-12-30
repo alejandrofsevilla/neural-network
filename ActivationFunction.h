@@ -19,6 +19,30 @@ public:
   double derivative(double input) const override;
 };
 
+class LinearActivationFunction : public ActivationFunction {
+public:
+  double operator()(double input) const override;
+  double derivative(double input) const override;
+};
+
+class ReluActivationFunction : public ActivationFunction {
+public:
+  double operator()(double input) const override;
+  double derivative(double input) const override;
+};
+
+class SigmoidActivationFunction : public ActivationFunction {
+public:
+  double operator()(double input) const override;
+  double derivative(double input) const override;
+};
+
+class TanHActivationFunction : public ActivationFunction {
+public:
+  double operator()(double input) const override;
+  double derivative(double input) const override;
+};
+
 // TODO: LinearActivationFunction, Sigmoid...
 
 #endif

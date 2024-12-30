@@ -9,18 +9,19 @@ public:
 
   static std::unique_ptr<Optimization> instance(Type type);
 
-  virtual double weightCorrection(const NeuronTrainingData &,
-                                  const CostFunction *) = 0;
+  virtual double correction(double gradient, std::size_t numberOfSamples) = 0;
 };
 
 class GradientDescendOptimization : public Optimization {
-  double
-  weightCorrection(const NeuronTrainingData, &const CostFunction *) override;
+  double correction(double gradient, std::size_t numberOfSamples) override;
 };
 
 class ADAMOptimization : public Optimization {
-  double
-  weightCorrection(const NeuronTrainingData, &const CostFunction *) override;
+  double correction(double gradient, std::size_t numberOfSamples) override;
+
+private:
+  double m_firstMomentEstimate{0.0};
+  double m_secondMomentEstimate{0.0};
 };
 
 #endif
