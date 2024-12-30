@@ -1,5 +1,4 @@
-#ifndef NEURAL_NETWORK_NEURON_H
-#define NEURAL_NETWORK_NEURON_H
+#pragma once
 
 #include "ActivationFunction.h"
 
@@ -20,5 +19,3 @@ private:
   std::vector<double> m_weights;
   const ActivationFunction *m_activationFunction;
 };
-
-#endif

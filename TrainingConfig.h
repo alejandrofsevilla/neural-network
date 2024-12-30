@@ -1,5 +1,4 @@
-#ifndef NEURAL_NETWORK_TRAINING_CONFIG_H
-#define NEURAL_NETWORK_TRAINING_CONFIG_H
+#pragma once
 
 #include "CostFunction.h"
 #include "Optimization.h"
@@ -11,5 +10,3 @@ struct TrainingConfig {
   double learnRate;
   double lossGoal;
 };
-
-#endif

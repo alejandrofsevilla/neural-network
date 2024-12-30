@@ -11,11 +11,14 @@ add_library(${PROJECT_NAME} SHARED
   CostFunction.cpp
   Layer.h
   Layer.cpp
-  Network.h
+  NeuralNetwork.h
+  NeuralNetwork.cpp
   Neuron.h
   Neuron.cpp
   Optimization.h
   Optimization.cpp
+  TrainingSample.h
+  TrainingConfig.h
   )
 
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)

@@ -1,5 +1,4 @@
-#ifndef NEURAL_NETWORK_COST_FUNCTION_H
-#define NEURAL_NETWORK_COST_FUNCTION_H
+#pragma once
 
 #include <memory>
 
@@ -24,5 +23,3 @@ public:
   double operator()(double value, double target) const override;
   double derivative(double value, double target) const override;
 };
-
-#endif

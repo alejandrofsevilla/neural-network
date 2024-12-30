@@ -1,6 +1,5 @@
 #include "Optimization.h"
 
-#include <cassert>
 #include <cmath>
 
 namespace {
@@ -20,19 +19,26 @@ std::unique_ptr<Optimization> Optimization::instance(Type type) {
   }
 }
 
-double GradientDescendOptimization::correction(double gradient,
-                                               std::size_t numberOfSamples) {
-  assert(numberOfSamples > 0);
-  return gradient / numberOfSamples;
+void Optimization::addGradient(double gradient) {
+  m_totalGradient += gradient;
+  m_numberOfSamples++;
 }
 
-double ADAMOptimization::correction(double gradient,
-                                    std::size_t numberOfSamples) {
-  assert(numberOfSamples > 0);
-  m_firstMomentEstimate = m_firstMomentEstimate * f_adamBetaOne +
-                          (1. + f_adamBetaOne) * (gradient / numberOfSamples);
-  m_secondMomentEstimate = m_secondMomentEstimate * f_adamBetaTwo +
-                           (1. + f_adamBetaTwo) * (gradient / numberOfSamples);
-  return m_firstMomentEstimate /
-         (pow(m_secondMomentEstimate, 0.5) + f_adamEpsilon);
+void Optimization::reset() {
+  m_totalGradient = 0.0;
+  m_numberOfSamples = 0;
+}
+
+double GradientDescendOptimization::correction() {
+  return m_totalGradient / m_numberOfSamples;
+}
+
+double ADAMOptimization::correction() {
+  auto averageGradient{m_totalGradient / m_numberOfSamples};
+  m_momentEstimates.first = m_momentEstimates.first * f_adamBetaOne +
+                            (1.0 + f_adamBetaOne) * averageGradient;
+  m_momentEstimates.second = m_momentEstimates.second * f_adamBetaTwo +
+                             (1.0 + f_adamBetaTwo) * averageGradient;
+  return m_momentEstimates.first /
+         (pow(m_momentEstimates.second, 0.5) + f_adamEpsilon);
 }

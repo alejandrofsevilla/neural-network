@@ -1,5 +1,4 @@
-#ifndef NEURAL_NETWORK_LAYER_H
-#define NEURAL_NETWORK_LAYER_H
+#pragma once
 
 #include "ActivationFunction.h"
 #include "Neuron.h"
@@ -15,5 +14,3 @@ private:
   std::unique_ptr<ActivationFunction> m_activationFunction;
   std::vector<Neuron> m_neurons;
 };
-
-#endif

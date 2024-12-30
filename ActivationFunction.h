@@ -1,5 +1,4 @@
-#ifndef NEURAL_NETWORK_ACTIVATION_FUNCTION_H
-#define NEURAL_NETWORK_ACTIVATION_FUNCTION_H
+#pragma once
 
 #include <memory>
 
@@ -44,5 +43,3 @@ public:
 };
 
 // TODO: LinearActivationFunction, Sigmoid...
-
-#endif
