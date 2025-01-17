@@ -2,12 +2,12 @@
 # neural-network
 Implementation of neural network class.
 
-## Requirements
+### Requirements
 * C++17 compiler.
 * CMake 3.22.0
 * GoogleTest 1.11.0
   
-## Interface
+### Interface
 ```cpp
 class NeuralNetwork {
 public:
