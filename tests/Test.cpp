@@ -120,10 +120,10 @@ TEST(NeuralNetworkTest,
 }
 
 TEST(NeuralNetworkTest,
-     FunctionSphereWith10NeuronsTanH10NeuronsTanHAndSGDOptimization) {
+     FunctionSphereWith5NeuronsTanH10NeuronsTanHAndSGDOptimization) {
   auto min1{-1.0}, min2{-1.0}, max1{1.0}, max2{1.0};
   NeuralNetwork nn{2};
-  nn.addLayer({10, options::ActivationFunctionType::TanH});
+  nn.addLayer({5, options::ActivationFunctionType::TanH});
   nn.addLayer({10, options::ActivationFunctionType::TanH});
   nn.addLayer({1, options::ActivationFunctionType::Linear});
   auto sphereFunction{std::bind(
