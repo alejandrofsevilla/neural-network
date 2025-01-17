@@ -3,7 +3,7 @@
 # neural-network
 Implementation of neural network class.
 
-## Design
+## Implementation
 ```mermaid
 classDiagram
     class C_0004723107453516162687["options::ActivationFunctionType"]
