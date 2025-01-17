@@ -5,7 +5,6 @@
 #include <vector>
 
 class CostFunction;
-class Optimizator;
 class Layer;
 class Neuron;
 class TrainingBatch;
@@ -23,6 +22,8 @@ public:
            options::CostFunctionType costFunction,
            const std::vector<std::unique_ptr<Layer>> &layers);
 
+  virtual ~OptimizationAlgorithm() = default;
+  
   std::size_t epochsCount() const;
 
   double loss() const;

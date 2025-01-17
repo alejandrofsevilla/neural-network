@@ -11,6 +11,8 @@ public:
   static std::unique_ptr<ActivationFunction>
   instance(options::ActivationFunctionType type);
 
+  virtual ~ActivationFunction() = default;
+
   virtual double operator()(double input) const = 0;
   virtual double derivative(double input) const = 0;
 };
