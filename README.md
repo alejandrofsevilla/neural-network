@@ -1,8 +1,62 @@
 # [![LinuxWorkflow](https://github.com/alejandrofsevilla/neural-network/actions/workflows/Linux.yml/badge.svg)](https://github.com/alejandrofsevilla/neural-network/actions/workflows/Linux.yml) [![MacOsWorkflow](https://github.com/alejandrofsevilla/neural-network/actions/workflows/MacOs.yml/badge.svg)](https://github.com/alejandrofsevilla/neural-networkboost-tcp-server-client/actions/workflows/MacOs.yml)
-
 # neural-network
 Implementation of neural network class.
 
+## Interface
+```cpp
+class NeuralNetwork {
+public:
+  explicit NeuralNetwork(std::size_t numberOfInputs);
+
+  ~NeuralNetwork();
+
+  std::vector<double> computeOutputs(const std::vector<double> &inputs);
+
+  void addLayer(options::LayerConfig config);
+
+  TrainingReport train(options::TrainingConfig config,
+                       const TrainingBatch &batch);
+```
+## Options
+```cpp
+namespace options {
+enum class ActivationFunctionType { Step, Linear, Relu, Sigmoid, TanH };
+enum class CostFunctionType { Quadratic, CostEntropy };
+enum class OptimizationType { GradientDescend, ADAM, SGD };
+
+struct LayerConfig {
+  std::size_t numberOfNeurons;
+  options::ActivationFunctionType activationFunction;
+};
+
+struct TrainingConfig {
+  options::OptimizationType optimization;
+  options::CostFunctionType costFunction;
+  std::size_t maxEpoch;
+  double learnRate;
+  double lossGoal;
+};
+```
+## Requirements
+* C++17 compiler.
+* CMake 3.22.0
+* GoogleTest 1.11.0
+
+## Build and Test
+- Clone the repository to your local machine.
+   ```terminal
+   git clone https://github.com/alejandrofsevilla/neural-network.git
+   cd neural-network
+   ```
+- Build.
+   ```terminal
+   cmake -S . -B build
+   cmake --build build
+   ```
+- Run tests.
+   ```terminal
+   ./build/tests/neural-network-tests
+   ```
 ## Implementation
 ```mermaid
 classDiagram
@@ -189,23 +243,5 @@ classDiagram
 %% Generated with clang-uml, version 0.6.0
 %% LLVM version Ubuntu clang version 15.0.7
 ```
-## Requirements
-* C++17 compiler.
-* CMake 3.22.0
-* GoogleTest 1.11.0
 
-## Build and Install
-- Clone the repository to your local machine.
-   ```terminal
-   git clone https://github.com/alejandrofsevilla/neural-network.git
-   cd neural-network
-   ```
-- Build.
-   ```terminal
-   cmake -S . -B build
-   cmake --build build
-   ```
-- Run tests.
-   ```terminal
-   ./build/tests/neural-network-tests
-   ```
+
