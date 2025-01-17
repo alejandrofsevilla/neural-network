@@ -83,7 +83,7 @@ $\large α$ *= learning rate*
   <img src="https://github.com/user-attachments/assets/fe1d5008-b3ec-4791-8453-9bca7dad3007" />
 </p>
 
-### Neuron Intermediate Quantity:
+### Neuron Intermediate Quantity
 $$ \large 
 z_{n_l} = \sum_{n_{l-1}}^{N_{l-1}}(w_{n_{l-1}n_l} \cdot y_{n_{l-1}} + b_{n_l}) 
 $$
