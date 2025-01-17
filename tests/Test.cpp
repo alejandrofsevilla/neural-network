@@ -76,10 +76,10 @@ inline auto print(TrainingReport r) {
 }
 } // namespace
 
-TEST(NeuralNetworkTest, FunctionCosineWith100NeuronsTanHAndSGDOptimization) {
+TEST(NeuralNetworkTest, FunctionCosineWith50NeuronsTanHAndSGDOptimization) {
   auto min{-1.5 * M_PI}, max{2.5 * M_PI};
   NeuralNetwork nn{1};
-  nn.addLayer({100, options::ActivationFunctionType::TanH});
+  nn.addLayer({50, options::ActivationFunctionType::TanH});
   nn.addLayer({1, options::ActivationFunctionType::Linear});
   auto cosineFunction{cosf};
   auto batch{generateBatch(cosineFunction, min, max)};
@@ -90,10 +90,10 @@ TEST(NeuralNetworkTest, FunctionCosineWith100NeuronsTanHAndSGDOptimization) {
   validate(nn, cosineFunction, min, max, tolerance);
 }
 
-TEST(NeuralNetworkTest, FunctionCubeWith100NeuronsSigmoidAndADAMOptimization) {
+TEST(NeuralNetworkTest, FunctionCubeWith50NeuronsSigmoidAndADAMOptimization) {
   auto min{-2.0}, max{2.0};
   NeuralNetwork nn{1};
-  nn.addLayer({100, options::ActivationFunctionType::Sigmoid});
+  nn.addLayer({50, options::ActivationFunctionType::Sigmoid});
   nn.addLayer({1, options::ActivationFunctionType::Linear});
   auto cubeFunction{std::bind(powf, std::placeholders::_1, 3.0)};
   auto batch{generateBatch(cubeFunction, min, max)};
@@ -105,10 +105,10 @@ TEST(NeuralNetworkTest, FunctionCubeWith100NeuronsSigmoidAndADAMOptimization) {
 }
 
 TEST(NeuralNetworkTest,
-     FunctionSqrWith100NeuronsReluAndGradientDescendOptimization) {
+     FunctionSqrWith50NeuronsReluAndGradientDescendOptimization) {
   auto min{-2.0}, max{2.0};
   NeuralNetwork nn{1};
-  nn.addLayer({100, options::ActivationFunctionType::Relu});
+  nn.addLayer({50, options::ActivationFunctionType::Relu});
   nn.addLayer({1, options::ActivationFunctionType::Linear});
   auto sqrFunction{std::bind(powf, std::placeholders::_1, 2.0)};
   auto batch{generateBatch(sqrFunction, min, max)};
