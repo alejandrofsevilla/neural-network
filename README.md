@@ -44,7 +44,7 @@ struct TrainingConfig {
 };
 ```
 
-### Build
+### Build and test
 - Clone the repository.
    ```terminal
    git clone https://github.com/alejandrofsevilla/neural-network.git
