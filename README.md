@@ -2,6 +2,11 @@
 # neural-network
 Implementation of neural network class.
 
+## Requirements
+* C++17 compiler.
+* CMake 3.22.0
+* GoogleTest 1.11.0
+  
 ## Interface
 ```cpp
 class NeuralNetwork {
@@ -37,10 +42,6 @@ struct TrainingConfig {
   double lossGoal;
 };
 ```
-## Requirements
-* C++17 compiler.
-* CMake 3.22.0
-* GoogleTest 1.11.0
 
 ## Build and Test
 - Clone the repository to your local machine.
@@ -55,6 +56,9 @@ struct TrainingConfig {
    ```
 - Run tests.
    ```terminal
+   ./build/tests/neural-network-tests
+   ```
+   
 ## Implementation
 ```mermaid
 classDiagram
