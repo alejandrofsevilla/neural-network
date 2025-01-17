@@ -2,6 +2,7 @@
 # neural-network
 Implementation of neural network class.
 
+## Usage
 ### Requirements
 * C++17 compiler.
 * CMake 3.22.0
@@ -22,7 +23,7 @@ public:
   TrainingReport train(options::TrainingConfig config,
                        const TrainingBatch &batch);
 ```
-## Options
+### Options
 ```cpp
 namespace options {
 enum class ActivationFunctionType { Step, Linear, Relu, Sigmoid, TanH };
@@ -43,7 +44,7 @@ struct TrainingConfig {
 };
 ```
 
-## Build and Test
+### Build and Test
 - Clone the repository to your local machine.
    ```terminal
    git clone https://github.com/alejandrofsevilla/neural-network.git
@@ -58,9 +59,8 @@ struct TrainingConfig {
    ```terminal
    ./build/tests/neural-network-tests
    ```
- 
-## Description
-## List of Symbols
+## Documentation
+### List of Symbols
 $\large s$ *= sample*\
 $\large S$ *= number of samples in training batch*\
 $\large l$ *= layer*\
@@ -83,7 +83,7 @@ $\large α$ *= learning rate*
   <img src="https://github.com/user-attachments/assets/fe1d5008-b3ec-4791-8453-9bca7dad3007" />
 </p>
 
-### Neuron Intermediate Quantity
+### Neuron Intermediate Quantity:
 $$ \large 
 z_{n_l} = \sum_{n_{l-1}}^{N_{l-1}}(w_{n_{l-1}n_l} \cdot y_{n_{l-1}} + b_{n_l}) 
 $$
@@ -137,8 +137,8 @@ $$ \large
 E_{n_l} = \dot C\big(y_{n_l}, \hat y_{n_l}\big) \cdot \dot A_{n_l}\big(z_{n_l}\big)
 $$
 
-## Activation Functions
-### Binary Step
+## Activation Function
+### Binary Step:
 <p align="center">
   <img src="https://github.com/user-attachments/assets/e46372d3-e7db-41c5-9229-a773b17a1d9b" alt="drawing" width="500"/>
 </p>
