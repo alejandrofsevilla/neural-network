@@ -37,6 +37,24 @@ struct TrainingConfig {
   double lossGoal;
 };
 ```
+## Requirements
+* C++17 compiler.
+* CMake 3.22.0
+* GoogleTest 1.11.0
+
+## Build and Test
+- Clone the repository to your local machine.
+   ```terminal
+   git clone https://github.com/alejandrofsevilla/neural-network.git
+   cd neural-network
+   ```
+- Build.
+   ```terminal
+   cmake -S . -B build
+   cmake --build build
+   ```
+- Run tests.
+   ```terminal
 ## Implementation
 ```mermaid
 classDiagram
@@ -450,24 +468,6 @@ $$ \large \beta_1 = 0.9 $$
 $$ \large \beta_2 = 0.999 $$
 
 
-## Requirements
-* C++17 compiler.
-* CMake 3.22.0
-* GoogleTest 1.11.0
-
-## Build and Test
-- Clone the repository to your local machine.
-   ```terminal
-   git clone https://github.com/alejandrofsevilla/neural-network.git
-   cd neural-network
-   ```
-- Build.
-   ```terminal
-   cmake -S . -B build
-   cmake --build build
-   ```
-- Run tests.
-   ```terminal
    ./build/tests/neural-network-tests
    ```
 
