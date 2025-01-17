@@ -2,7 +2,7 @@
 
 # neural-network
 Implementation of neural network class.
-`
+
 ## Requirements
 * C++17 compiler.
 * CMake 3.22.0
