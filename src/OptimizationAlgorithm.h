@@ -7,10 +7,10 @@
 class CostFunction;
 class Layer;
 class Neuron;
-class TrainingBatch;
+struct TrainingBatch;
 
 namespace options {
-class TrainingConfig;
+struct TrainingConfig;
 enum class OptimizationType;
 enum class CostFunctionType;
 } // namespace options

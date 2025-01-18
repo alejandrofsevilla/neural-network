@@ -25,7 +25,7 @@ double StepActivationFunction::operator()(double input) const {
   return input >= 0.0 ? 1.0 : 0.0;
 }
 
-double StepActivationFunction::derivative([[maybe_unused]] double input) const {
+double StepActivationFunction::derivative(double) const {
   return 0.0;
 }
 
@@ -34,7 +34,7 @@ double LinearActivationFunction::operator()(double input) const {
 }
 
 double
-LinearActivationFunction::derivative([[maybe_unused]] double input) const {
+LinearActivationFunction::derivative(double) const {
   return 1.0;
 }
 
