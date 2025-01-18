@@ -441,12 +441,8 @@ $$ \large \beta_2 = 0.999 $$
 
 ### References
 - http://neuralnetworksanddeeplearning.com/
-- https://www.analyticsvidhya.com/blog/2020/04/feature-scaling-machine-learning-normalization-standardization/
-- https://comsm0045-applied-deep-learning.github.io/Slides/COMSM0045_05.pdf
-- https://towardsdatascience.com/optimizers-for-training-neural-network-59450d71caf6
+- https://ml-cheatsheet.readthedocs.io/en/latest/nn_concepts.html
 - https://stats.stackexchange.com/questions/154879/a-list-of-cost-functions-used-in-neural-networks-alongside-applications
 - https://en.wikipedia.org/wiki/Activation_function#Table_of_activation_functions
-- https://arxiv.org/abs/1502.03167
-- https://www.samyzaf.com/ML/rl/qmaze.html
 
 
