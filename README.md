@@ -1,6 +1,64 @@
 # [![LinuxBuildWorkflow](https://github.com/alejandrofsevilla/neural-network/actions/workflows/Linux.yml/badge.svg)](https://github.com/alejandrofsevilla/neural-network/actions/workflows/Linux.yml) [![Testsflow](https://github.com/alejandrofsevilla/neural-network/actions/workflows/LinuxBuildAndTest.yml/badge.svg)](https://github.com/alejandrofsevilla/neural-network/actions/workflows/LinuxBuildAndTest.yml)
 # neural-network
 C++ implementation of neural network class.
+## Usage
+### Requirements
+* C++17 compiler.
+* CMake 3.22.0
+* GoogleTest 1.11.0
+  
+### Interface
+```cpp
+class NeuralNetwork {
+public:
+  explicit NeuralNetwork(std::size_t numberOfInputs);
+
+  ~NeuralNetwork();
+
+  std::vector<double> computeOutputs(const std::vector<double> &inputs);
+
+  void addLayer(options::LayerConfig config);
+
+  TrainingReport train(options::TrainingConfig config,
+                       const TrainingBatch &batch);
+```
+### Options
+```cpp
+namespace options {
+enum class ActivationFunctionType { Step, Linear, Relu, Sigmoid, TanH };
+enum class CostFunctionType { Quadratic, CostEntropy };
+enum class OptimizationType { GradientDescend, ADAM, SGD };
+
+struct LayerConfig {
+  std::size_t numberOfNeurons;
+  options::ActivationFunctionType activationFunction;
+};
+
+struct TrainingConfig {
+  options::OptimizationType optimization;
+  options::CostFunctionType costFunction;
+  std::size_t maxEpoch;
+  double learnRate;
+  double lossGoal;
+};
+```
+
+### Build and test
+- Clone the repository.
+   ```terminal
+   git clone https://github.com/alejandrofsevilla/neural-network.git
+   cd neural-network
+   ```
+- Build.
+   ```terminal
+   cmake -S . -B build
+   cmake --build build
+   ```
+- Run tests.
+   ```terminal
+   ./build/tests/neural-network-tests
+   ```
+## Implementation
 
 ```mermaid
 classDiagram
@@ -175,63 +233,6 @@ classDiagram
 %% LLVM version Ubuntu clang version 15.0.7
 ```
 
-## Usage
-### Requirements
-* C++17 compiler.
-* CMake 3.22.0
-* GoogleTest 1.11.0
-  
-### Interface
-```cpp
-class NeuralNetwork {
-public:
-  explicit NeuralNetwork(std::size_t numberOfInputs);
-
-  ~NeuralNetwork();
-
-  std::vector<double> computeOutputs(const std::vector<double> &inputs);
-
-  void addLayer(options::LayerConfig config);
-
-  TrainingReport train(options::TrainingConfig config,
-                       const TrainingBatch &batch);
-```
-### Options
-```cpp
-namespace options {
-enum class ActivationFunctionType { Step, Linear, Relu, Sigmoid, TanH };
-enum class CostFunctionType { Quadratic, CostEntropy };
-enum class OptimizationType { GradientDescend, ADAM, SGD };
-
-struct LayerConfig {
-  std::size_t numberOfNeurons;
-  options::ActivationFunctionType activationFunction;
-};
-
-struct TrainingConfig {
-  options::OptimizationType optimization;
-  options::CostFunctionType costFunction;
-  std::size_t maxEpoch;
-  double learnRate;
-  double lossGoal;
-};
-```
-
-### Build and test
-- Clone the repository.
-   ```terminal
-   git clone https://github.com/alejandrofsevilla/neural-network.git
-   cd neural-network
-   ```
-- Build.
-   ```terminal
-   cmake -S . -B build
-   cmake --build build
-   ```
-- Run tests.
-   ```terminal
-   ./build/tests/neural-network-tests
-   ```
 ## Documentation
 ### List of Symbols
 $\large s$ *= sample*\
