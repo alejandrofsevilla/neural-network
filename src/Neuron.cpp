@@ -28,10 +28,10 @@ inline auto generateWeights(std::size_t numberOfWeights) {
 }
 } // namespace
 
-Neuron::Neuron(const Layer *owner, std::size_t id)
-    : m_activationFunction{owner->activationFunction()},
-      m_inputs{owner->inputs()}, m_layerId{owner->id()}, m_id{id},
-      m_weights{generateWeights(owner->numberOfInputs() + f_bias)},
+Neuron::Neuron(const Layer &owner, std::size_t id)
+  : m_activationFunction{owner.activationFunction()},
+      m_inputs{owner.inputs()}, m_layerId{owner.id()}, m_id{id},
+      m_weights{generateWeights(owner.numberOfInputs() + f_bias)},
       m_gradients(m_weights.size(), 0.0), m_intermediateQty{}, m_loss{} {}
 
 std::size_t Neuron::id() const { return m_id; }
@@ -46,22 +46,22 @@ double Neuron::loss() const { return m_loss; }
 
 double Neuron::computeOutput() {
   updateIntermediateQuantity();
-  return m_activationFunction->operator()(m_intermediateQty);
+  return m_activationFunction(m_intermediateQty);
 }
 
-double Neuron::computeError(double target, const CostFunction *costFunction) {
+double Neuron::computeError(double target, const CostFunction &costFunction) {
   auto output{computeOutput()};
-  auto error{m_activationFunction->derivative(m_intermediateQty) *
-             costFunction->derivative(output, target)};
+  auto error{m_activationFunction.derivative(m_intermediateQty) *
+             costFunction.derivative(output, target)};
   updateLoss(output, target, costFunction);
   updateGradients(error);
   return error;
 }
 
-double Neuron::computeError(const Layer *nextLayer) {
-  auto &nextLayerErrors{nextLayer->errors()};
-  auto &nextLayerNeurons{nextLayer->neurons()};
-  auto error{m_activationFunction->derivative(m_intermediateQty) *
+double Neuron::computeError(const Layer &nextLayer) {
+  auto &nextLayerErrors{nextLayer.errors()};
+  auto &nextLayerNeurons{nextLayer.neurons()};
+  auto error{m_activationFunction.derivative(m_intermediateQty) *
              std::accumulate(nextLayerNeurons.cbegin(), nextLayerNeurons.cend(),
                              0.0, [this, &nextLayerErrors](auto val, auto &n) {
                                return val + n.weights().at(m_id) *
@@ -83,8 +83,8 @@ void Neuron::updateWeights(double learnRate) {
 }
 
 void Neuron::updateLoss(double output, double target,
-                        const CostFunction *costFunction) {
-  m_loss = costFunction->operator()(output, target);
+                        const CostFunction &costFunction) {
+  m_loss = costFunction(output, target);
 }
 
 void Neuron::updateIntermediateQuantity() {

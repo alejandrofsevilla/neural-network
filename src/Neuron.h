@@ -9,7 +9,7 @@ class Layer;
 
 class Neuron {
 public:
-  Neuron(const Layer *owner, std::size_t id);
+  Neuron(const Layer &layer, std::size_t id);
 
   std::size_t id() const;
   std::size_t layerId() const;
@@ -20,8 +20,8 @@ public:
   double loss() const;
 
   double computeOutput();
-  double computeError(double target, const CostFunction *costFunction);
-  double computeError(const Layer *nextLayer);
+  double computeError(double target, const CostFunction &costFunction);
+  double computeError(const Layer &nextLayer);
 
   void updateWeights(const std::vector<double> &gradients, double learnRate);
   void updateWeights(double learnRate);
@@ -30,9 +30,9 @@ private:
   void updateIntermediateQuantity();
   void updateGradients(double error);
   void updateLoss(double output, double target,
-                  const CostFunction *costFunction);
+                  const CostFunction &costFunction);
 
-  const ActivationFunction *m_activationFunction;
+  const ActivationFunction &m_activationFunction;
   const std::vector<double> &m_inputs;
   const std::size_t m_layerId;
   const std::size_t m_id;

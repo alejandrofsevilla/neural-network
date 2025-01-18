@@ -28,17 +28,17 @@ public:
 
   const std::vector<Neuron> &neurons() const;
 
-  const ActivationFunction *activationFunction() const;
+  const ActivationFunction &activationFunction() const;
 
   double computeLoss() const;
 
   std::vector<double> computeOutputs();
-  std::vector<double> computeErrors(const Layer *nextLayer);
+  std::vector<double> computeErrors(const Layer &nextLayer);
   std::vector<double> computeErrors(const std::vector<double> &targets,
-                                    const CostFunction *costFunction);
+                                    const CostFunction &costFunction);
 
-  void forwardPropagate(Layer *nextLayer);
-  void backwardPropagate(Layer *prevLayer);
+  void forwardPropagate(Layer &nextLayer);
+  void backwardPropagate(Layer &prevLayer);
   void updateNeuronWeights(std::size_t neuronId, double learnRate);
   void updateNeuronWeights(std::size_t neuronId,
                            const std::vector<double> &gradients,

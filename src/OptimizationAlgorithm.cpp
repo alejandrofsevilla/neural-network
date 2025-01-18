@@ -78,17 +78,17 @@ void OptimizationAlgorithm::forwardPropagate(
     const std::vector<double> &inputs) {
   m_layers.front()->setInputs(inputs);
   std::for_each(m_layers.begin(), m_layers.end() - 1, [this](auto &l) {
-    l->forwardPropagate(m_layers.at(l->id() + 1).get());
+    l->forwardPropagate(*m_layers.at(l->id() + 1));
   });
 }
 
 void OptimizationAlgorithm::backwardPropagate(
     const std::vector<double> &outputs) {
   auto &lastLayer{m_layers.back()};
-  lastLayer->setErrors(lastLayer->computeErrors(outputs, m_costFunction.get()));
+  lastLayer->setErrors(lastLayer->computeErrors(outputs, *m_costFunction));
   std::for_each(m_layers.rbegin(), m_layers.rend() - 1, [this](auto &l) {
     auto prevLayerId{l->id() - 1};
-    l->backwardPropagate(m_layers.at(prevLayerId).get());
+    l->backwardPropagate(*m_layers.at(prevLayerId));
   });
 }
 

@@ -27,7 +27,7 @@ NeuralNetwork::computeOutputs(const std::vector<double> &inputs) {
   }
   m_layers.front()->setInputs(inputs);
   std::for_each(m_layers.begin(), m_layers.end() - 1, [this](auto &l) {
-    l->forwardPropagate(m_layers.at(l->id() + 1).get());
+    l->forwardPropagate(*m_layers.at(l->id() + 1));
   });
   return m_layers.back()->computeOutputs();
 }
