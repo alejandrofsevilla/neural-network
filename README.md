@@ -1,66 +1,6 @@
 # [![LinuxWorkflow](https://github.com/alejandrofsevilla/neural-network/actions/workflows/Linux.yml/badge.svg)](https://github.com/alejandrofsevilla/neural-network/actions/workflows/Linux.yml) [![MacOsWorkflow](https://github.com/alejandrofsevilla/neural-network/actions/workflows/MacOs.yml/badge.svg)](https://github.com/alejandrofsevilla/neural-networkboost-tcp-server-client/actions/workflows/MacOs.yml)
 # neural-network
 C++ implementation of neural network class.
-
-## Usage
-### Requirements
-* C++17 compiler.
-* CMake 3.22.0
-* GoogleTest 1.11.0
-  
-### Interface
-```cpp
-class NeuralNetwork {
-public:
-  explicit NeuralNetwork(std::size_t numberOfInputs);
-
-  ~NeuralNetwork();
-
-  std::vector<double> computeOutputs(const std::vector<double> &inputs);
-
-  void addLayer(options::LayerConfig config);
-
-  TrainingReport train(options::TrainingConfig config,
-                       const TrainingBatch &batch);
-```
-### Options
-```cpp
-namespace options {
-enum class ActivationFunctionType { Step, Linear, Relu, Sigmoid, TanH };
-enum class CostFunctionType { Quadratic, CostEntropy };
-enum class OptimizationType { GradientDescend, ADAM, SGD };
-
-struct LayerConfig {
-  std::size_t numberOfNeurons;
-  options::ActivationFunctionType activationFunction;
-};
-
-struct TrainingConfig {
-  options::OptimizationType optimization;
-  options::CostFunctionType costFunction;
-  std::size_t maxEpoch;
-  double learnRate;
-  double lossGoal;
-};
-```
-
-### Build and test
-- Clone the repository.
-   ```terminal
-   git clone https://github.com/alejandrofsevilla/neural-network.git
-   cd neural-network
-   ```
-- Build.
-   ```terminal
-   cmake -S . -B build
-   cmake --build build
-   ```
-- Run tests.
-   ```terminal
-   ./build/tests/neural-network-tests
-   ```
-## Implementation
-
 ```mermaid
 classDiagram
     class C_0004723107453516162687["options::ActivationFunctionType"]
@@ -245,9 +185,64 @@ classDiagram
 
 %% Generated with clang-uml, version 0.6.0
 %% LLVM version Ubuntu clang version 15.0.7
+```
+## Usage
+### Requirements
+* C++17 compiler.
+* CMake 3.22.0
+* GoogleTest 1.11.0
+  
+### Interface
+```cpp
+class NeuralNetwork {
+public:
+  explicit NeuralNetwork(std::size_t numberOfInputs);
 
+  ~NeuralNetwork();
+
+  std::vector<double> computeOutputs(const std::vector<double> &inputs);
+
+  void addLayer(options::LayerConfig config);
+
+  TrainingReport train(options::TrainingConfig config,
+                       const TrainingBatch &batch);
+```
+### Options
+```cpp
+namespace options {
+enum class ActivationFunctionType { Step, Linear, Relu, Sigmoid, TanH };
+enum class CostFunctionType { Quadratic, CostEntropy };
+enum class OptimizationType { GradientDescend, ADAM, SGD };
+
+struct LayerConfig {
+  std::size_t numberOfNeurons;
+  options::ActivationFunctionType activationFunction;
+};
+
+struct TrainingConfig {
+  options::OptimizationType optimization;
+  options::CostFunctionType costFunction;
+  std::size_t maxEpoch;
+  double learnRate;
+  double lossGoal;
+};
 ```
 
+### Build and test
+- Clone the repository.
+   ```terminal
+   git clone https://github.com/alejandrofsevilla/neural-network.git
+   cd neural-network
+   ```
+- Build.
+   ```terminal
+   cmake -S . -B build
+   cmake --build build
+   ```
+- Run tests.
+   ```terminal
+   ./build/tests/neural-network-tests
+   ```
 ## Documentation
 ### List of Symbols
 $\large s$ *= sample*\
@@ -267,21 +262,21 @@ $\large C$ *= cost function {MSE, SSE, WSE, NSE...}*\
 $\large O$ *= optimization Algorithm {Gradient Descend, ADAM, Quasi Newton Method...}*\
 $\large α$ *= learning rate*
 
-## Neuron Equations
+### Neuron Equations
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/fe1d5008-b3ec-4791-8453-9bca7dad3007" />
+  <img src="https://github.com/user-attachments/assets/fe1d5008-b3ec-4791-8453-9bca7dad3007"  width="450" />
 </p>
 
-### Neuron Intermediate Quantity
+#### Neuron Intermediate Quantity:
 $$ \large 
 z_{n_l} = \sum_{n_{l-1}}^{N_{l-1}}(w_{n_{l-1}n_l} \cdot y_{n_{l-1}} + b_{n_l}) 
 $$
-### Neuron Output
+#### Neuron Output:
 $$ \large
 y_{n_l} = A_{n_l}\big(z_{n_l}\big)
 $$
 
-## Training 
+### Training 
 <p align="justify">
 Errors of the network are reduced by an optimization algorithm $O$ that uses the derivatives of the cost function ${\partial C}/{\partial {w_{n_{l-1}n_l}}}$ and ${\partial C}/{\partial {b_{n_l}}}$ to periodically update the network weights and biases.
 </p>
@@ -294,7 +289,7 @@ $$ \large
 \Delta b_{n_l} = - α \cdot O\big(\frac {\partial C}{\partial {b_{n_l}}}\big)
 $$
 
-### Chain Rule
+#### Chain Rule:
 
 $$ \large
 \frac {\partial C}{\partial {w_{n_{l-1}n_l}}} 
@@ -311,7 +306,7 @@ $$ \large
 = \dot C\big(y_{n_l}, \hat y_{n_l}\big) \cdot \dot A_{n_l}\big(z_{n_l}\big)
 $$
 
-### Backpropagation
+#### Backpropagation:
 <p align="justify">
 The terms $\dot C (y_{n_l} \hat y_{n_l})$ depend on the output target value for each neuron $\hat y_{n_l}$. Training data set only counts on the value of $\hat y_{n_l}$ for the last layer $l = L$. For all previous layers $l < L$, components $\dot C ( y_{n_l}, \hat y_{n_l})$ are computed as a weighted sum of the neuron errors previously calculated at the next layer $E_{n_{l+1}}$ :
 </p>
@@ -326,8 +321,8 @@ $$ \large
 E_{n_l} = \dot C\big(y_{n_l}, \hat y_{n_l}\big) \cdot \dot A_{n_l}\big(z_{n_l}\big)
 $$
 
-## Activation Function
-### Binary Step:
+### Activation Function
+#### Binary Step:
 <p align="center">
   <img src="https://github.com/user-attachments/assets/e46372d3-e7db-41c5-9229-a773b17a1d9b" alt="drawing" width="500"/>
 </p>
@@ -341,7 +336,7 @@ $$ \large
 \dot A \big(z\big) = 0
 $$
 
-### Linear
+#### Linear:
 <p align="center">
   <img src="https://github.com/user-attachments/assets/f4dceb90-73c4-4e40-83ac-0271ac412cff" alt="drawing" width="500"/>
 </p>
@@ -354,7 +349,7 @@ $$ \large
 \dot A \big(z\big) = 1
 $$
 
-### ReLU (Rectified Linear Unit)
+#### Relu:
 <p align="center">
   <img src="https://github.com/user-attachments/assets/fc453862-5fd8-43a0-ac5d-57bdf318eee6" alt="drawing" width="500"/>
 </p>
@@ -369,26 +364,7 @@ $$ \large
  0 & z ≤ 0 \end{Bmatrix}\end{split}
 $$
 
-### Leaky ReLU
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/13983fa3-bfe7-41b7-9c70-f6021eef33a2" alt="drawing" width="500"/>
-</p>
-
-$$ \large
-\begin{split}A \big(z, \tau \big) = \begin{Bmatrix} z & z > 0 \\
-\tau \cdot z & z ≤ 0 \end{Bmatrix}\end{split}
-$$
-
-$$ \large
-\begin{split}\dot A \big(z, \tau \big) = \begin{Bmatrix} 1 & z > 0 \\
-\tau & z ≤ 0 \end{Bmatrix}\end{split}
-$$
-
-where typically:
-
-$$ \large \tau=0.01 $$
-
-### Sigmoid
+#### Sigmoid:
 <p align="center">
   <img src="https://github.com/user-attachments/assets/8758a47d-2494-4dde-a513-ae87a4f63d64" alt="drawing" width="500"/>
 </p>
@@ -401,7 +377,7 @@ $$ \large
 \dot A \big(z\big) = A(z) \cdot (1-A(z))
 $$
 
-### Tanh
+#### TanH:
 <p align="center">
   <img src="https://github.com/user-attachments/assets/483cf2be-54d2-4a0f-9ca7-45d7252789b5" alt="drawing" width="500"/>
 </p>
@@ -414,14 +390,14 @@ $$ \large
 \dot A \big(z\big) = 1 - {A(z)}^2 
 $$
 
-## Cost Function
+### Cost Function
 
-### Quadratic Cost
+#### Quadratic Cost:
 $$\large C\big(y, \hat y\big) = 1/2 \cdot {\big(y - \hat y\big)^{\small 2}}$$
 
 $$\large\dot C\big(y, \hat y\big) = \big(y - \hat y\big)$$
 
-### Cross Entropy Cost
+#### Cross Entropy Cost:
 $$ \large
 C\big(y, \hat y\big) = -\big({\hat y} \text{ ln } y + (1 - {\hat y}) \cdot \text{ ln }(1-y)\big)
 $$
@@ -430,22 +406,22 @@ $$ \large
 \dot C\big(y, \hat y\big) = \frac{y - \hat y}{(1-y) \cdot y}
 $$
 
-## Optimization Algorithm
-### Gradient Descend
+### Optimization Algorithm
+#### Gradient Descend:
 Network parameters are updated after every epoch.
 
 $$ \large
 O \big( \frac{\partial C}{\partial {w_{n_{l-1}n_l}}} \big) = \frac{1}{S} \cdot \sum_{s}^S{\frac{\partial C}{\partial {w_{n_{l-1}n_l}}}}
 $$
 
-### Stochastic Gradient Descend
+#### Stochastic Gradient Descend:
 Network parameters updated after every sample.
 
 $$ \large
 O \big( \frac{\partial C}{\partial {w_{n_{l-1}n_l}}} \big) = \frac{\partial C}{\partial {w_{n_{l-1}n_l}}}
 $$
 
-### Adaptive Moment Estimation
+#### Adaptive Moment Estimation:
 Network parameters updated after every sample.
 
 $$ \large
@@ -474,8 +450,7 @@ $$ \large \beta_1 = 0.9 $$
 
 $$ \large \beta_2 = 0.999 $$
 
-
-## References
+### References
 - http://neuralnetworksanddeeplearning.com/
 - https://www.analyticsvidhya.com/blog/2020/04/feature-scaling-machine-learning-normalization-standardization/
 - https://comsm0045-applied-deep-learning.github.io/Slides/COMSM0045_05.pdf
