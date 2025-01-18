@@ -1,6 +1,7 @@
 # [![LinuxBuildWorkflow](https://github.com/alejandrofsevilla/neural-network/actions/workflows/Linux.yml/badge.svg)](https://github.com/alejandrofsevilla/neural-network/actions/workflows/Linux.yml) [![Testsflow](https://github.com/alejandrofsevilla/neural-network/actions/workflows/LinuxBuildAndTest.yml/badge.svg)](https://github.com/alejandrofsevilla/neural-networkboost-tcp-server-client/actions/workflows/LinuxBuildAndTest.yml)
 # neural-network
 C++ implementation of neural network class.
+
 ```mermaid
 classDiagram
     class C_0004723107453516162687["options::ActivationFunctionType"]
@@ -37,7 +38,6 @@ classDiagram
     }
     class C_0017517293265978054845["Layer"]
     class C_0017517293265978054845 {
-        +Layer(std::size_t id, std::size_t numberOfInputs, std::size_t numberOfNeurons, options::ActivationFunctionType activationFunction) : void
         +activationFunction() : [const] const ActivationFunction *
         +backwardPropagate(Layer * prevLayer) : void
         +computeErrors(const Layer * nextLayer) : std::vector&lt;double&gt;
@@ -58,10 +58,8 @@ classDiagram
     class C_0016029915442214150756["ActivationFunction"]
     class C_0016029915442214150756 {
         <<abstract>>
-        +~ActivationFunction() : [default] void
         +operator()(double input) : [const] double*
         +derivative(double input) : [const] double*
-        +instance(options::ActivationFunctionType type) : std::unique_ptr&lt;ActivationFunction&gt;$
     }
     class C_0013578780095480796457["StepActivationFunction"]
     class C_0013578780095480796457 {
@@ -91,10 +89,8 @@ classDiagram
     class C_0018195103025728394851["CostFunction"]
     class C_0018195103025728394851 {
         <<abstract>>
-        +~CostFunction() : [default] void
         +operator()(double value, double target) : [const] double*
         +derivative(double value, double target) : [const] double*
-        +instance(options::CostFunctionType type) : std::unique_ptr&lt;CostFunction&gt;$
     }
     class C_0015216133785148867685["QuadraticCostFunction"]
     class C_0015216133785148867685 {
@@ -108,7 +104,6 @@ classDiagram
     }
     class C_0014902208681964330340["Neuron"]
     class C_0014902208681964330340 {
-        +Neuron(const Layer * owner, std::size_t id) : void
         +computeError(double target, const CostFunction * costFunction) : double
         +computeError(const Layer * nextLayer) : double
         +computeOutput() : double
@@ -122,15 +117,12 @@ classDiagram
     }
     class C_0014877256980872623468["OptimizationAlgorithm"]
     class C_0014877256980872623468 {
-        +~OptimizationAlgorithm() : [default] void
         +epochsCount() : [const] std::size_t
-        +instance(options::OptimizationType optimization, options::CostFunctionType costFunction, const std::vector&lt;std::unique_ptr&lt;Layer&gt;&gt; & layers) : std::unique_ptr&lt;OptimizationAlgorithm&gt;$
         +loss() : [const] double
         +run(TrainingBatch batch, std::size_t maxEpoch, double learnRate, double lossGoal) : void
     }
     class C_0011803148689591493735["GradientDescendOptimizationAlgorithm"]
     class C_0011803148689591493735 {
-        +GradientDescendOptimizationAlgorithm(options::CostFunctionType costFunction, const std::vector&lt;std::unique_ptr&lt;Layer&gt;&gt; & layers) : void
     }
     class C_0016586572411026969904["TrainingSample"]
     class C_0016586572411026969904 {
@@ -148,19 +140,15 @@ classDiagram
     }
     class C_0016902125101895250401["NeuralNetwork"]
     class C_0016902125101895250401 {
-        +NeuralNetwork(std::size_t numberOfInputs) : void
-        +~NeuralNetwork() : void
         +addLayer(options::LayerConfig config) : void
         +computeOutputs(const std::vector&lt;double&gt; & inputs) : std::vector&lt;double&gt;
         +train(options::TrainingConfig config, const TrainingBatch & batch) : TrainingReport
     }
     class C_0009936346703037128794["SGDOptimizationAlgorithm"]
     class C_0009936346703037128794 {
-        +SGDOptimizationAlgorithm(options::CostFunctionType costFunction, const std::vector&lt;std::unique_ptr&lt;Layer&gt;&gt; & layers) : void
     }
     class C_0012912509499042389263["ADAMOptimizationAlgorithm"]
     class C_0012912509499042389263 {
-        +ADAMOptimizationAlgorithm(options::CostFunctionType costFunction, const std::vector&lt;std::unique_ptr&lt;Layer&gt;&gt; & layers) : void
     }
     C_0005162987213334549566 o-- C_0004723107453516162687 : +activationFunction
     C_0009990744508583239417 o-- C_0006489356659787961387 : +optimization
@@ -186,6 +174,7 @@ classDiagram
 %% Generated with clang-uml, version 0.6.0
 %% LLVM version Ubuntu clang version 15.0.7
 ```
+
 ## Usage
 ### Requirements
 * C++17 compiler.
