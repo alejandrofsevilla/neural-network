@@ -59,7 +59,6 @@ struct TrainingConfig {
    ./build/tests/neural-network-tests
    ```
 ## Implementation
-
 ```mermaid
 classDiagram
     class C_0004723107453516162687["options::ActivationFunctionType"]
@@ -96,14 +95,14 @@ classDiagram
     }
     class C_0017517293265978054845["Layer"]
     class C_0017517293265978054845 {
-        +activationFunction() : [const] const ActivationFunction *
-        +backwardPropagate(Layer * prevLayer) : void
-        +computeErrors(const Layer * nextLayer) : std::vector&lt;double&gt;
-        +computeErrors(const std::vector&lt;double&gt; & targets, const CostFunction * costFunction) : std::vector&lt;double&gt;
+        +activationFunction() : [const] const ActivationFunction &
+        +backwardPropagate(Layer & prevLayer) : void
+        +computeErrors(const Layer & nextLayer) : std::vector&lt;double&gt;
+        +computeErrors(const std::vector&lt;double&gt; & targets, const CostFunction & costFunction) : std::vector&lt;double&gt;
         +computeLoss() : [const] double
         +computeOutputs() : std::vector&lt;double&gt;
         +errors() : [const] const std::vector&lt;double&gt; &
-        +forwardPropagate(Layer * nextLayer) : void
+        +forwardPropagate(Layer & nextLayer) : void
         +id() : [const] std::size_t
         +inputs() : [const] const std::vector&lt;double&gt; &
         +neurons() : [const] const std::vector&lt;Neuron&gt; &
@@ -162,8 +161,8 @@ classDiagram
     }
     class C_0014902208681964330340["Neuron"]
     class C_0014902208681964330340 {
-        +computeError(double target, const CostFunction * costFunction) : double
-        +computeError(const Layer * nextLayer) : double
+        +computeError(double target, const CostFunction & costFunction) : double
+        +computeError(const Layer & nextLayer) : double
         +computeOutput() : double
         +gradients() : [const] const std::vector&lt;double&gt; &
         +id() : [const] std::size_t
