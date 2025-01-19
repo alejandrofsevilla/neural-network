@@ -123,8 +123,8 @@ TEST(NeuralNetworkTest,
      FunctionSphereWith5NeuronsTanH10NeuronsTanHAndSGDOptimization) {
   auto min1{-1.0}, min2{-1.0}, max1{1.0}, max2{1.0};
   NeuralNetwork nn{2};
-  nn.addLayer({5, options::ActivationFunctionType::TanH});
-  nn.addLayer({10, options::ActivationFunctionType::TanH});
+  nn.addLayer({25 options::ActivationFunctionType::TanH});
+  nn.addLayer({25, options::ActivationFunctionType::TanH});
   nn.addLayer({1, options::ActivationFunctionType::Linear});
   auto sphereFunction{std::bind(
       [](auto x, auto y) { return sqrt(2. - pow(x, 2.0) - pow(y, 2.0)); },
