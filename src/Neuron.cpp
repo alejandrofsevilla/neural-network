@@ -29,7 +29,7 @@ inline auto generateWeights(std::size_t numberOfWeights) {
 } // namespace
 
 Neuron::Neuron(const Layer &owner, std::size_t id)
-  : m_activationFunction{owner.activationFunction()},
+    : m_activationFunction{owner.activationFunction()},
       m_inputs{owner.inputs()}, m_layerId{owner.id()}, m_id{id},
       m_weights{generateWeights(owner.numberOfInputs() + f_bias)},
       m_gradients(m_weights.size(), 0.0), m_intermediateQty{}, m_loss{} {}
@@ -42,7 +42,10 @@ const std::vector<double> &Neuron::weights() const { return m_weights; }
 
 const std::vector<double> &Neuron::gradients() const { return m_gradients; }
 
-double Neuron::loss() const { return m_loss; }
+double Neuron::computeLoss(double target,
+                           const CostFunction &costFunction) const {
+  return costFunction(m_activationFunction(m_intermediateQty), target);
+}
 
 double Neuron::computeOutput() {
   updateIntermediateQuantity();
@@ -53,13 +56,12 @@ double Neuron::computeError(double target, const CostFunction &costFunction) {
   auto output{computeOutput()};
   auto error{m_activationFunction.derivative(m_intermediateQty) *
              costFunction.derivative(output, target)};
-  updateLoss(output, target, costFunction);
   updateGradients(error);
   return error;
 }
 
-double Neuron::computeError(const Layer &nextLayer) {
-  auto &nextLayerErrors{nextLayer.errors()};
+double Neuron::computeError(const Layer &nextLayer,
+                            const std::vector<double> &nextLayerErrors) {
   auto &nextLayerNeurons{nextLayer.neurons()};
   auto error{m_activationFunction.derivative(m_intermediateQty) *
              std::accumulate(nextLayerNeurons.cbegin(), nextLayerNeurons.cend(),
@@ -80,11 +82,6 @@ void Neuron::updateWeights(const std::vector<double> &gradients,
 
 void Neuron::updateWeights(double learnRate) {
   updateWeights(m_gradients, learnRate);
-}
-
-void Neuron::updateLoss(double output, double target,
-                        const CostFunction &costFunction) {
-  m_loss = costFunction(output, target);
 }
 
 void Neuron::updateIntermediateQuantity() {
