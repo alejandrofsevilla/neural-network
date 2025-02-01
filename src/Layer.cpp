@@ -25,9 +25,8 @@ Layer::Layer(std::size_t id, std::size_t numberOfInputs,
              options::ActivationFunctionType activationFunction)
     : m_id{id}, m_numberOfInputs{numberOfInputs},
       m_activationFunction{ActivationFunction::instance(activationFunction)},
-      m_inputs(numberOfInputs),
-      m_errors(numberOfNeurons), m_neurons{
-                                     generateNeurons(*this, numberOfNeurons)} {}
+      m_inputs(numberOfInputs), m_neurons{
+                                    generateNeurons(*this, numberOfNeurons)} {}
 
 std::size_t Layer::id() const { return m_id; }
 
@@ -35,25 +34,24 @@ std::size_t Layer::numberOfInputs() const { return m_numberOfInputs; }
 
 const std::vector<double> &Layer::inputs() const { return m_inputs; }
 
-void Layer::setInputs(const std::vector<double> &inputs) { m_inputs = inputs; }
-
-const std::vector<double> &Layer::errors() const { return m_errors; }
-
-void Layer::setErrors(const std::vector<double> &errors) { m_errors = errors; }
-
 const std::vector<Neuron> &Layer::neurons() const { return m_neurons; }
 
 const ActivationFunction &Layer::activationFunction() const {
   return *m_activationFunction;
 }
 
-double Layer::computeLoss() const {
+double Layer::computeLoss(const std::vector<double> &targets,
+                          const CostFunction &costFunction) const {
   return std::accumulate(m_neurons.cbegin(), m_neurons.cend(), 0.0,
-                         [](auto val, auto &n) { return val + n.loss(); }) /
+                         [&targets, &costFunction](auto val, auto &n) {
+                           return val + n.computeLoss(targets.at(n.id()),
+                                                      costFunction);
+                         }) /
          m_neurons.size();
 }
 
-std::vector<double> Layer::computeOutputs() {
+std::vector<double> Layer::computeOutputs(const std::vector<double> &inputs) {
+  m_inputs = inputs;
   std::vector<double> outputs;
   std::transform(m_neurons.begin(), m_neurons.end(),
                  std::back_inserter(outputs),
@@ -61,10 +59,14 @@ std::vector<double> Layer::computeOutputs() {
   return outputs;
 }
 
-std::vector<double> Layer::computeErrors(const Layer &nextLayer) {
+std::vector<double>
+Layer::computeErrors(const Layer &nextLayer,
+                     const std::vector<double> &nextLayerErrors) {
   std::vector<double> errors;
   std::transform(m_neurons.begin(), m_neurons.end(), std::back_inserter(errors),
-                 [&nextLayer](auto &n) { return n.computeError(nextLayer); });
+                 [&nextLayer, &nextLayerErrors](auto &n) {
+                   return n.computeError(nextLayer, nextLayerErrors);
+                 });
   return errors;
 }
 
@@ -76,14 +78,6 @@ std::vector<double> Layer::computeErrors(const std::vector<double> &targets,
                    return n.computeError(targets.at(n.id()), costFunction);
                  });
   return errors;
-}
-
-void Layer::forwardPropagate(Layer &nextLayer) {
-  nextLayer.setInputs(computeOutputs());
-}
-
-void Layer::backwardPropagate(Layer &prevLayer) {
-  prevLayer.setErrors(prevLayer.computeErrors(*this));
 }
 
 void Layer::updateNeuronWeights(std::size_t neuronId, double learnRate) {

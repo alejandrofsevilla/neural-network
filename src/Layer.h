@@ -21,24 +21,20 @@ public:
   std::size_t numberOfInputs() const;
 
   const std::vector<double> &inputs() const;
-  void setInputs(const std::vector<double> &inputs);
-
-  const std::vector<double> &errors() const;
-  void setErrors(const std::vector<double> &errors);
 
   const std::vector<Neuron> &neurons() const;
 
   const ActivationFunction &activationFunction() const;
 
-  double computeLoss() const;
+  double computeLoss(const std::vector<double> &targets,
+                     const CostFunction &costFunction) const;
 
-  std::vector<double> computeOutputs();
-  std::vector<double> computeErrors(const Layer &nextLayer);
+  std::vector<double> computeOutputs(const std::vector<double> &inputs);
+  std::vector<double> computeErrors(const Layer &nextLayer,
+                                    const std::vector<double> &nextLayerErrors);
   std::vector<double> computeErrors(const std::vector<double> &targets,
                                     const CostFunction &costFunction);
 
-  void forwardPropagate(Layer &nextLayer);
-  void backwardPropagate(Layer &prevLayer);
   void updateNeuronWeights(std::size_t neuronId, double learnRate);
   void updateNeuronWeights(std::size_t neuronId,
                            const std::vector<double> &gradients,
@@ -49,6 +45,5 @@ private:
   const std::size_t m_numberOfInputs;
   std::unique_ptr<ActivationFunction> m_activationFunction;
   std::vector<double> m_inputs;
-  std::vector<double> m_errors;
   std::vector<Neuron> m_neurons;
 };

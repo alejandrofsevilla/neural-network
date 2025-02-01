@@ -17,11 +17,11 @@ public:
   const std::vector<double> &weights() const;
   const std::vector<double> &gradients() const;
 
-  double loss() const;
-
   double computeOutput();
+  double computeLoss(double target, const CostFunction &costFunction) const;
   double computeError(double target, const CostFunction &costFunction);
-  double computeError(const Layer &nextLayer);
+  double computeError(const Layer &nextLayer,
+                      const std::vector<double> &nextLayerErrors);
 
   void updateWeights(const std::vector<double> &gradients, double learnRate);
   void updateWeights(double learnRate);
@@ -29,8 +29,6 @@ public:
 private:
   void updateIntermediateQuantity();
   void updateGradients(double error);
-  void updateLoss(double output, double target,
-                  const CostFunction &costFunction);
 
   const ActivationFunction &m_activationFunction;
   const std::vector<double> &m_inputs;

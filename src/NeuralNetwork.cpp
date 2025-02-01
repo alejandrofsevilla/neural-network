@@ -25,11 +25,10 @@ NeuralNetwork::computeOutputs(const std::vector<double> &inputs) {
     std::cerr << "error: input vector has incorrect dimensions." << std::endl;
     return inputs;
   }
-  m_layers.front()->setInputs(inputs);
-  std::for_each(m_layers.begin(), m_layers.end() - 1, [this](auto &l) {
-    l->forwardPropagate(*m_layers.at(l->id() + 1));
-  });
-  return m_layers.back()->computeOutputs();
+  auto outputs{m_layers.front()->computeOutputs(inputs)};
+  std::for_each(m_layers.begin() + 1, m_layers.end(),
+                [&outputs](auto &l) { outputs = l->computeOutputs(outputs); });
+  return outputs;
 }
 
 TrainingReport NeuralNetwork::train(options::TrainingConfig config,

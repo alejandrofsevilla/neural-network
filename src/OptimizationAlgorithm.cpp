@@ -47,7 +47,7 @@ void OptimizationAlgorithm::run(TrainingBatch batch, std::size_t maxEpoch,
                     m_samplesCount++;
                     forwardPropagate(s.inputs);
                     backwardPropagate(s.outputs);
-                    updateLoss();
+                    updateLoss(s.outputs);
                     afterSample();
                   });
     if (m_loss < lossGoal) {
@@ -69,27 +69,25 @@ void OptimizationAlgorithm::afterEpoch() {}
 
 std::size_t OptimizationAlgorithm::epochsCount() const { return m_epochsCount; }
 
-void OptimizationAlgorithm::updateLoss() {
-  auto loss = m_layers.back()->computeLoss();
+void OptimizationAlgorithm::updateLoss(const std::vector<double> &outputs) {
+  auto loss = m_layers.back()->computeLoss(outputs, *m_costFunction);
   m_loss = m_loss + (loss - m_loss) / m_samplesCount;
 }
 
 void OptimizationAlgorithm::forwardPropagate(
     const std::vector<double> &inputs) {
-  m_layers.front()->setInputs(inputs);
-  std::for_each(m_layers.begin(), m_layers.end() - 1, [this](auto &l) {
-    l->forwardPropagate(*m_layers.at(l->id() + 1));
-  });
+  auto outputs{m_layers.front()->computeOutputs(inputs)};
+  std::for_each(m_layers.begin() + 1, m_layers.end(),
+                [&outputs](auto &l) { outputs = l->computeOutputs(outputs); });
 }
 
 void OptimizationAlgorithm::backwardPropagate(
     const std::vector<double> &outputs) {
-  auto &lastLayer{m_layers.back()};
-  lastLayer->setErrors(lastLayer->computeErrors(outputs, *m_costFunction));
-  std::for_each(m_layers.rbegin(), m_layers.rend() - 1, [this](auto &l) {
-    auto prevLayerId{l->id() - 1};
-    l->backwardPropagate(*m_layers.at(prevLayerId));
-  });
+  auto errors{m_layers.back()->computeErrors(outputs, *m_costFunction)};
+  std::for_each(m_layers.rbegin() + 1, m_layers.rend(),
+                [this, &errors](auto &l) {
+                  errors = l->computeErrors(*m_layers.at(l->id() + 1), errors);
+                });
 }
 
 void OptimizationAlgorithm::preprocess(TrainingBatch &batch) const {

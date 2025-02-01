@@ -23,7 +23,7 @@ public:
            const std::vector<std::unique_ptr<Layer>> &layers);
 
   virtual ~OptimizationAlgorithm() = default;
-  
+
   std::size_t epochsCount() const;
 
   double loss() const;
@@ -39,7 +39,7 @@ protected:
   OptimizationAlgorithm(options::CostFunctionType costFunction,
                         const std::vector<std::unique_ptr<Layer>> &layers);
 
-  void updateLoss();
+  void updateLoss(const std::vector<double> &outputs);
   void forwardPropagate(const std::vector<double> &inputs);
   void backwardPropagate(const std::vector<double> &outputs);
   void preprocess(TrainingBatch &batch) const;
