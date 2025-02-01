@@ -17,8 +17,9 @@ public:
   const std::vector<double> &weights() const;
   const std::vector<double> &gradients() const;
 
-  double computeOutput();
   double computeLoss(double target, const CostFunction &costFunction) const;
+
+  double computeOutput();
   double computeError(double target, const CostFunction &costFunction);
   double computeError(const Layer &nextLayer,
                       const std::vector<double> &nextLayerErrors);
