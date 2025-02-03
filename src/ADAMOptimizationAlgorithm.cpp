@@ -30,7 +30,7 @@ ADAMOptimizationAlgorithm::computeGradients(std::size_t layerId) {
   auto &momentEstimates{m_momentEstimates.at(layerId)};
   momentEstimates.resize(layer.weights().rows(), layer.weights().cols());
   auto gradients{layer.computeGradients()};
-  auto gradientsView{layer.computeGradients().reshaped()};
+  auto gradientsView{gradients.reshaped()};
   std::transform(gradientsView.cbegin(), gradientsView.cend(),
                  momentEstimates.reshaped().begin(), gradientsView.begin(),
                  [this](auto &g, auto &m) {
