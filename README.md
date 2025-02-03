@@ -50,6 +50,12 @@ struct TrainingConfig {
    git clone https://github.com/alejandrofsevilla/neural-network.git
    cd neural-network
    ```
+- Install dependencies.
+   ```terminal
+   sudo apt-get update;
+   sudo apt-get install libgtest-dev;
+   sudo apt-get install libeigen3-dev
+   ```
 - Build.
    ```terminal
    cmake -S . -B build
