@@ -2,7 +2,6 @@
 
 #include "CostFunction.h"
 #include "Layer.h"
-#include "Neuron.h"
 #include "Options.h"
 
 #include <algorithm>
@@ -15,29 +14,26 @@ constexpr auto f_epsilon{0.00000001};
 } // namespace
 
 ADAMOptimizationAlgorithm::ADAMOptimizationAlgorithm(
-    options::CostFunctionType costFunction,
-    const std::vector<std::unique_ptr<Layer>> &layers)
-    : OptimizationAlgorithm(costFunction, layers), m_momentEstimates{} {}
+    options::CostFunctionType costFunction, std::vector<Layer> &layers)
+    : OptimizationAlgorithm(costFunction, layers),
+      m_momentEstimates(layers.size()) {}
 
 void ADAMOptimizationAlgorithm::afterSample() {
   std::for_each(m_layers.begin(), m_layers.end(), [this](auto &l) {
-    auto &neurons{l->neurons()};
-    std::for_each(neurons.begin(), neurons.end(), [this, &l](auto &n) {
-      auto neuronId{n.id()};
-      l->updateNeuronWeights(neuronId, gradients(l->id(), neuronId),
-                             m_learnRate);
-    });
+    l.updateWeights(computeGradients(l.id()), m_learnRate);
   });
 }
 
-std::vector<double> ADAMOptimizationAlgorithm::gradients(std::size_t layerId,
-                                                         std::size_t neuronId) {
-  auto &momentEstimate{m_momentEstimates[{layerId, neuronId}]};
-  auto &neuron{m_layers.at(layerId)->neurons().at(neuronId)};
-  auto gradients{neuron.gradients()};
-  momentEstimate.resize(neuron.weights().size());
-  std::transform(gradients.cbegin(), gradients.cend(), momentEstimate.begin(),
-                 gradients.begin(), [this](auto g, auto &m) {
+Eigen::MatrixXd
+ADAMOptimizationAlgorithm::computeGradients(std::size_t layerId) {
+  auto &momentEstimates{m_momentEstimates.at(layerId)};
+  auto &layer{m_layers.at(layerId)};
+  momentEstimates.resize(layer.weights().rows(), layer.weights().cols());
+  auto gradients{layer.computeGradients()};
+  auto gradientsView{gradients.reshaped()};
+  std::transform(gradientsView.cbegin(), gradientsView.cend(),
+                 momentEstimates.reshaped().begin(), gradientsView.begin(),
+                 [this](auto &g, auto &m) {
                    auto &m1{m.first};
                    auto &v1{m.second};
                    m1 = f_beta1 * m1 + (1 - f_beta1) * g;

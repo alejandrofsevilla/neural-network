@@ -3,11 +3,11 @@
 #include "ActivationFunction.h"
 #include "CostFunction.h"
 #include "Layer.h"
-#include "Neuron.h"
 #include "OptimizationAlgorithm.h"
 #include "Options.h"
 #include "TrainingSample.h"
 
+#include <Eigen/Dense>
 #include <algorithm>
 #include <chrono>
 #include <iostream>
@@ -25,10 +25,12 @@ NeuralNetwork::computeOutputs(const std::vector<double> &inputs) {
     std::cerr << "error: input vector has incorrect dimensions." << std::endl;
     return inputs;
   }
-  auto outputs{m_layers.front()->computeOutputs(inputs)};
-  std::for_each(m_layers.begin() + 1, m_layers.end(),
-                [&outputs](auto &l) { outputs = l->computeOutputs(outputs); });
-  return outputs;
+  auto values{inputs};
+  Eigen::VectorXd outputs{
+      Eigen::Map<Eigen::VectorXd>(values.data(), values.size())};
+  std::for_each(m_layers.begin(), m_layers.end(),
+                [&outputs](auto &l) { outputs = l.computeOutputs(outputs); });
+  return std::vector<double>(outputs.cbegin(), outputs.cend());
 }
 
 TrainingReport NeuralNetwork::train(options::TrainingConfig config,
@@ -43,8 +45,7 @@ TrainingReport NeuralNetwork::train(options::TrainingConfig config,
 }
 
 void NeuralNetwork::addLayer(options::LayerConfig config) {
-  m_layers.emplace_back(std::make_unique<Layer>(
-      m_layers.size(), m_numberOfOutputs, config.numberOfNeurons,
-      config.activationFunction));
+  m_layers.emplace_back(m_layers.size(), m_numberOfOutputs,
+                        config.numberOfNeurons, config.activationFunction);
   m_numberOfOutputs = config.numberOfNeurons;
 }

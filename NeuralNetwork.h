@@ -26,5 +26,5 @@ public:
 private:
   const std::size_t m_numberOfInputs;
   std::size_t m_numberOfOutputs;
-  std::vector<std::unique_ptr<Layer>> m_layers;
+  std::vector<Layer> m_layers;
 };

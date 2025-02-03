@@ -2,8 +2,7 @@
 
 #include "OptimizationAlgorithm.h"
 
-#include <map>
-#include <memory>
+#include <Eigen/Dense>
 #include <vector>
 
 class Neuron;
@@ -17,14 +16,14 @@ enum class CostFunctionType;
 class ADAMOptimizationAlgorithm : public OptimizationAlgorithm {
 public:
   ADAMOptimizationAlgorithm(options::CostFunctionType costFunction,
-                            const std::vector<std::unique_ptr<Layer>> &layers);
+                            std::vector<Layer> &layers);
 
 private:
   void afterSample() override;
 
-  std::vector<double> gradients(std::size_t layerId, std::size_t neuronId);
+  Eigen::MatrixXd computeGradients(std::size_t layerId);
 
-  using ValuePair = std::pair<double, double>;
-  using LayerIdNeuronIdPair = std::pair<std::size_t, std::size_t>;
-  std::map<LayerIdNeuronIdPair, std::vector<ValuePair>> m_momentEstimates;
+  std::vector<
+      Eigen::Matrix<std::pair<double, double>, Eigen::Dynamic, Eigen::Dynamic>>
+      m_momentEstimates;
 };

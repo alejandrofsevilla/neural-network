@@ -19,8 +19,7 @@ class OptimizationAlgorithm {
 public:
   static std::unique_ptr<OptimizationAlgorithm>
   instance(options::OptimizationType optimization,
-           options::CostFunctionType costFunction,
-           const std::vector<std::unique_ptr<Layer>> &layers);
+           options::CostFunctionType costFunction, std::vector<Layer> &layers);
 
   virtual ~OptimizationAlgorithm() = default;
 
@@ -37,14 +36,14 @@ protected:
   virtual void afterEpoch();
 
   OptimizationAlgorithm(options::CostFunctionType costFunction,
-                        const std::vector<std::unique_ptr<Layer>> &layers);
+                        std::vector<Layer> &layers);
 
   void updateLoss(const std::vector<double> &outputs);
   void forwardPropagate(const std::vector<double> &inputs);
   void backwardPropagate(const std::vector<double> &outputs);
   void preprocess(TrainingBatch &batch) const;
 
-  const std::vector<std::unique_ptr<Layer>> &m_layers;
+  std::vector<Layer> &m_layers;
   std::unique_ptr<CostFunction> m_costFunction;
   std::size_t m_epochsCount;
   std::size_t m_samplesCount;
