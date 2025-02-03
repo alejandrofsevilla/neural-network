@@ -45,16 +45,16 @@ struct TrainingConfig {
 ```
 
 ### Build and test
-- Clone the repository.
-   ```terminal
-   git clone https://github.com/alejandrofsevilla/neural-network.git
-   cd neural-network
-   ```
 - Install dependencies.
    ```terminal
    sudo apt-get update;
    sudo apt-get install libgtest-dev;
    sudo apt-get install libeigen3-dev
+   ```
+- Clone the repository.
+   ```terminal
+   git clone https://github.com/alejandrofsevilla/neural-network.git
+   cd neural-network
    ```
 - Build.
    ```terminal
