@@ -4,10 +4,7 @@
 #include "CostFunction.h"
 #include "Options.h"
 
-#include <Eigen/Core>
-#include <Eigen/src/Core/util/Constants.h>
 #include <algorithm>
-#include <iterator>
 #include <numeric>
 #include <random>
 
@@ -24,7 +21,6 @@ inline auto randomValue(double min, double max) {
 }
 } // namespace
 
-#include <iostream>
 Layer::Layer(std::size_t id, std::size_t numberOfInputs,
              std::size_t numberOfNeurons,
              options::ActivationFunctionType activationFunction)
