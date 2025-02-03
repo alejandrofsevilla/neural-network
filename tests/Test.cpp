@@ -84,7 +84,7 @@ TEST(NeuralNetworkTest, FunctionCosineWith50NeuronsTanHAndSGDOptimization) {
   auto cosineFunction{cosf};
   auto batch{generateBatch(cosineFunction, min, max)};
   print(nn.train({options::OptimizationType::SGD,
-                  options::CostFunctionType::Quadratic, 10000, 0.01, 0.0001},
+                  options::CostFunctionType::Quadratic, 20000, 0.01, 0.0001},
                  batch));
   auto tolerance{0.1};
   validate(nn, cosineFunction, min, max, tolerance);
@@ -98,7 +98,7 @@ TEST(NeuralNetworkTest, FunctionCubeWith50NeuronsSigmoidAndADAMOptimization) {
   auto cubeFunction{std::bind(powf, std::placeholders::_1, 3.0)};
   auto batch{generateBatch(cubeFunction, min, max)};
   print(nn.train({options::OptimizationType::ADAM,
-                  options::CostFunctionType::Quadratic, 20000, 0.01, 0.0001},
+                  options::CostFunctionType::Quadratic, 20000, 0.005, 0.0001},
                  batch));
   auto tolerance{0.1};
   validate(nn, cubeFunction, min, max, tolerance);
@@ -131,7 +131,7 @@ TEST(NeuralNetworkTest,
       std::placeholders::_1, std::placeholders::_2)};
   auto batch{generateBatch(sphereFunction, min1, min2, max1, max2)};
   print(nn.train({options::OptimizationType::SGD,
-                  options::CostFunctionType::Quadratic, 20000, 0.01, 0.0001},
+                  options::CostFunctionType::Quadratic, 20000, 0.05, 0.00001},
                  batch));
   auto tolerance{0.1};
   validate(nn, sphereFunction, min1, min2, max1, max2, tolerance);

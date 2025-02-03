@@ -4,18 +4,19 @@
 #include "CostFunction.h"
 #include "GradientDescendOptimizationAlgorithm.h"
 #include "Layer.h"
-#include "Neuron.h"
 #include "Options.h"
 #include "SGDOptimizationAlgorithm.h"
 #include "TrainingSample.h"
 
+#include <Eigen/Dense>
 #include <algorithm>
 #include <iostream>
 #include <random>
 
-std::unique_ptr<OptimizationAlgorithm> OptimizationAlgorithm::instance(
-    options::OptimizationType type, options::CostFunctionType costFunction,
-    const std::vector<std::unique_ptr<Layer>> &layers) {
+std::unique_ptr<OptimizationAlgorithm>
+OptimizationAlgorithm::instance(options::OptimizationType type,
+                                options::CostFunctionType costFunction,
+                                std::vector<Layer> &layers) {
   switch (type) {
   case options::OptimizationType::ADAM:
     return std::make_unique<ADAMOptimizationAlgorithm>(costFunction, layers);
@@ -29,8 +30,7 @@ std::unique_ptr<OptimizationAlgorithm> OptimizationAlgorithm::instance(
 }
 
 OptimizationAlgorithm::OptimizationAlgorithm(
-    options::CostFunctionType costFunction,
-    const std::vector<std::unique_ptr<Layer>> &layers)
+    options::CostFunctionType costFunction, std::vector<Layer> &layers)
     : m_layers{layers}, m_costFunction{CostFunction::instance(costFunction)},
       m_epochsCount{0}, m_learnRate{0.0}, m_loss{0.0} {}
 
@@ -70,29 +70,37 @@ void OptimizationAlgorithm::afterEpoch() {}
 std::size_t OptimizationAlgorithm::epochsCount() const { return m_epochsCount; }
 
 void OptimizationAlgorithm::updateLoss(const std::vector<double> &outputs) {
-  auto loss = m_layers.back()->computeLoss(outputs, *m_costFunction);
+  auto values{outputs};
+  auto loss{m_layers.back().computeLoss(
+      Eigen::Map<Eigen::VectorXd>(values.data(), values.size()),
+      *m_costFunction)};
   m_loss = m_loss + (loss - m_loss) / m_samplesCount;
 }
 
 void OptimizationAlgorithm::forwardPropagate(
     const std::vector<double> &inputs) {
-  auto outputs{m_layers.front()->computeOutputs(inputs)};
-  std::for_each(m_layers.begin() + 1, m_layers.end(),
-                [&outputs](auto &l) { outputs = l->computeOutputs(outputs); });
+  auto values{inputs};
+  Eigen::VectorXd outputs{
+      Eigen::Map<Eigen::VectorXd>(values.data(), values.size())};
+  std::for_each(m_layers.begin(), m_layers.end(),
+                [&outputs](auto &l) { outputs = l.computeOutputs(outputs); });
 }
 
 void OptimizationAlgorithm::backwardPropagate(
     const std::vector<double> &outputs) {
-  auto errors{m_layers.back()->computeErrors(outputs, *m_costFunction)};
+  auto values{outputs};
+  Eigen::VectorXd errors{m_layers.back().computeErrors(
+      Eigen::Map<Eigen::VectorXd>(values.data(), values.size()),
+      *m_costFunction)};
   std::for_each(m_layers.rbegin() + 1, m_layers.rend(),
                 [this, &errors](auto &l) {
-                  errors = l->computeErrors(*m_layers.at(l->id() + 1), errors);
+                  errors = l.computeErrors(m_layers.at(l.id() + 1), errors);
                 });
 }
 
 void OptimizationAlgorithm::preprocess(TrainingBatch &batch) const {
-  auto networkInputDimensions{m_layers.front()->numberOfInputs()};
-  auto networkOutputDimensions{m_layers.back()->neurons().size()};
+  auto networkInputDimensions{m_layers.front().numberOfInputs()};
+  auto networkOutputDimensions{m_layers.back().numberOfNeurons()};
   for (auto it = batch.samples.begin(); it != batch.samples.end(); it++) {
     if (it->inputs.size() != networkInputDimensions ||
         it->outputs.size() != networkOutputDimensions) {
