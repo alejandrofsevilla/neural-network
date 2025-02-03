@@ -5,13 +5,11 @@
 #include "Layer.h"
 #include "OptimizationAlgorithm.h"
 #include "Options.h"
+#include "TrainingReport.h"
 #include "TrainingSample.h"
 
-#include <Eigen/Dense>
-#include <algorithm>
 #include <chrono>
 #include <iostream>
-#include <memory>
 
 NeuralNetwork::NeuralNetwork(std::size_t numberOfInputs)
     : m_numberOfInputs{numberOfInputs},
@@ -25,12 +23,14 @@ NeuralNetwork::computeOutputs(const std::vector<double> &inputs) {
     std::cerr << "error: input vector has incorrect dimensions." << std::endl;
     return inputs;
   }
-  auto values{inputs};
-  Eigen::VectorXd outputs{
-      Eigen::Map<Eigen::VectorXd>(values.data(), values.size())};
-  std::for_each(m_layers.begin(), m_layers.end(),
-                [&outputs](auto &l) { outputs = l.computeOutputs(outputs); });
-  return std::vector<double>(outputs.cbegin(), outputs.cend());
+  auto outputs{Eigen::Map<const Eigen::VectorXd>(inputs.data(), inputs.size())};
+  m_layers.front().updateOutputs(outputs);
+  std::for_each(m_layers.begin() + 1, m_layers.end(), [this](auto &l) {
+    l.updateOutputs(m_layers.at(l.id() - 1).outputs());
+  });
+  auto &lastLayerOutputs{m_layers.back().outputs()};
+  return std::vector<double>(lastLayerOutputs.cbegin(),
+                             lastLayerOutputs.cend());
 }
 
 TrainingReport NeuralNetwork::train(options::TrainingConfig config,

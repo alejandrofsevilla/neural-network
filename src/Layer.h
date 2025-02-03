@@ -3,11 +3,9 @@
 #include <Eigen/Dense>
 #include <cstddef>
 #include <memory>
-#include <vector>
 
 class CostFunction;
 class ActivationFunction;
-class Neuron;
 
 namespace options {
 enum class ActivationFunctionType;
@@ -24,20 +22,22 @@ public:
 
   std::size_t numberOfNeurons() const;
 
-  Eigen::MatrixXd computeGradients() const;
+  double loss() const;
 
-  double computeLoss(const Eigen::VectorXd &targets,
-                     const CostFunction &costFunction) const;
+  const Eigen::VectorXd &outputs() const;
+
+  const Eigen::VectorXd &errors() const;
 
   const Eigen::MatrixXd &weights() const;
 
-  const Eigen::VectorXd &computeOutputs(const Eigen::VectorXd &inputs);
+  Eigen::MatrixXd computeGradients() const;
 
-  const Eigen::VectorXd &computeErrors(const Layer &nextLayer,
-                                       const Eigen::VectorXd &nextLayerErrors);
+  void updateOutputs(const Eigen::VectorXd &inputs);
 
-  const Eigen::VectorXd &computeErrors(const Eigen::VectorXd &targets,
-                                       const CostFunction &costFunction);
+  void updateErrors(const Layer &nextLayer);
+
+  void updateErrors(const Eigen::VectorXd &targets,
+                    const CostFunction &costFunction);
 
   void updateWeights(double learnRate);
 
@@ -53,4 +53,5 @@ private:
   Eigen::VectorXd m_outputs;
   Eigen::VectorXd m_errors;
   Eigen::MatrixXd m_weights;
+  double m_loss;
 };

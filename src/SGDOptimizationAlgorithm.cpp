@@ -2,9 +2,6 @@
 
 #include "CostFunction.h"
 #include "Layer.h"
-#include "Options.h"
-
-#include <algorithm>
 
 SGDOptimizationAlgorithm::SGDOptimizationAlgorithm(
     options::CostFunctionType costFunction, std::vector<Layer> &layers)

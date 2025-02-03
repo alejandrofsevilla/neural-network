@@ -6,7 +6,6 @@
 
 class CostFunction;
 class Layer;
-class Neuron;
 struct TrainingBatch;
 
 namespace options {
@@ -23,22 +22,22 @@ public:
 
   virtual ~OptimizationAlgorithm() = default;
 
+  virtual void run(TrainingBatch batch, std::size_t maxEpoch, double learnRate,
+                   double lossGoal);
+
   std::size_t epochsCount() const;
 
   double loss() const;
 
-  virtual void run(TrainingBatch batch, std::size_t maxEpoch, double learnRate,
-                   double lossGoal);
-
 protected:
+  OptimizationAlgorithm(options::CostFunctionType costFunction,
+                        std::vector<Layer> &layers);
+
   virtual void beforeRun(double learnRate);
   virtual void afterSample();
   virtual void afterEpoch();
 
-  OptimizationAlgorithm(options::CostFunctionType costFunction,
-                        std::vector<Layer> &layers);
-
-  void updateLoss(const std::vector<double> &outputs);
+  void updateLoss();
   void forwardPropagate(const std::vector<double> &inputs);
   void backwardPropagate(const std::vector<double> &outputs);
   void preprocess(TrainingBatch &batch) const;

@@ -4,8 +4,6 @@
 #include "Layer.h"
 #include "Options.h"
 
-#include <algorithm>
-
 GradientDescendOptimizationAlgorithm::GradientDescendOptimizationAlgorithm(
     options::CostFunctionType costFunction, std::vector<Layer> &layers)
     : OptimizationAlgorithm(costFunction, layers),

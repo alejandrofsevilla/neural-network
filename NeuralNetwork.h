@@ -1,14 +1,17 @@
 #pragma once
 
-#include "Options.h"
-#include "TrainingReport.h"
-#include "TrainingSample.h"
-
 #include <memory>
 #include <utility>
 #include <vector>
 
 class Layer;
+struct TrainingBatch;
+struct TrainingReport;
+
+namespace options {
+struct LayerConfig;
+struct TrainingConfig;
+} // namespace options
 
 class NeuralNetwork {
 public:

@@ -9,9 +9,13 @@
 #include "TrainingSample.h"
 
 #include <Eigen/Dense>
-#include <algorithm>
 #include <iostream>
 #include <random>
+
+OptimizationAlgorithm::OptimizationAlgorithm(
+    options::CostFunctionType costFunction, std::vector<Layer> &layers)
+    : m_layers{layers}, m_costFunction{CostFunction::instance(costFunction)},
+      m_epochsCount{0}, m_learnRate{0.0}, m_loss{0.0} {}
 
 std::unique_ptr<OptimizationAlgorithm>
 OptimizationAlgorithm::instance(options::OptimizationType type,
@@ -29,33 +33,29 @@ OptimizationAlgorithm::instance(options::OptimizationType type,
   }
 }
 
-OptimizationAlgorithm::OptimizationAlgorithm(
-    options::CostFunctionType costFunction, std::vector<Layer> &layers)
-    : m_layers{layers}, m_costFunction{CostFunction::instance(costFunction)},
-      m_epochsCount{0}, m_learnRate{0.0}, m_loss{0.0} {}
-
-double OptimizationAlgorithm::loss() const { return m_loss; }
-
 void OptimizationAlgorithm::run(TrainingBatch batch, std::size_t maxEpoch,
                                 double learnRate, double lossGoal) {
   beforeRun(learnRate);
   preprocess(batch);
   for (m_epochsCount = 0; m_epochsCount < maxEpoch; m_epochsCount++) {
     m_samplesCount = 0;
-    std::for_each(batch.samples.cbegin(), batch.samples.cend(),
-                  [this](auto &s) {
-                    m_samplesCount++;
-                    forwardPropagate(s.inputs);
-                    backwardPropagate(s.outputs);
-                    updateLoss(s.outputs);
-                    afterSample();
-                  });
+    std::for_each(batch.samples.begin(), batch.samples.end(), [this](auto &s) {
+      m_samplesCount++;
+      forwardPropagate(s.inputs);
+      backwardPropagate(s.outputs);
+      updateLoss();
+      afterSample();
+    });
     if (m_loss < lossGoal) {
       return;
     }
     afterEpoch();
   }
 }
+
+std::size_t OptimizationAlgorithm::epochsCount() const { return m_epochsCount; }
+
+double OptimizationAlgorithm::loss() const { return m_loss; }
 
 void OptimizationAlgorithm::beforeRun(double learnRate) {
   m_learnRate = learnRate;
@@ -67,35 +67,26 @@ void OptimizationAlgorithm::afterSample() {}
 
 void OptimizationAlgorithm::afterEpoch() {}
 
-std::size_t OptimizationAlgorithm::epochsCount() const { return m_epochsCount; }
-
-void OptimizationAlgorithm::updateLoss(const std::vector<double> &outputs) {
-  auto values{outputs};
-  auto loss{m_layers.back().computeLoss(
-      Eigen::Map<Eigen::VectorXd>(values.data(), values.size()),
-      *m_costFunction)};
-  m_loss = m_loss + (loss - m_loss) / m_samplesCount;
+void OptimizationAlgorithm::updateLoss() {
+  m_loss = m_loss + (m_layers.back().loss() - m_loss) / m_samplesCount;
 }
 
 void OptimizationAlgorithm::forwardPropagate(
     const std::vector<double> &inputs) {
-  auto values{inputs};
-  Eigen::VectorXd outputs{
-      Eigen::Map<Eigen::VectorXd>(values.data(), values.size())};
-  std::for_each(m_layers.begin(), m_layers.end(),
-                [&outputs](auto &l) { outputs = l.computeOutputs(outputs); });
+  auto outputs{Eigen::Map<const Eigen::VectorXd>(inputs.data(), inputs.size())};
+  m_layers.front().updateOutputs(outputs);
+  std::for_each(m_layers.begin() + 1, m_layers.end(), [this](auto &l) {
+    l.updateOutputs(m_layers.at(l.id() - 1).outputs());
+  });
 }
 
 void OptimizationAlgorithm::backwardPropagate(
     const std::vector<double> &outputs) {
-  auto values{outputs};
-  Eigen::VectorXd errors{m_layers.back().computeErrors(
-      Eigen::Map<Eigen::VectorXd>(values.data(), values.size()),
-      *m_costFunction)};
+  m_layers.back().updateErrors(
+      Eigen::Map<const Eigen::VectorXd>(outputs.data(), outputs.size()),
+      *m_costFunction);
   std::for_each(m_layers.rbegin() + 1, m_layers.rend(),
-                [this, &errors](auto &l) {
-                  errors = l.computeErrors(m_layers.at(l.id() + 1), errors);
-                });
+                [this](auto &l) { l.updateErrors(m_layers.at(l.id() + 1)); });
 }
 
 void OptimizationAlgorithm::preprocess(TrainingBatch &batch) const {

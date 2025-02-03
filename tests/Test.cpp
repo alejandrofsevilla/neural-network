@@ -1,5 +1,6 @@
 #include <NeuralNetwork.h>
 #include <Options.h>
+#include <TrainingReport.h>
 #include <TrainingSample.h>
 #include <gtest/gtest.h>
 #include <iostream>

@@ -5,7 +5,6 @@
 #include <Eigen/Dense>
 #include <vector>
 
-class Neuron;
 class Layer;
 class CostFunction;
 
