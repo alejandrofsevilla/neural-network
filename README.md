@@ -6,6 +6,7 @@ C++ implementation of neural network class.
 * C++17 compiler.
 * CMake 3.22.0
 * GoogleTest 1.11.0
+* Eigen 3
   
 ### Interface
 ```cpp
