@@ -76,13 +76,9 @@ void Layer::updateErrors(const Eigen::VectorXd &targets,
                  m_errors.begin(), [&costFunction](auto o, auto t) {
                    return costFunction.derivative(o, t);
                  });
-  m_loss = m_outputs
-               .binaryExpr(targets,
-                           [&costFunction](auto o, auto t) {
-                             return costFunction(o, t);
-                           })
-               .sum() /
-           m_numberOfNeurons;
+  auto losses{m_outputs.binaryExpr(
+      targets, [&costFunction](auto o, auto t) { return costFunction(o, t); })};
+  m_loss = losses.sum() / m_numberOfNeurons;
 }
 
 void Layer::updateWeights(double learnRate) {
