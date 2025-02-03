@@ -62,7 +62,8 @@ void Layer::updateOutputs(const Eigen::VectorXd &inputs) {
 }
 
 void Layer::updateErrors(const Layer &nextLayer) {
-  m_errors = nextLayer.weights().topRows(m_outputs.size()) * nextLayer.errors();
+  auto &nextLayerErrors{nextLayer.errors()};
+  m_errors = nextLayer.weights().topRows(nextLayerErrors.size()) * nextLayerErrors;
   std::transform(m_errors.cbegin(), m_errors.cend(),
                  m_intermediateQtys.cbegin(), m_errors.begin(),
                  [this](auto e, auto q) {
