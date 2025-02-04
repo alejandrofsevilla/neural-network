@@ -29,7 +29,7 @@ ADAMOptimizationAlgorithm::computeGradients(std::size_t layerId) {
   auto &layer{m_layers.at(layerId)};
   auto &momentEstimates{m_momentEstimates.at(layerId)};
   momentEstimates.resize(layer.weights().rows(), layer.weights().cols());
-  auto gradients{layer.computeGradients()};
+  Eigen::MatrixXf gradients{layer.inputs() * layer.errors().transpose()};
   auto gradientsView{gradients.reshaped()};
   std::transform(gradientsView.cbegin(), gradientsView.cend(),
                  momentEstimates.reshaped().begin(), gradientsView.begin(),

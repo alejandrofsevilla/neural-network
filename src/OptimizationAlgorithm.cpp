@@ -81,9 +81,10 @@ void OptimizationAlgorithm::forwardPropagate(const std::vector<float> &inputs) {
 
 void OptimizationAlgorithm::backwardPropagate(
     const std::vector<float> &outputs) {
-  m_layers.back().updateErrors(
-      Eigen::Map<const Eigen::VectorXf>(outputs.data(), outputs.size()),
-      *m_costFunction);
+  auto &lastLayer{m_layers.back()};
+  auto outputsView{
+      Eigen::Map<const Eigen::VectorXf>(outputs.data(), outputs.size())};
+  lastLayer.updateErrorsAndLoss(outputsView, *m_costFunction);
   std::for_each(m_layers.rbegin() + 1, m_layers.rend(),
                 [this](auto &l) { l.updateErrors(m_layers.at(l.id() + 1)); });
 }
