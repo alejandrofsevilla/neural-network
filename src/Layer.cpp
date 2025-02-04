@@ -3,6 +3,7 @@
 #include "ActivationFunction.h"
 #include "CostFunction.h"
 
+#include <Eigen/src/Core/Matrix.h>
 #include <random>
 
 namespace {
@@ -30,9 +31,7 @@ Layer::Layer(std::size_t id, std::size_t numberOfInputs,
       m_errors{Eigen::VectorXf::Zero(numberOfNeurons)},
       m_weights{Eigen::MatrixXf::NullaryExpr(
           numberOfInputs + f_bias, numberOfNeurons,
-          []() {
-            return randomValue(f_weightInitMinValue, f_weightInitMaxValue);
-          })},
+          std::bind(randomValue, f_weightInitMinValue, f_weightInitMaxValue))},
       m_loss{} {}
 
 std::size_t Layer::id() const { return m_id; }
@@ -53,12 +52,11 @@ const Eigen::VectorXf &Layer::errors() const { return m_errors; }
 
 void Layer::updateOutputs(const Eigen::VectorXf &inputs) {
   m_inputs.head(inputs.size()) = inputs;
-  Eigen::VectorXf intermediateQtys = m_weights.transpose() * m_inputs;
-  for (auto i = 0; i < intermediateQtys.size(); i++) {
-    auto q{intermediateQtys[i]};
+  for (auto i = 0; i < m_weights.cols(); i++) {
+    float q{m_weights.col(i).transpose() * m_inputs};
     m_outputs[i] = m_activationFunction->operator()(q);
     m_outputDerivatives[i] = m_activationFunction->derivative(q);
-  } // TODO: Nullaryexpr
+  }
 }
 
 void Layer::updateErrors(const Layer &nextLayer) {
@@ -74,7 +72,7 @@ void Layer::updateErrorsAndLoss(const Eigen::VectorXf &targets,
   for (auto i = 0; i < m_outputs.size(); i++) {
     m_errors[i] = costFunction.derivative(m_outputs[i], targets[i]);
     m_loss += costFunction(m_outputs[i], targets[i]) / m_numberOfNeurons;
-  } // TODO: Nullaryexpr
+  }
 }
 
 void Layer::updateWeights(float learnRate) {

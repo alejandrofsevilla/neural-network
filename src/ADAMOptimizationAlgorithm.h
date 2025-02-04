@@ -22,7 +22,5 @@ private:
 
   Eigen::MatrixXf computeGradients(std::size_t layerId);
 
-  std::vector<
-      Eigen::Matrix<std::pair<float, float>, Eigen::Dynamic, Eigen::Dynamic>>
-      m_momentEstimates;
+  std::vector<Eigen::MatrixX<std::pair<float, float>>> m_momentEstimates;
 };

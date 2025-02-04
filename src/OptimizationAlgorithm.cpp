@@ -72,8 +72,9 @@ void OptimizationAlgorithm::updateLoss() {
 }
 
 void OptimizationAlgorithm::forwardPropagate(const std::vector<float> &inputs) {
-  auto outputs{Eigen::Map<const Eigen::VectorXf>(inputs.data(), inputs.size())};
-  m_layers.front().updateOutputs(outputs);
+  auto inputsView{
+      Eigen::Map<const Eigen::VectorXf>(inputs.data(), inputs.size())};
+  m_layers.front().updateOutputs(inputsView);
   std::for_each(m_layers.begin() + 1, m_layers.end(), [this](auto &l) {
     l.updateOutputs(m_layers.at(l.id() - 1).outputs());
   });
