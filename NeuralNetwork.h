@@ -1,17 +1,14 @@
 #pragma once
 
+#include "Options.h"
+#include "TrainingReport.h"
+#include "TrainingSample.h"
+
 #include <memory>
 #include <utility>
 #include <vector>
 
 class Layer;
-struct TrainingBatch;
-struct TrainingReport;
-
-namespace options {
-struct LayerConfig;
-struct TrainingConfig;
-} // namespace options
 
 class NeuralNetwork {
 public:
@@ -29,5 +26,5 @@ public:
 private:
   const std::size_t m_numberOfInputs;
   std::size_t m_numberOfOutputs;
-  std::vector<Layer> m_layers;
+  std::vector<std::unique_ptr<Layer>> m_layers;
 };

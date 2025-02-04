@@ -2,19 +2,21 @@
 
 #include "ActivationFunction.h"
 #include "CostFunction.h"
+#include "Neuron.h"
+#include "Options.h"
 
-#include <random>
+#include <algorithm>
+#include <iterator>
+#include <numeric>
 
 namespace {
-constexpr auto f_bias{1};
-constexpr auto f_weightInitMinValue{-1.0};
-constexpr auto f_weightInitMaxValue{+1.0};
-
-inline auto randomValue(double min, double max) {
-  std::random_device rd;
-  std::mt19937 eng{rd()};
-  std::uniform_real_distribution<double> dist{min, max};
-  return dist(eng);
+auto generateNeurons(const Layer &layer, std::size_t numberOfNeurons) {
+  std::vector<Neuron> neurons;
+  std::generate_n(std::back_inserter(neurons), numberOfNeurons,
+                  [&neurons, &layer]() {
+                    return Neuron{layer, neurons.size()};
+                  });
+  return neurons;
 }
 } // namespace
 
@@ -22,70 +24,68 @@ Layer::Layer(std::size_t id, std::size_t numberOfInputs,
              std::size_t numberOfNeurons,
              options::ActivationFunctionType activationFunction)
     : m_id{id}, m_numberOfInputs{numberOfInputs},
-      m_numberOfNeurons{numberOfNeurons},
       m_activationFunction{ActivationFunction::instance(activationFunction)},
-      m_intermediateQtys{Eigen::VectorXd::Zero(numberOfNeurons)},
-      m_inputs{Eigen::VectorXd::Ones(numberOfInputs + f_bias)},
-      m_outputs{Eigen::VectorXd::Zero(numberOfNeurons)},
-      m_errors{Eigen::VectorXd::Zero(numberOfNeurons)},
-      m_weights{Eigen::MatrixXd::NullaryExpr(
-          numberOfInputs + f_bias, numberOfNeurons,
-          []() {
-            return randomValue(f_weightInitMinValue, f_weightInitMaxValue);
-          })},
-      m_loss{} {}
+      m_inputs(numberOfInputs), m_neurons{
+                                    generateNeurons(*this, numberOfNeurons)} {}
 
 std::size_t Layer::id() const { return m_id; }
 
 std::size_t Layer::numberOfInputs() const { return m_numberOfInputs; }
 
-std::size_t Layer::numberOfNeurons() const { return m_numberOfNeurons; }
+const std::vector<double> &Layer::inputs() const { return m_inputs; }
 
-double Layer::loss() const { return m_loss; }
+const std::vector<Neuron> &Layer::neurons() const { return m_neurons; }
 
-const Eigen::MatrixXd &Layer::weights() const { return m_weights; }
-
-const Eigen::VectorXd &Layer::outputs() const { return m_outputs; }
-
-const Eigen::VectorXd &Layer::errors() const { return m_errors; }
-
-Eigen::MatrixXd Layer::computeGradients() const {
-  return m_inputs * m_errors.transpose();
+const ActivationFunction &Layer::activationFunction() const {
+  return *m_activationFunction;
 }
 
-void Layer::updateOutputs(const Eigen::VectorXd &inputs) {
-  m_inputs.head(inputs.size()) = inputs;
-  m_intermediateQtys = m_weights.transpose() * m_inputs;
-  std::transform(
-      m_intermediateQtys.cbegin(), m_intermediateQtys.cend(), m_outputs.begin(),
-      [this](auto q) { return m_activationFunction->operator()(q); });
+double Layer::computeLoss(const std::vector<double> &targets,
+                          const CostFunction &costFunction) const {
+  return std::accumulate(m_neurons.cbegin(), m_neurons.cend(), 0.0,
+                         [&targets, &costFunction](auto val, auto &n) {
+                           return val + n.computeLoss(targets.at(n.id()),
+                                                      costFunction);
+                         }) /
+         m_neurons.size();
 }
 
-void Layer::updateErrors(const Layer &nextLayer) {
-  auto &nextLayerWeights{nextLayer.weights()};
-  m_errors = nextLayerWeights.topRows(nextLayerWeights.rows() - 1) * nextLayer.errors();
-  std::transform(m_errors.cbegin(), m_errors.cend(),
-                 m_intermediateQtys.cbegin(), m_errors.begin(),
-                 [this](auto e, auto q) {
-                   return e * m_activationFunction->derivative(q);
+std::vector<double> Layer::computeOutputs(const std::vector<double> &inputs) {
+  m_inputs = inputs;
+  std::vector<double> outputs;
+  std::transform(m_neurons.begin(), m_neurons.end(),
+                 std::back_inserter(outputs),
+                 [](auto &n) { return n.computeOutput(); });
+  return outputs;
+}
+
+std::vector<double>
+Layer::computeErrors(const Layer &nextLayer,
+                     const std::vector<double> &nextLayerErrors) {
+  std::vector<double> errors;
+  std::transform(m_neurons.begin(), m_neurons.end(), std::back_inserter(errors),
+                 [&nextLayer, &nextLayerErrors](auto &n) {
+                   return n.computeError(nextLayer, nextLayerErrors);
                  });
+  return errors;
 }
 
-void Layer::updateErrors(const Eigen::VectorXd &targets,
-                         const CostFunction &costFunction) {
-  std::transform(m_outputs.cbegin(), m_outputs.cend(), targets.cbegin(),
-                 m_errors.begin(), [&costFunction](auto o, auto t) {
-                   return costFunction.derivative(o, t);
+std::vector<double> Layer::computeErrors(const std::vector<double> &targets,
+                                         const CostFunction &costFunction) {
+  std::vector<double> errors;
+  std::transform(m_neurons.begin(), m_neurons.end(), std::back_inserter(errors),
+                 [&targets, &costFunction](auto &n) {
+                   return n.computeError(targets.at(n.id()), costFunction);
                  });
-  auto losses{m_outputs.binaryExpr(
-      targets, [&costFunction](auto o, auto t) { return costFunction(o, t); })};
-  m_loss = losses.sum() / m_numberOfNeurons;
+  return errors;
 }
 
-void Layer::updateWeights(double learnRate) {
-  updateWeights(computeGradients(), learnRate);
+void Layer::updateNeuronWeights(std::size_t neuronId, double learnRate) {
+  m_neurons.at(neuronId).updateWeights(learnRate);
 }
 
-void Layer::updateWeights(const Eigen::MatrixXd &gradients, double learnRate) {
-  m_weights -= learnRate * gradients;
+void Layer::updateNeuronWeights(std::size_t neuronId,
+                                const std::vector<double> &gradients,
+                                double learnRate) {
+  m_neurons.at(neuronId).updateWeights(gradients, learnRate);
 }

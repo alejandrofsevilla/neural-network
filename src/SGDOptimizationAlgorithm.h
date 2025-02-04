@@ -2,6 +2,7 @@
 
 #include "OptimizationAlgorithm.h"
 
+#include <memory>
 #include <vector>
 
 class Layer;
@@ -14,7 +15,7 @@ enum class CostFunctionType;
 class SGDOptimizationAlgorithm : public OptimizationAlgorithm {
 public:
   SGDOptimizationAlgorithm(options::CostFunctionType costFunction,
-                           std::vector<Layer> &layers);
+                           const std::vector<std::unique_ptr<Layer>> &layers);
 
 private:
   void afterSample() override;

@@ -6,7 +6,6 @@ C++ implementation of neural network class.
 * C++17 compiler.
 * CMake 3.22.0
 * GoogleTest 1.11.0
-* Eigen 3
   
 ### Interface
 ```cpp
@@ -45,12 +44,6 @@ struct TrainingConfig {
 ```
 
 ### Build and test
-- Install dependencies.
-   ```terminal
-   sudo apt-get update;
-   sudo apt-get install libgtest-dev;
-   sudo apt-get install libeigen3-dev
-   ```
 - Clone the repository.
    ```terminal
    git clone https://github.com/alejandrofsevilla/neural-network.git
@@ -71,10 +64,17 @@ classDiagram
     class C_0004723107453516162687["options::ActivationFunctionType"]
     class C_0004723107453516162687 {
         <<enumeration>>
+        Step
+        Linear
+        Relu
+        Sigmoid
+        TanH
     }
     class C_0005819293835413443314["options::CostFunctionType"]
     class C_0005819293835413443314 {
         <<enumeration>>
+        Quadratic
+        CostEntropy
     }
     class C_0006489356659787961387["options::OptimizationType"]
     class C_0006489356659787961387 {
@@ -95,28 +95,22 @@ classDiagram
     }
     class C_0017517293265978054845["Layer"]
     class C_0017517293265978054845 {
-        +computeGradients() : [const] Eigen::MatrixXd
-        +errors() : [const] const Eigen::VectorXd &
+        +activationFunction() : [const] const ActivationFunction &
+        +backwardPropagate(Layer & prevLayer) : void
+        +computeErrors(const Layer & nextLayer) : std::vector&lt;double&gt;
+        +computeErrors(const std::vector&lt;double&gt; & targets, const CostFunction & costFunction) : std::vector&lt;double&gt;
+        +computeLoss() : [const] double
+        +computeOutputs() : std::vector&lt;double&gt;
+        +errors() : [const] const std::vector&lt;double&gt; &
+        +forwardPropagate(Layer & nextLayer) : void
         +id() : [const] std::size_t
-        +loss() : [const] double
+        +inputs() : [const] const std::vector&lt;double&gt; &
+        +neurons() : [const] const std::vector&lt;Neuron&gt; &
         +numberOfInputs() : [const] std::size_t
-        +numberOfNeurons() : [const] std::size_t
-        +outputs() : [const] const Eigen::VectorXd &
-        +updateErrors(const Layer & nextLayer) : void
-        +updateErrors(const Eigen::VectorXd & targets, const CostFunction & costFunction) : void
-        +updateOutputs(const Eigen::VectorXd & inputs) : void
-        +updateWeights(double learnRate) : void
-        +updateWeights(const Eigen::MatrixXd & gradients, double learnRate) : void
-        +weights() : [const] const Eigen::MatrixXd &
-        -m_errors : Eigen::VectorXd
-        -m_id : const std::size_t
-        -m_inputs : Eigen::VectorXd
-        -m_intermediateQtys : Eigen::VectorXd
-        -m_loss : double
-        -m_numberOfInputs : const std::size_t
-        -m_numberOfNeurons : const std::size_t
-        -m_outputs : Eigen::VectorXd
-        -m_weights : Eigen::MatrixXd
+        +setErrors(const std::vector&lt;double&gt; & errors) : void
+        +setInputs(const std::vector&lt;double&gt; & inputs) : void
+        +updateNeuronWeights(std::size_t neuronId, double learnRate) : void
+        +updateNeuronWeights(std::size_t neuronId, const std::vector&lt;double&gt; & gradients, double learnRate) : void
     }
     class C_0016029915442214150756["ActivationFunction"]
     class C_0016029915442214150756 {
@@ -165,39 +159,35 @@ classDiagram
         +operator()(double value, double target) : [const] double
         +derivative(double value, double target) : [const] double
     }
+    class C_0014902208681964330340["Neuron"]
+    class C_0014902208681964330340 {
+        +computeError(double target, const CostFunction & costFunction) : double
+        +computeError(const Layer & nextLayer) : double
+        +computeOutput() : double
+        +gradients() : [const] const std::vector&lt;double&gt; &
+        +id() : [const] std::size_t
+        +layerId() : [const] std::size_t
+        +loss() : [const] double
+        +updateWeights(const std::vector&lt;double&gt; & gradients, double learnRate) : void
+        +updateWeights(double learnRate) : void
+        +weights() : [const] const std::vector&lt;double&gt; &
+    }
     class C_0014877256980872623468["OptimizationAlgorithm"]
     class C_0014877256980872623468 {
-        #afterEpoch() : void
-        #afterSample() : void
-        #backwardPropagate(const std::vector&lt;double&gt; & outputs) : void
-        #beforeRun(double learnRate) : void
         +epochsCount() : [const] std::size_t
-        #forwardPropagate(const std::vector&lt;double&gt; & inputs) : void
         +loss() : [const] double
-        #preprocess(TrainingBatch & batch) : [const] void
         +run(TrainingBatch batch, std::size_t maxEpoch, double learnRate, double lossGoal) : void
-        #updateLoss() : void
-        #m_epochsCount : std::size_t
-        #m_learnRate : double
-        #m_loss : double
-        #m_samplesCount : std::size_t
     }
     class C_0011803148689591493735["GradientDescendOptimizationAlgorithm"]
     class C_0011803148689591493735 {
-        -afterEpoch() : void
-        -afterSample() : void
-        -m_gradients : std::vector&lt;Eigen::MatrixXd&gt;
+    }
+    class C_0016586572411026969904["TrainingSample"]
+    class C_0016586572411026969904 {
+        +inputs : std::vector&lt;double&gt;
+        +outputs : std::vector&lt;double&gt;
     }
     class C_0004972352846766595368["TrainingBatch"]
     class C_0004972352846766595368 {
-    }
-    class C_0016902125101895250401["NeuralNetwork"]
-    class C_0016902125101895250401 {
-        +addLayer(options::LayerConfig config) : void
-        +computeOutputs(const std::vector&lt;double&gt; & inputs) : std::vector&lt;double&gt;
-        +train(options::TrainingConfig config, const TrainingBatch & batch) : TrainingReport
-        -m_numberOfInputs : const std::size_t
-        -m_numberOfOutputs : std::size_t
     }
     class C_0006869410385549763069["TrainingReport"]
     class C_0006869410385549763069 {
@@ -205,25 +195,23 @@ classDiagram
         +loss : double
         +trainingTime : std::chrono::milliseconds
     }
-    class C_0016586572411026969904["TrainingSample"]
-    class C_0016586572411026969904 {
-        +inputs : std::vector&lt;double&gt;
-        +outputs : std::vector&lt;double&gt;
+    class C_0016902125101895250401["NeuralNetwork"]
+    class C_0016902125101895250401 {
+        +addLayer(options::LayerConfig config) : void
+        +computeOutputs(const std::vector&lt;double&gt; & inputs) : std::vector&lt;double&gt;
+        +train(options::TrainingConfig config, const TrainingBatch & batch) : TrainingReport
     }
     class C_0009936346703037128794["SGDOptimizationAlgorithm"]
     class C_0009936346703037128794 {
-        -afterSample() : void
     }
     class C_0012912509499042389263["ADAMOptimizationAlgorithm"]
     class C_0012912509499042389263 {
-        -afterSample() : void
-        -computeGradients(std::size_t layerId) : Eigen::MatrixXd
-        -m_momentEstimates : std::vector&lt;Eigen::Matrix&lt;std::pair&lt;double,double&gt;,Eigen::Dynamic,Eigen::Dynamic&gt;&gt;
     }
     C_0005162987213334549566 o-- C_0004723107453516162687 : +activationFunction
     C_0009990744508583239417 o-- C_0006489356659787961387 : +optimization
     C_0009990744508583239417 o-- C_0005819293835413443314 : +costFunction
     C_0017517293265978054845 o-- C_0016029915442214150756 : -m_activationFunction
+    C_0017517293265978054845 o-- C_0014902208681964330340 : -m_neurons
     C_0016029915442214150756 <|-- C_0013578780095480796457 : 
     C_0016029915442214150756 <|-- C_0011078890997464044819 : 
     C_0016029915442214150756 <|-- C_0002817530414547552801 : 
@@ -231,9 +219,11 @@ classDiagram
     C_0016029915442214150756 <|-- C_0000064153189652549417 : 
     C_0018195103025728394851 <|-- C_0015216133785148867685 : 
     C_0018195103025728394851 <|-- C_0016477597730260498529 : 
+    C_0014902208681964330340 --> C_0016029915442214150756 : -m_activationFunction
     C_0014877256980872623468 --> C_0017517293265978054845 : #m_layers
     C_0014877256980872623468 o-- C_0018195103025728394851 : #m_costFunction
     C_0014877256980872623468 <|-- C_0011803148689591493735 : 
+    C_0004972352846766595368 o-- C_0016586572411026969904 : +samples
     C_0016902125101895250401 o-- C_0017517293265978054845 : -m_layers
     C_0014877256980872623468 <|-- C_0009936346703037128794 : 
     C_0014877256980872623468 <|-- C_0012912509499042389263 : 
@@ -241,6 +231,7 @@ classDiagram
 %% Generated with clang-uml, version 0.6.0
 %% LLVM version Ubuntu clang version 15.0.7
 ```
+
 ## Documentation
 ### List of Symbols
 $\large s$ *= sample*\

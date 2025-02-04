@@ -2,9 +2,11 @@
 
 #include "OptimizationAlgorithm.h"
 
-#include <Eigen/Dense>
+#include <map>
+#include <memory>
 #include <vector>
 
+class Neuron;
 class Layer;
 class CostFunction;
 
@@ -14,12 +16,14 @@ enum class CostFunctionType;
 
 class GradientDescendOptimizationAlgorithm : public OptimizationAlgorithm {
 public:
-  GradientDescendOptimizationAlgorithm(options::CostFunctionType costFunction,
-                                       std::vector<Layer> &layers);
+  GradientDescendOptimizationAlgorithm(
+      options::CostFunctionType costFunction,
+      const std::vector<std::unique_ptr<Layer>> &layers);
 
 private:
   void afterSample() override;
   void afterEpoch() override;
 
-  std::vector<Eigen::MatrixXd> m_gradients;
+  using LayerIdNeuronIdPair = std::pair<std::size_t, std::size_t>;
+  std::map<LayerIdNeuronIdPair, std::vector<double>> m_gradients;
 };
