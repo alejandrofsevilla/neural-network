@@ -20,9 +20,9 @@ public:
 private:
   void afterSample() override;
 
-  Eigen::MatrixXd computeGradients(std::size_t layerId);
+  Eigen::MatrixXf computeGradients(std::size_t layerId);
 
   std::vector<
-      Eigen::Matrix<std::pair<double, double>, Eigen::Dynamic, Eigen::Dynamic>>
+      Eigen::Matrix<std::pair<float, float>, Eigen::Dynamic, Eigen::Dynamic>>
       m_momentEstimates;
 };

@@ -16,7 +16,7 @@ public:
 
   ~NeuralNetwork();
 
-  std::vector<double> computeOutputs(const std::vector<double> &inputs);
+  std::vector<float> computeOutputs(const std::vector<float> &inputs);
 
   void addLayer(options::LayerConfig config);
 
@@ -39,8 +39,8 @@ struct TrainingConfig {
   options::OptimizationType optimization;
   options::CostFunctionType costFunction;
   std::size_t maxEpoch;
-  double learnRate;
-  double lossGoal;
+  float learnRate;
+  float lossGoal;
 };
 ```
 
@@ -89,8 +89,8 @@ classDiagram
     }
     class C_0009990744508583239417["options::TrainingConfig"]
     class C_0009990744508583239417 {
-        +learnRate : double
-        +lossGoal : double
+        +learnRate : float
+        +lossGoal : float
         +maxEpoch : std::size_t
     }
     class C_0017517293265978054845["Layer"]
@@ -98,21 +98,21 @@ classDiagram
         +computeGradients() : [const] Eigen::MatrixXd
         +errors() : [const] const Eigen::VectorXd &
         +id() : [const] std::size_t
-        +loss() : [const] double
+        +loss() : [const] float
         +numberOfInputs() : [const] std::size_t
         +numberOfNeurons() : [const] std::size_t
         +outputs() : [const] const Eigen::VectorXd &
         +updateErrors(const Layer & nextLayer) : void
         +updateErrors(const Eigen::VectorXd & targets, const CostFunction & costFunction) : void
         +updateOutputs(const Eigen::VectorXd & inputs) : void
-        +updateWeights(double learnRate) : void
-        +updateWeights(const Eigen::MatrixXd & gradients, double learnRate) : void
+        +updateWeights(float learnRate) : void
+        +updateWeights(const Eigen::MatrixXd & gradients, float learnRate) : void
         +weights() : [const] const Eigen::MatrixXd &
         -m_errors : Eigen::VectorXd
         -m_id : const std::size_t
         -m_inputs : Eigen::VectorXd
         -m_intermediateQtys : Eigen::VectorXd
-        -m_loss : double
+        -m_loss : float
         -m_numberOfInputs : const std::size_t
         -m_numberOfNeurons : const std::size_t
         -m_outputs : Eigen::VectorXd
@@ -121,65 +121,65 @@ classDiagram
     class C_0016029915442214150756["ActivationFunction"]
     class C_0016029915442214150756 {
         <<abstract>>
-        +operator()(double input) : [const] double*
-        +derivative(double input) : [const] double*
+        +operator()(float input) : [const] float*
+        +derivative(float input) : [const] float*
     }
     class C_0013578780095480796457["StepActivationFunction"]
     class C_0013578780095480796457 {
-        +operator()(double input) : [const] double
-        +derivative(double input) : [const] double
+        +operator()(float input) : [const] float
+        +derivative(float input) : [const] float
     }
     class C_0011078890997464044819["LinearActivationFunction"]
     class C_0011078890997464044819 {
-        +operator()(double input) : [const] double
-        +derivative(double input) : [const] double
+        +operator()(float input) : [const] float
+        +derivative(float input) : [const] float
     }
     class C_0002817530414547552801["ReluActivationFunction"]
     class C_0002817530414547552801 {
-        +operator()(double input) : [const] double
-        +derivative(double input) : [const] double
+        +operator()(float input) : [const] float
+        +derivative(float input) : [const] float
     }
     class C_0011953039370874830196["SigmoidActivationFunction"]
     class C_0011953039370874830196 {
-        +operator()(double input) : [const] double
-        +derivative(double input) : [const] double
+        +operator()(float input) : [const] float
+        +derivative(float input) : [const] float
     }
     class C_0000064153189652549417["TanHActivationFunction"]
     class C_0000064153189652549417 {
-        +operator()(double input) : [const] double
-        +derivative(double input) : [const] double
+        +operator()(float input) : [const] float
+        +derivative(float input) : [const] float
     }
     class C_0018195103025728394851["CostFunction"]
     class C_0018195103025728394851 {
         <<abstract>>
-        +operator()(double value, double target) : [const] double*
-        +derivative(double value, double target) : [const] double*
+        +operator()(float value, float target) : [const] float*
+        +derivative(float value, float target) : [const] float*
     }
     class C_0015216133785148867685["QuadraticCostFunction"]
     class C_0015216133785148867685 {
-        +operator()(double value, double target) : [const] double
-        +derivative(double value, double target) : [const] double
+        +operator()(float value, float target) : [const] float
+        +derivative(float value, float target) : [const] float
     }
     class C_0016477597730260498529["CostEntropyCostFunction"]
     class C_0016477597730260498529 {
-        +operator()(double value, double target) : [const] double
-        +derivative(double value, double target) : [const] double
+        +operator()(float value, float target) : [const] float
+        +derivative(float value, float target) : [const] float
     }
     class C_0014877256980872623468["OptimizationAlgorithm"]
     class C_0014877256980872623468 {
         #afterEpoch() : void
         #afterSample() : void
-        #backwardPropagate(const std::vector&lt;double&gt; & outputs) : void
-        #beforeRun(double learnRate) : void
+        #backwardPropagate(const std::vector&lt;float&gt; & outputs) : void
+        #beforeRun(float learnRate) : void
         +epochsCount() : [const] std::size_t
-        #forwardPropagate(const std::vector&lt;double&gt; & inputs) : void
-        +loss() : [const] double
+        #forwardPropagate(const std::vector&lt;float&gt; & inputs) : void
+        +loss() : [const] float
         #preprocess(TrainingBatch & batch) : [const] void
-        +run(TrainingBatch batch, std::size_t maxEpoch, double learnRate, double lossGoal) : void
+        +run(TrainingBatch batch, std::size_t maxEpoch, float learnRate, float lossGoal) : void
         #updateLoss() : void
         #m_epochsCount : std::size_t
-        #m_learnRate : double
-        #m_loss : double
+        #m_learnRate : float
+        #m_loss : float
         #m_samplesCount : std::size_t
     }
     class C_0011803148689591493735["GradientDescendOptimizationAlgorithm"]
@@ -194,7 +194,7 @@ classDiagram
     class C_0016902125101895250401["NeuralNetwork"]
     class C_0016902125101895250401 {
         +addLayer(options::LayerConfig config) : void
-        +computeOutputs(const std::vector&lt;double&gt; & inputs) : std::vector&lt;double&gt;
+        +computeOutputs(const std::vector&lt;float&gt; & inputs) : std::vector&lt;float&gt;
         +train(options::TrainingConfig config, const TrainingBatch & batch) : TrainingReport
         -m_numberOfInputs : const std::size_t
         -m_numberOfOutputs : std::size_t
@@ -202,13 +202,13 @@ classDiagram
     class C_0006869410385549763069["TrainingReport"]
     class C_0006869410385549763069 {
         +epochs : std::size_t
-        +loss : double
+        +loss : float
         +trainingTime : std::chrono::milliseconds
     }
     class C_0016586572411026969904["TrainingSample"]
     class C_0016586572411026969904 {
-        +inputs : std::vector&lt;double&gt;
-        +outputs : std::vector&lt;double&gt;
+        +inputs : std::vector&lt;float&gt;
+        +outputs : std::vector&lt;float&gt;
     }
     class C_0009936346703037128794["SGDOptimizationAlgorithm"]
     class C_0009936346703037128794 {
@@ -218,7 +218,7 @@ classDiagram
     class C_0012912509499042389263 {
         -afterSample() : void
         -computeGradients(std::size_t layerId) : Eigen::MatrixXd
-        -m_momentEstimates : std::vector&lt;Eigen::Matrix&lt;std::pair&lt;double,double&gt;,Eigen::Dynamic,Eigen::Dynamic&gt;&gt;
+        -m_momentEstimates : std::vector&lt;Eigen::Matrix&lt;std::pair&lt;float,float&gt;,Eigen::Dynamic,Eigen::Dynamic&gt;&gt;
     }
     C_0005162987213334549566 o-- C_0004723107453516162687 : +activationFunction
     C_0009990744508583239417 o-- C_0006489356659787961387 : +optimization

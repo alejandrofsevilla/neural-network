@@ -21,5 +21,5 @@ private:
   void afterSample() override;
   void afterEpoch() override;
 
-  std::vector<Eigen::MatrixXd> m_gradients;
+  std::vector<Eigen::MatrixXf> m_gradients;
 };

@@ -17,20 +17,19 @@ NeuralNetwork::NeuralNetwork(std::size_t numberOfInputs)
 
 NeuralNetwork::~NeuralNetwork() {}
 
-std::vector<double>
-NeuralNetwork::computeOutputs(const std::vector<double> &inputs) {
+std::vector<float>
+NeuralNetwork::computeOutputs(const std::vector<float> &inputs) {
   if (inputs.size() != m_numberOfInputs) {
     std::cerr << "error: input vector has incorrect dimensions." << std::endl;
     return inputs;
   }
-  auto outputs{Eigen::Map<const Eigen::VectorXd>(inputs.data(), inputs.size())};
+  auto outputs{Eigen::Map<const Eigen::VectorXf>(inputs.data(), inputs.size())};
   m_layers.front().updateOutputs(outputs);
   std::for_each(m_layers.begin() + 1, m_layers.end(), [this](auto &l) {
     l.updateOutputs(m_layers.at(l.id() - 1).outputs());
   });
   auto &lastLayerOutputs{m_layers.back().outputs()};
-  return std::vector<double>(lastLayerOutputs.cbegin(),
-                             lastLayerOutputs.cend());
+  return std::vector<float>(lastLayerOutputs.cbegin(), lastLayerOutputs.cend());
 }
 
 TrainingReport NeuralNetwork::train(options::TrainingConfig config,

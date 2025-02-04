@@ -13,36 +13,36 @@ public:
 
   virtual ~ActivationFunction() = default;
 
-  virtual double operator()(double input) const = 0;
-  virtual double derivative(double input) const = 0;
+  virtual float operator()(float input) const = 0;
+  virtual float derivative(float input) const = 0;
 };
 
 class StepActivationFunction : public ActivationFunction {
 public:
-  double operator()(double input) const override;
-  double derivative(double input) const override;
+  float operator()(float input) const override;
+  float derivative(float input) const override;
 };
 
 class LinearActivationFunction : public ActivationFunction {
 public:
-  double operator()(double input) const override;
-  double derivative(double input) const override;
+  float operator()(float input) const override;
+  float derivative(float input) const override;
 };
 
 class ReluActivationFunction : public ActivationFunction {
 public:
-  double operator()(double input) const override;
-  double derivative(double input) const override;
+  float operator()(float input) const override;
+  float derivative(float input) const override;
 };
 
 class SigmoidActivationFunction : public ActivationFunction {
 public:
-  double operator()(double input) const override;
-  double derivative(double input) const override;
+  float operator()(float input) const override;
+  float derivative(float input) const override;
 };
 
 class TanHActivationFunction : public ActivationFunction {
 public:
-  double operator()(double input) const override;
-  double derivative(double input) const override;
+  float operator()(float input) const override;
+  float derivative(float input) const override;
 };

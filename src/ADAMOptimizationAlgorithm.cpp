@@ -24,7 +24,7 @@ void ADAMOptimizationAlgorithm::afterSample() {
   });
 }
 
-Eigen::MatrixXd
+Eigen::MatrixXf
 ADAMOptimizationAlgorithm::computeGradients(std::size_t layerId) {
   auto &layer{m_layers.at(layerId)};
   auto &momentEstimates{m_momentEstimates.at(layerId)};

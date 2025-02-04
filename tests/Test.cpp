@@ -7,7 +7,7 @@
 #include <math.h>
 
 namespace {
-template <class F> auto generateBatch(F f, double min, double max) {
+template <class F> auto generateBatch(F f, float min, float max) {
   TrainingBatch batch;
   auto numberOfSamples{100};
   auto step{(max - min) / (numberOfSamples - 1)};
@@ -20,7 +20,7 @@ template <class F> auto generateBatch(F f, double min, double max) {
 }
 
 template <class F>
-auto generateBatch(F f, double min1, double min2, double max1, double max2) {
+auto generateBatch(F f, float min1, float min2, float max1, float max2) {
   TrainingBatch batch;
   auto numberOfSamples{20};
   auto step1{(max1 - min1) / (numberOfSamples - 1)};
@@ -37,9 +37,9 @@ auto generateBatch(F f, double min1, double min2, double max1, double max2) {
 }
 
 template <class F>
-inline auto validate(NeuralNetwork &nn, const F &f, double min, double max,
-                     double tol) {
-  auto maxError{0.0};
+inline auto validate(NeuralNetwork &nn, const F &f, float min, float max,
+                     float tol) {
+  float maxError{0.0};
   auto numberOfSamples{200};
   auto step{(max - min) / (numberOfSamples - 1)};
   for (auto i = 0; i < numberOfSamples; i++) {
@@ -52,9 +52,9 @@ inline auto validate(NeuralNetwork &nn, const F &f, double min, double max,
 }
 
 template <class F>
-inline auto validate(NeuralNetwork &nn, const F &f, double min1, double min2,
-                     double max1, double max2, double tol) {
-  auto maxError{0.0};
+inline auto validate(NeuralNetwork &nn, const F &f, float min1, float min2,
+                     float max1, float max2, float tol) {
+  float maxError{0.0};
   auto numberOfSamples{100};
   auto step1{(max1 - min1) / (numberOfSamples - 1)};
   auto step2{(max2 - min2) / (numberOfSamples - 1)};
@@ -128,7 +128,7 @@ TEST(NeuralNetworkTest,
   nn.addLayer({25, options::ActivationFunctionType::TanH});
   nn.addLayer({1, options::ActivationFunctionType::Linear});
   auto sphereFunction{std::bind(
-      [](auto x, auto y) { return sqrt(2. - pow(x, 2.0) - pow(y, 2.0)); },
+      [](auto x, auto y) { return sqrtf(2. - pow(x, 2.0) - pow(y, 2.0)); },
       std::placeholders::_1, std::placeholders::_2)};
   auto batch{generateBatch(sphereFunction, min1, min2, max1, max2)};
   print(nn.train({options::OptimizationType::SGD,

@@ -19,7 +19,7 @@ public:
 
   ~NeuralNetwork();
 
-  std::vector<double> computeOutputs(const std::vector<double> &inputs);
+  std::vector<float> computeOutputs(const std::vector<float> &inputs);
 
   void addLayer(options::LayerConfig config);
 
