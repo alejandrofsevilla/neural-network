@@ -14,10 +14,10 @@ constexpr auto f_beta2{0.999};
 constexpr auto f_epsilon{0.00000001};
 
 auto generateGradients(const std::vector<Layer> &layers) {
-  std::vector<Eigen::MatrixX<std::pair<float, float>>> gradients;
+  std::vector<Eigen::MatrixX<std::pair<double, double>>> gradients;
   std::transform(layers.cbegin(), layers.cend(), std::back_inserter(gradients),
                  [](auto &l) {
-                   return Eigen::MatrixX<std::pair<float, float>>(
+                   return Eigen::MatrixX<std::pair<double, double>>(
                        l.weights().cols(), l.weights().rows());
                  });
   return gradients;
@@ -35,10 +35,10 @@ void ADAMOptimizationAlgorithm::afterSample() {
   });
 }
 
-Eigen::MatrixXf
+Eigen::MatrixXd
 ADAMOptimizationAlgorithm::computeGradients(std::size_t layerId) {
   auto &layer{m_layers.at(layerId)};
-  Eigen::MatrixXf gradients{layer.inputs() * layer.errors().transpose()};
+  Eigen::MatrixXd gradients{layer.inputs() * layer.errors().transpose()};
   auto gradientsView{gradients.reshaped()};
   auto momentEstimatesView{m_momentEstimates.at(layerId).reshaped()};
   for (auto i = 0; i < gradientsView.size(); i++) {

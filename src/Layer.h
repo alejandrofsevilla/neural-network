@@ -23,36 +23,36 @@ public:
 
   std::size_t numberOfNeurons() const;
 
-  float loss() const;
+  double loss() const;
 
-  const Eigen::VectorXf &inputs() const;
+  const Eigen::VectorXd &inputs() const;
 
-  const Eigen::VectorXf &outputs() const;
+  const Eigen::VectorXd &outputs() const;
 
-  const Eigen::VectorXf &errors() const;
+  const Eigen::VectorXd &errors() const;
 
-  const Eigen::MatrixXf &weights() const;
+  const Eigen::MatrixXd &weights() const;
 
-  void updateOutputs(const Eigen::VectorXf &inputs);
+  void updateOutputs(const Eigen::VectorXd &inputs);
 
   void updateErrors(const Layer &nextLayer);
 
-  void updateErrorsAndLoss(const Eigen::VectorXf &targets,
+  void updateErrorsAndLoss(const Eigen::VectorXd &targets,
                            const CostFunction &costFunction);
 
-  void updateWeights(float learnRate);
+  void updateWeights(double learnRate);
 
-  void updateWeights(const Eigen::MatrixXf &gradients, float learnRate);
+  void updateWeights(const Eigen::MatrixXd &gradients, double learnRate);
 
 private:
   const std::size_t m_id;
   const std::size_t m_numberOfInputs;
   const std::size_t m_numberOfNeurons;
   std::unique_ptr<ActivationFunction> m_activationFunction;
-  Eigen::VectorXf m_outputDerivatives;
-  Eigen::VectorXf m_outputs;
-  Eigen::VectorXf m_inputs;
-  Eigen::VectorXf m_errors;
-  Eigen::MatrixXf m_weights;
-  float m_loss;
+  Eigen::VectorXd m_outputDerivatives;
+  Eigen::VectorXd m_outputs;
+  Eigen::VectorXd m_inputs;
+  Eigen::VectorXd m_errors;
+  Eigen::MatrixXd m_weights;
+  double m_loss;
 };

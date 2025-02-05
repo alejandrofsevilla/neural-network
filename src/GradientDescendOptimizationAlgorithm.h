@@ -21,5 +21,5 @@ private:
   void afterSample() override;
   void afterEpoch() override;
 
-  std::vector<Eigen::MatrixXf> m_averageGradients;
+  std::vector<Eigen::MatrixXd> m_averageGradients;
 };

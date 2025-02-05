@@ -15,18 +15,18 @@ CostFunction::instance(options::CostFunctionType type) {
   }
 }
 
-float QuadraticCostFunction::operator()(float value, float target) const {
+double QuadraticCostFunction::operator()(double value, double target) const {
   return 0.5 * pow((value - target), 2.0);
 }
 
-float QuadraticCostFunction::derivative(float value, float target) const {
+double QuadraticCostFunction::derivative(double value, double target) const {
   return value - target;
 }
 
-float CostEntropyCostFunction::operator()(float value, float target) const {
+double CostEntropyCostFunction::operator()(double value, double target) const {
   return -(target * log(value) + (1.0 - target) * log(1.0 - value));
 }
 
-float CostEntropyCostFunction::derivative(float value, float target) const {
+double CostEntropyCostFunction::derivative(double value, double target) const {
   return (value - target) / ((1.0 - value) * target);
 }

@@ -34,7 +34,7 @@ OptimizationAlgorithm::instance(options::OptimizationType type,
 }
 
 void OptimizationAlgorithm::run(TrainingBatch batch, std::size_t maxEpoch,
-                                float learnRate, float lossGoal) {
+                                double learnRate, double lossGoal) {
   beforeRun(learnRate);
   preprocess(batch);
   for (m_epochsCount = 0; m_epochsCount < maxEpoch; m_epochsCount++) {
@@ -55,9 +55,9 @@ void OptimizationAlgorithm::run(TrainingBatch batch, std::size_t maxEpoch,
 
 std::size_t OptimizationAlgorithm::epochsCount() const { return m_epochsCount; }
 
-float OptimizationAlgorithm::loss() const { return m_loss; }
+double OptimizationAlgorithm::loss() const { return m_loss; }
 
-void OptimizationAlgorithm::beforeRun(float learnRate) {
+void OptimizationAlgorithm::beforeRun(double learnRate) {
   m_learnRate = learnRate;
   m_epochsCount = 0;
   m_loss = 0;
@@ -71,9 +71,9 @@ void OptimizationAlgorithm::updateLoss() {
   m_loss = m_loss + (m_layers.back().loss() - m_loss) / m_samplesCount;
 }
 
-void OptimizationAlgorithm::forwardPropagate(const std::vector<float> &inputs) {
+void OptimizationAlgorithm::forwardPropagate(const std::vector<double> &inputs) {
   auto inputsView{
-      Eigen::Map<const Eigen::VectorXf>(inputs.data(), inputs.size())};
+      Eigen::Map<const Eigen::VectorXd>(inputs.data(), inputs.size())};
   m_layers.front().updateOutputs(inputsView);
   std::for_each(m_layers.begin() + 1, m_layers.end(), [this](auto &l) {
     l.updateOutputs(m_layers.at(l.id() - 1).outputs());
@@ -81,10 +81,10 @@ void OptimizationAlgorithm::forwardPropagate(const std::vector<float> &inputs) {
 }
 
 void OptimizationAlgorithm::backwardPropagate(
-    const std::vector<float> &outputs) {
+    const std::vector<double> &outputs) {
   auto &lastLayer{m_layers.back()};
   auto outputsView{
-      Eigen::Map<const Eigen::VectorXf>(outputs.data(), outputs.size())};
+      Eigen::Map<const Eigen::VectorXd>(outputs.data(), outputs.size())};
   lastLayer.updateErrorsAndLoss(outputsView, *m_costFunction);
   std::for_each(m_layers.rbegin() + 1, m_layers.rend(),
                 [this](auto &l) { l.updateErrors(m_layers.at(l.id() + 1)); });

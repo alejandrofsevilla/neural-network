@@ -12,18 +12,18 @@ public:
 
   virtual ~CostFunction() = default;
 
-  virtual float operator()(float value, float target) const = 0;
-  virtual float derivative(float value, float target) const = 0;
+  virtual double operator()(double value, double target) const = 0;
+  virtual double derivative(double value, double target) const = 0;
 };
 
 class QuadraticCostFunction : public CostFunction {
 public:
-  float operator()(float value, float target) const override;
-  float derivative(float value, float target) const override;
+  double operator()(double value, double target) const override;
+  double derivative(double value, double target) const override;
 };
 
 class CostEntropyCostFunction : public CostFunction {
 public:
-  float operator()(float value, float target) const override;
-  float derivative(float value, float target) const override;
+  double operator()(double value, double target) const override;
+  double derivative(double value, double target) const override;
 };

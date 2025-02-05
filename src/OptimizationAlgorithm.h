@@ -22,30 +22,30 @@ public:
 
   virtual ~OptimizationAlgorithm() = default;
 
-  virtual void run(TrainingBatch batch, std::size_t maxEpoch, float learnRate,
-                   float lossGoal);
+  virtual void run(TrainingBatch batch, std::size_t maxEpoch, double learnRate,
+                   double lossGoal);
 
   std::size_t epochsCount() const;
 
-  float loss() const;
+  double loss() const;
 
 protected:
   OptimizationAlgorithm(options::CostFunctionType costFunction,
                         std::vector<Layer> &layers);
 
-  virtual void beforeRun(float learnRate);
+  virtual void beforeRun(double learnRate);
   virtual void afterSample();
   virtual void afterEpoch();
 
   void updateLoss();
-  void forwardPropagate(const std::vector<float> &inputs);
-  void backwardPropagate(const std::vector<float> &outputs);
+  void forwardPropagate(const std::vector<double> &inputs);
+  void backwardPropagate(const std::vector<double> &outputs);
   void preprocess(TrainingBatch &batch) const;
 
   std::vector<Layer> &m_layers;
   std::unique_ptr<CostFunction> m_costFunction;
   std::size_t m_epochsCount;
   std::size_t m_samplesCount;
-  float m_learnRate;
-  float m_loss;
+  double m_learnRate;
+  double m_loss;
 };

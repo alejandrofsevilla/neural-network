@@ -3,8 +3,8 @@
 #include <vector>
 
 struct TrainingSample {
-  std::vector<float> inputs;
-  std::vector<float> outputs;
+  std::vector<double> inputs;
+  std::vector<double> outputs;
 };
 
 struct TrainingBatch {

@@ -21,39 +21,39 @@ ActivationFunction::instance(options::ActivationFunctionType type) {
   }
 }
 
-float StepActivationFunction::operator()(float input) const {
+double StepActivationFunction::operator()(double input) const {
   return input >= 0.0 ? 1.0 : 0.0;
 }
 
-float StepActivationFunction::derivative(float) const { return 0.0; }
+double StepActivationFunction::derivative(double) const { return 0.0; }
 
-float LinearActivationFunction::operator()(float input) const { return input; }
+double LinearActivationFunction::operator()(double input) const { return input; }
 
-float LinearActivationFunction::derivative(float) const { return 1.0; }
+double LinearActivationFunction::derivative(double) const { return 1.0; }
 
-float ReluActivationFunction::operator()(float input) const {
+double ReluActivationFunction::operator()(double input) const {
   return input >= 0.0 ? input : 0.0;
 }
 
-float ReluActivationFunction::derivative(float input) const {
+double ReluActivationFunction::derivative(double input) const {
   return input >= 0.0 ? 1.0 : 0.0;
 }
 
-float SigmoidActivationFunction::operator()(float input) const {
+double SigmoidActivationFunction::operator()(double input) const {
   return 1.0 / (1 + exp(-input));
 }
 
-float SigmoidActivationFunction::derivative(float input) const {
+double SigmoidActivationFunction::derivative(double input) const {
   auto c{this->operator()(input)};
   return c * (1.0 - c);
 }
 
-float TanHActivationFunction::operator()(float input) const {
+double TanHActivationFunction::operator()(double input) const {
   auto c1{exp(input)};
   auto c2{exp(-input)};
   return (c1 - c2) / (c1 + c2);
 }
 
-float TanHActivationFunction::derivative(float input) const {
+double TanHActivationFunction::derivative(double input) const {
   return 1.0 - std::pow((this->operator()(input)), 2.0);
 }
