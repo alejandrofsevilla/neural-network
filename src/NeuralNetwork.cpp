@@ -8,7 +8,6 @@
 #include "TrainingReport.h"
 #include "TrainingSample.h"
 
-#include <chrono>
 #include <iostream>
 
 NeuralNetwork::NeuralNetwork(std::size_t numberOfInputs)
@@ -23,24 +22,21 @@ NeuralNetwork::computeOutputs(const std::vector<double> &inputs) {
     std::cerr << "error: input vector has incorrect dimensions." << std::endl;
     return inputs;
   }
-  auto outputs{Eigen::Map<const Eigen::VectorXd>(inputs.data(), inputs.size())};
-  m_layers.front().updateOutputs(outputs);
+  m_layers.front().updateOutputs(
+      Eigen::Map<const Eigen::VectorXd>(inputs.data(), inputs.size()));
   std::for_each(m_layers.begin() + 1, m_layers.end(), [this](auto &l) {
     l.updateOutputs(m_layers.at(l.id() - 1).outputs());
   });
-  auto &lastLayerOutputs{m_layers.back().outputs()};
-  return std::vector<double>(lastLayerOutputs.cbegin(), lastLayerOutputs.cend());
+  auto &outputs{m_layers.back().outputs()};
+  return std::vector<double>(outputs.cbegin(), outputs.cend());
 }
 
 TrainingReport NeuralNetwork::train(options::TrainingConfig config,
                                     const TrainingBatch &batch) {
-  auto begin = std::chrono::steady_clock::now();
   auto optimizator{OptimizationAlgorithm::instance(
       config.optimization, config.costFunction, m_layers)};
-  optimizator->run(batch, config.maxEpoch, config.learnRate, config.lossGoal);
-  auto end = std::chrono::steady_clock::now();
-  return {std::chrono::duration_cast<std::chrono::milliseconds>(end - begin),
-          optimizator->epochsCount(), optimizator->loss()};
+  return optimizator->run(batch, config.maxEpoch, config.learnRate,
+                          config.lossGoal);
 }
 
 void NeuralNetwork::addLayer(options::LayerConfig config) {

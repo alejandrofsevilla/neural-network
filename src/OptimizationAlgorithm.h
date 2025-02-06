@@ -4,8 +4,9 @@
 #include <memory>
 #include <vector>
 
-class CostFunction;
 class Layer;
+class CostFunction;
+struct TrainingReport;
 struct TrainingBatch;
 
 namespace options {
@@ -22,30 +23,24 @@ public:
 
   virtual ~OptimizationAlgorithm() = default;
 
-  virtual void run(TrainingBatch batch, std::size_t maxEpoch, double learnRate,
-                   double lossGoal);
-
-  std::size_t epochsCount() const;
-
-  double loss() const;
+  TrainingReport run(TrainingBatch batch, std::size_t maxEpoch,
+                     double learnRate, double lossGoal);
 
 protected:
   OptimizationAlgorithm(options::CostFunctionType costFunction,
                         std::vector<Layer> &layers);
 
-  virtual void beforeRun(double learnRate);
   virtual void afterSample();
   virtual void afterEpoch();
 
-  void updateLoss();
   void forwardPropagate(const std::vector<double> &inputs);
   void backwardPropagate(const std::vector<double> &outputs);
   void preprocess(TrainingBatch &batch) const;
 
   std::vector<Layer> &m_layers;
   std::unique_ptr<CostFunction> m_costFunction;
-  std::size_t m_epochsCount;
-  std::size_t m_samplesCount;
+  std::size_t m_epochCount;
+  std::size_t m_sampleCount;
   double m_learnRate;
   double m_loss;
 };

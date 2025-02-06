@@ -4,17 +4,28 @@
 #include "Layer.h"
 #include "Options.h"
 
+namespace {
+auto generateGradients(const std::vector<Layer> &layers) {
+  std::vector<Eigen::MatrixXd> gradients;
+  std::transform(layers.cbegin(), layers.cend(), std::back_inserter(gradients),
+                 [](auto &l) {
+                   auto &weights{l.weights()};
+                   return Eigen::MatrixXd::Zero(weights.rows(), weights.cols());
+                 });
+  return gradients;
+}
+} // namespace
+
 GradientDescendOptimizationAlgorithm::GradientDescendOptimizationAlgorithm(
     options::CostFunctionType costFunction, std::vector<Layer> &layers)
     : OptimizationAlgorithm(costFunction, layers),
-      m_averageGradients(m_layers.size()) {}
+      m_averageGradients{generateGradients(layers)} {}
 
 void GradientDescendOptimizationAlgorithm::afterSample() {
   std::for_each(m_layers.begin(), m_layers.end(), [this](auto &l) {
-    auto &layerGradients{m_averageGradients.at(l.id())};
-    layerGradients.resize(l.weights().rows(), l.weights().cols());
-    layerGradients += ((l.inputs() * l.errors().transpose()) - layerGradients) /
-                      m_samplesCount;
+    auto &gradients{m_averageGradients.at(l.id())};
+    gradients += ((l.inputs() * l.errors().transpose()) - gradients) /
+                 (m_sampleCount + 1);
   });
 }
 
