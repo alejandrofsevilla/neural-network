@@ -5,7 +5,7 @@
 
 SGDOptimizationAlgorithm::SGDOptimizationAlgorithm(
     options::CostFunctionType costFunction, std::vector<Layer> &layers)
-    : OptimizationAlgorithm(costFunction, layers) {}
+    : OptimizationAlgorithm{costFunction, layers} {}
 
 void SGDOptimizationAlgorithm::afterSample() {
   std::for_each(m_layers.begin(), m_layers.end(),

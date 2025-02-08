@@ -12,7 +12,7 @@
 
 NeuralNetwork::NeuralNetwork(std::size_t numberOfInputs)
     : m_numberOfInputs{numberOfInputs},
-      m_numberOfOutputs(numberOfInputs), m_layers{} {}
+      m_numberOfOutputs{numberOfInputs}, m_layers{} {}
 
 NeuralNetwork::~NeuralNetwork() {}
 

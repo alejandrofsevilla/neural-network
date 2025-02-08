@@ -25,7 +25,7 @@ auto generateMomentEstimates(const std::vector<Layer> &layers) {
 
 ADAMOptimizationAlgorithm::ADAMOptimizationAlgorithm(
     options::CostFunctionType costFunction, std::vector<Layer> &layers)
-    : OptimizationAlgorithm(costFunction, layers),
+    : OptimizationAlgorithm{costFunction, layers},
       m_momentEstimates{generateMomentEstimates(layers)} {}
 
 void ADAMOptimizationAlgorithm::afterSample() {
