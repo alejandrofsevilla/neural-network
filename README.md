@@ -95,15 +95,15 @@ classDiagram
     }
     class C_0017517293265978054845["Layer"]
     class C_0017517293265978054845 {
-        +computeGradients() : [const] Eigen::MatrixXd
         +errors() : [const] const Eigen::VectorXd &
         +id() : [const] std::size_t
+        +inputs() : [const] const Eigen::VectorXd &
         +loss() : [const] double
         +numberOfInputs() : [const] std::size_t
         +numberOfNeurons() : [const] std::size_t
         +outputs() : [const] const Eigen::VectorXd &
         +updateErrors(const Layer & nextLayer) : void
-        +updateErrors(const Eigen::VectorXd & targets, const CostFunction & costFunction) : void
+        +updateErrorsAndLoss(const Eigen::VectorXd & targets, const CostFunction & costFunction) : void
         +updateOutputs(const Eigen::VectorXd & inputs) : void
         +updateWeights(double learnRate) : void
         +updateWeights(const Eigen::MatrixXd & gradients, double learnRate) : void
@@ -111,10 +111,10 @@ classDiagram
         -m_errors : Eigen::VectorXd
         -m_id : const std::size_t
         -m_inputs : Eigen::VectorXd
-        -m_intermediateQtys : Eigen::VectorXd
         -m_loss : double
         -m_numberOfInputs : const std::size_t
         -m_numberOfNeurons : const std::size_t
+        -m_outputDerivatives : Eigen::VectorXd
         -m_outputs : Eigen::VectorXd
         -m_weights : Eigen::MatrixXd
     }
@@ -170,26 +170,25 @@ classDiagram
         #afterEpoch() : void
         #afterSample() : void
         #backwardPropagate(const std::vector&lt;double&gt; & outputs) : void
-        #beforeRun(double learnRate) : void
-        +epochsCount() : [const] std::size_t
         #forwardPropagate(const std::vector&lt;double&gt; & inputs) : void
-        +loss() : [const] double
         #preprocess(TrainingBatch & batch) : [const] void
-        +run(TrainingBatch batch, std::size_t maxEpoch, double learnRate, double lossGoal) : void
-        #updateLoss() : void
-        #m_epochsCount : std::size_t
+        +run(TrainingBatch batch, std::size_t maxEpoch, double learnRate, double lossGoal) : TrainingReport
+        #m_epochCount : std::size_t
         #m_learnRate : double
         #m_loss : double
-        #m_samplesCount : std::size_t
+        #m_sampleCount : std::size_t
     }
     class C_0011803148689591493735["GradientDescendOptimizationAlgorithm"]
     class C_0011803148689591493735 {
         -afterEpoch() : void
         -afterSample() : void
-        -m_gradients : std::vector&lt;Eigen::MatrixXd&gt;
+        -m_averageGradients : std::vector&lt;Eigen::MatrixXd&gt;
     }
     class C_0004972352846766595368["TrainingBatch"]
     class C_0004972352846766595368 {
+    }
+    class C_0006869410385549763069["TrainingReport"]
+    class C_0006869410385549763069 {
     }
     class C_0016902125101895250401["NeuralNetwork"]
     class C_0016902125101895250401 {
@@ -198,12 +197,6 @@ classDiagram
         +train(options::TrainingConfig config, const TrainingBatch & batch) : TrainingReport
         -m_numberOfInputs : const std::size_t
         -m_numberOfOutputs : std::size_t
-    }
-    class C_0006869410385549763069["TrainingReport"]
-    class C_0006869410385549763069 {
-        +epochs : std::size_t
-        +loss : double
-        +trainingTime : std::chrono::milliseconds
     }
     class C_0016586572411026969904["TrainingSample"]
     class C_0016586572411026969904 {
@@ -218,7 +211,7 @@ classDiagram
     class C_0012912509499042389263 {
         -afterSample() : void
         -computeGradients(std::size_t layerId) : Eigen::MatrixXd
-        -m_momentEstimates : std::vector&lt;Eigen::Matrix&lt;std::pair&lt;double,double&gt;,Eigen::Dynamic,Eigen::Dynamic&gt;&gt;
+        -m_momentEstimates : std::vector&lt;Eigen::MatrixX&lt;std::pair&lt;double,double&gt;&gt;&gt;
     }
     C_0005162987213334549566 o-- C_0004723107453516162687 : +activationFunction
     C_0009990744508583239417 o-- C_0006489356659787961387 : +optimization
@@ -240,6 +233,7 @@ classDiagram
 
 %% Generated with clang-uml, version 0.6.0
 %% LLVM version Ubuntu clang version 15.0.7
+
 ```
 ## Documentation
 ### List of Symbols

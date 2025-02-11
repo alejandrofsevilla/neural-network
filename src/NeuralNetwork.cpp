@@ -11,8 +11,7 @@
 #include <iostream>
 
 NeuralNetwork::NeuralNetwork(std::size_t numberOfInputs)
-    : m_numberOfInputs{numberOfInputs},
-      m_numberOfOutputs{numberOfInputs}, m_layers{} {}
+    : m_numberOfInputs{numberOfInputs}, m_numberOfOutputs{}, m_layers{} {}
 
 NeuralNetwork::~NeuralNetwork() {}
 
@@ -28,7 +27,7 @@ NeuralNetwork::computeOutputs(const std::vector<double> &inputs) {
     l.updateOutputs(m_layers.at(l.id() - 1).outputs());
   });
   auto &outputs{m_layers.back().outputs()};
-  return std::vector<double>(outputs.cbegin(), outputs.cend());
+  return {outputs.cbegin(), outputs.cend()};
 }
 
 TrainingReport NeuralNetwork::train(options::TrainingConfig config,
@@ -40,7 +39,8 @@ TrainingReport NeuralNetwork::train(options::TrainingConfig config,
 }
 
 void NeuralNetwork::addLayer(options::LayerConfig config) {
-  m_layers.emplace_back(m_layers.size(), m_numberOfOutputs,
+  m_layers.emplace_back(m_layers.size(),
+                        m_layers.empty() ? m_numberOfInputs : m_numberOfOutputs,
                         config.numberOfNeurons, config.activationFunction);
   m_numberOfOutputs = config.numberOfNeurons;
 }

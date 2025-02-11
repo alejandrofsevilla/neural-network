@@ -11,8 +11,7 @@ constexpr auto f_weightInitMinValue{-1.0};
 constexpr auto f_weightInitMaxValue{+1.0};
 
 inline auto randomValue(double min, double max) {
-  std::random_device rd;
-  std::mt19937 eng{rd()};
+  std::mt19937 eng{std::random_device{}()};
   std::uniform_real_distribution<double> dist{min, max};
   return dist(eng);
 }
@@ -49,6 +48,14 @@ const Eigen::VectorXd &Layer::outputs() const { return m_outputs; }
 
 const Eigen::VectorXd &Layer::errors() const { return m_errors; }
 
+void Layer::updateWeights(double learnRate) {
+  m_weights -= m_inputs * m_errors.transpose() * learnRate;
+}
+
+void Layer::updateWeights(const Eigen::MatrixXd &gradients, double learnRate) {
+  m_weights -= learnRate * gradients;
+}
+
 void Layer::updateOutputs(const Eigen::VectorXd &inputs) {
   m_inputs.head(inputs.size()) = inputs;
   for (auto i = 0; i < m_weights.cols(); i++) {
@@ -74,12 +81,4 @@ void Layer::updateErrorsAndLoss(const Eigen::VectorXd &targets,
     m_errors(i) = costFunction.derivative(o, t);
     m_loss += costFunction(o, t) / m_numberOfNeurons;
   }
-}
-
-void Layer::updateWeights(double learnRate) {
-  m_weights -= m_inputs * m_errors.transpose() * learnRate;
-}
-
-void Layer::updateWeights(const Eigen::MatrixXd &gradients, double learnRate) {
-  m_weights -= learnRate * gradients;
 }

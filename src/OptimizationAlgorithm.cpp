@@ -83,11 +83,10 @@ void OptimizationAlgorithm::backwardPropagate(
 }
 
 void OptimizationAlgorithm::preprocess(TrainingBatch &batch) const {
-  auto networkInputDimensions{m_layers.front().numberOfInputs()};
-  auto networkOutputDimensions{m_layers.back().numberOfNeurons()};
+  auto inputSize{m_layers.front().numberOfInputs()};
+  auto outputSize{m_layers.back().numberOfNeurons()};
   for (auto it = batch.samples.begin(); it != batch.samples.end(); it++) {
-    if (it->inputs.size() != networkInputDimensions ||
-        it->outputs.size() != networkOutputDimensions) {
+    if (it->inputs.size() != inputSize || it->outputs.size() != outputSize) {
       std::cerr << "error: sample has incorrect dimensions." << std::endl;
       batch.samples.erase(it--);
     }
