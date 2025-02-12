@@ -59,9 +59,9 @@ void Layer::updateWeights(const Eigen::MatrixXd &gradients, double learnRate) {
 void Layer::updateOutputs(const Eigen::VectorXd &inputs) {
   m_inputs.head(inputs.size()) = inputs;
   for (auto i = 0; i < m_weights.cols(); i++) {
-    double q{m_weights.col(i).transpose() * m_inputs};
-    m_outputs(i) = m_activationFunction->operator()(q);
-    m_outputDerivatives(i) = m_activationFunction->derivative(q);
+    double qty{m_weights.col(i).transpose() * m_inputs};
+    m_outputs(i) = m_activationFunction->operator()(qty);
+    m_outputDerivatives(i) = m_activationFunction->derivative(qty);
   }
 }
 
@@ -76,9 +76,9 @@ void Layer::updateErrorsAndLoss(const Eigen::VectorXd &targets,
                                 const CostFunction &costFunction) {
   m_loss = 0;
   for (auto i = 0; i < m_outputs.size(); i++) {
-    auto o{m_outputs(i)};
-    auto t{targets(i)};
-    m_errors(i) = costFunction.derivative(o, t);
-    m_loss += costFunction(o, t) / m_numberOfNeurons;
+    auto output{m_outputs(i)};
+    auto target{targets(i)};
+    m_errors(i) = costFunction.derivative(output, target);
+    m_loss += costFunction(output, target) / m_numberOfNeurons;
   }
 }
