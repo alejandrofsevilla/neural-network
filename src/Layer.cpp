@@ -58,11 +58,11 @@ void Layer::updateWeights(const Eigen::MatrixXd &gradients, double learnRate) {
 
 void Layer::updateOutputs(const Eigen::VectorXd &inputs) {
   m_inputs.head(inputs.size()) = inputs;
-  Eigen::VectorXd qties{m_weights.transpose() * m_inputs};
-  m_outputs = qties.unaryExpr(
-      [this](auto qty) { return m_activationFunction->operator()(qty); });
-  m_outputDerivatives = qties.unaryExpr(
-      [this](auto qty) { return m_activationFunction->derivative(qty); });
+  Eigen::VectorXd intermediateQuantities{m_weights.transpose() * m_inputs};
+  m_outputs = intermediateQuantities.unaryExpr(
+      [this](auto q) { return m_activationFunction->operator()(q); });
+  m_outputDerivatives = intermediateQuantities.unaryExpr(
+      [this](auto q) { return m_activationFunction->derivative(q); });
 }
 
 void Layer::updateErrors(const Layer &nextLayer) {
