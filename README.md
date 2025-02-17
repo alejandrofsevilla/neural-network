@@ -316,7 +316,8 @@ $$
 ### Matrix Operations
 #### Neuron Intermediate Quantity:
 $$ \large
-z_{n_l} = \begin{bmatrix}y_1&y_2&...&y_{N_{l-1}}&b\end{bmatrix} \cdot \begin{bmatrix}w_1\\\w_2\\\ . \\\ . \\\ . \\\w_{N_{l-1}}\\\w_b\end{bmatrix}
+\begin{bmatrix}z_1\\\z_2\\\  . \\\ . \\\ .  \\\ z_{N_l}\end{bmatrix} = {\begin{bmatrix}w_{11}&w_{12}&...&w_{1N_l}\\\w_{21}&w_{22}&...&w_{2N_l}\\\ . & . & . & . \\\ . & . & . & . \\\ . & . & . & . \\\w_{N_{l-1}1}&w_{N_{l-1}2}&...&w_{N_{l-1}N_l}\end{bmatrix}}^T \cdot 
+ \begin{bmatrix}y_1\\\y_2\\\  . \\\ . \\\ .  \\\ y_{N_{l-1}}\end{bmatrix}
 $$
 #### Layer Errors:
 
