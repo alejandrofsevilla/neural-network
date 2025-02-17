@@ -313,16 +313,17 @@ $$ \large
 E_{n_l} = \dot C\big(y_{n_l}, \hat y_{n_l}\big) \cdot \dot A_{n_l}\big(z_{n_l}\big)
 $$
 
-### Matrix Operations
-#### Neuron Intermediate Quantity:
+### Layer Matrix Operations
+#### Intermediate Quantities:
 $$ \large
 \begin{bmatrix}z_1\\\z_2\\\  . \\\ . \\\ .  \\\ z_{N_l}\end{bmatrix} = {\begin{bmatrix}w_{11}&w_{12}&...&w_{1N_l}\\\w_{21}&w_{22}&...&w_{2N_l}\\\ . & . & . & . \\\ . & . & . & . \\\ . & . & . & . \\\w_{N_{l-1}1}&w_{N_{l-1}2}&...&w_{N_{l-1}N_l}\end{bmatrix}}^T \cdot 
  \begin{bmatrix}y_1\\\y_2\\\  . \\\ . \\\ .  \\\ y_{N_{l-1}}\end{bmatrix}
 $$
-#### Layer Errors:
+#### Errors:
 
 $$ \large
-\begin{bmatrix}E_1&E_2&...&E_N\end{bmatrix} = \begin{bmatrix}w_{11}&w_{12}&...&w_{1N_l}\\\w_{21}&w_{22}&...&w_{2N_l}\\\ ...&...&...&... \\\w_{N_{l-1}1}&w_{N_{l-1}2}&...&w_{N_{l-1}N_l}\end{bmatrix}
+\begin{bmatrix}E_1\\\E_2\\\  . \\\ . \\\ .  \\\ E_{N_l}\end{bmatrix} = {\begin{bmatrix}w_{11}&w_{12}&...&w_{1N_{l+1}}\\\w_{21}&w_{22}&...&w_{2N_{l+1}}\\\ . & . & . & . \\\ . & . & . & . \\\ . & . & . & . \\\w_{N_l1}&w_{N_l2}&...&w_{N_lN_{l+1}}\end{bmatrix}}
+\cdot \begin{bmatrix}E_1\\\E_2\\\  . \\\ . \\\ .  \\\ E_{N_{l+1}}\end{bmatrix} \odot \begin{bmatrix} \dot A(z_1)\\\ \dot A(z_2) \\\  . \\\ . \\\ .  \\\ \dot A(z_{N_l})\end{bmatrix}
 $$
 
 
