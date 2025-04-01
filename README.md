@@ -316,7 +316,7 @@ $$
 ### Activation Function
 #### Binary Step:
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/e46372d3-e7db-41c5-9229-a773b17a1d9b" alt="drawing" width="500"/>
+  <img src="https://github.com/user-attachments/assets/e46372d3-e7db-41c5-9229-a773b17a1d9b" width="500"/>
 </p>
 
 $$ \large
