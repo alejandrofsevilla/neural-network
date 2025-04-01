@@ -316,7 +316,7 @@ $$
 ### Activation Function
 #### Binary Step:
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/e46372d3-e7db-41c5-9229-a773b17a1d9b" width="500"/>
+  <img src="https://github.com/user-attachments/assets/22efea97-1de4-44c9-942c-2829b0481670" width="500"/>
 </p>
 
 $$ \large
@@ -330,7 +330,7 @@ $$
 
 #### Linear:
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/f4dceb90-73c4-4e40-83ac-0271ac412cff" alt="drawing" width="500"/>
+  <img src="https://github.com/user-attachments/assets/8ee2561c-b260-4153-80f8-312117132881" alt="drawing" width="500"/>
 </p>
 
 $$ \large
@@ -343,7 +343,7 @@ $$
 
 #### Relu:
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/fc453862-5fd8-43a0-ac5d-57bdf318eee6" alt="drawing" width="500"/>
+  <img src="https://github.com/user-attachments/assets/c37acd4a-6e67-49ed-b7e2-9ae0d5fb2cef" alt="drawing" width="500"/>
 </p>
 
 $$ \large
@@ -358,7 +358,7 @@ $$
 
 #### Sigmoid:
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/8758a47d-2494-4dde-a513-ae87a4f63d64" alt="drawing" width="500"/>
+  <img src="https://github.com/user-attachments/assets/6371021c-cb9e-4b97-857a-e148e8d4a9e8" alt="drawing" width="500"/>
 </p>
 
 $$ \large
@@ -371,7 +371,7 @@ $$
 
 #### TanH:
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/483cf2be-54d2-4a0f-9ca7-45d7252789b5" alt="drawing" width="500"/>
+  <img src="https://github.com/user-attachments/assets/ab8ac6d9-357b-46df-af4e-e7ef76e5026d" alt="drawing" width="500"/>
 </p>
 
 $$ \large
