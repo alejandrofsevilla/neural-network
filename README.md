@@ -256,7 +256,7 @@ $\large α$ *= learning rate*
 
 ### Neuron Equations
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/fe1d5008-b3ec-4791-8453-9bca7dad3007"  width="450" />
+  <img src="https://github.com/user-attachments/assets/a6aace91-9450-4e6e-9929-8e4b8532090d"  width="450" />
 </p>
 
 #### Neuron Intermediate Quantity:
