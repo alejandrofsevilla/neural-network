@@ -42,6 +42,7 @@ struct TrainingConfig {
   double learnRate;
   double lossGoal;
 };
+}
 ```
 
 ### Build and test
