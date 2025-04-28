@@ -22,6 +22,9 @@ public:
 
   TrainingReport train(options::TrainingConfig config,
                        const TrainingBatch &batch);
+//...
+
+} //NeuralNetwork
 ```
 ### Options
 ```cpp
@@ -42,7 +45,7 @@ struct TrainingConfig {
   double learnRate;
   double lossGoal;
 };
-}
+} //Options
 ```
 
 ### Build and test
