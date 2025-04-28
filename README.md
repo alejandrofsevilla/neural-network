@@ -23,13 +23,11 @@ public:
   TrainingReport train(options::TrainingConfig config,
                        const TrainingBatch &batch);
 //...
-
 } //NeuralNetwork
 ```
 ### Options
 ```cpp
 namespace options {
-
 enum class ActivationFunctionType { Step, Linear, Relu, Sigmoid, TanH };
 enum class CostFunctionType { Quadratic, CostEntropy };
 enum class OptimizationType { GradientDescend, ADAM, SGD };
@@ -46,7 +44,6 @@ struct TrainingConfig {
   double learnRate;
   double lossGoal;
 };
-
 } //Options
 ```
 
