@@ -8,43 +8,24 @@ C++ implementation of neural network class.
 * GoogleTest 1.11.0
 * Eigen 3
   
-### Interface
+### Member Functions
 ```cpp
-class NeuralNetwork {
-public:
-  explicit NeuralNetwork(std::size_t numberOfInputs);
-
-  ~NeuralNetwork();
-
-  std::vector<double> computeOutputs(const std::vector<double> &inputs);
-
-  void addLayer(options::LayerConfig config);
-
-  TrainingReport train(options::TrainingConfig config,
-                       const TrainingBatch &batch);
-//...
-} //NeuralNetwork
+explicit NeuralNetwork(std::size_t numberOfInputs);
+```
+```cpp
+std::vector<double> NeuralNetwork::computeOutputs(const std::vector<double> &inputs);
+```
+```cpp
+void NeuralNetwork::addLayer(options::LayerConfig config);
+```
+```cpp
+TrainingReport NeuralNetwork::train(options::TrainingConfig config, const TrainingBatch &batch);
 ```
 ### Options
 ```cpp
-namespace options {
-enum class ActivationFunctionType { Step, Linear, Relu, Sigmoid, TanH };
-enum class CostFunctionType { Quadratic, CostEntropy };
-enum class OptimizationType { GradientDescend, ADAM, SGD };
-
-struct LayerConfig {
-  std::size_t numberOfNeurons;
-  options::ActivationFunctionType activationFunction;
-};
-
-struct TrainingConfig {
-  options::OptimizationType optimization;
-  options::CostFunctionType costFunction;
-  std::size_t maxEpoch;
-  double learnRate;
-  double lossGoal;
-};
-} //Options
+enum class options::ActivationFunctionType { Step, Linear, Relu, Sigmoid, TanH };
+enum class options::CostFunctionType { Quadratic, CostEntropy };
+enum class options::OptimizationType { GradientDescend, ADAM, SGD };
 ```
 
 ### Build and test
