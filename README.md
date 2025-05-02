@@ -1,17 +1,10 @@
 # [![LinuxBuildWorkflow](https://github.com/alejandrofsevilla/neural-network/actions/workflows/LinuxBuild.yml/badge.svg)](https://github.com/alejandrofsevilla/neural-network/actions/workflows/LinuxBuild.yml) [![Testsflow](https://github.com/alejandrofsevilla/neural-network/actions/workflows/LinuxBuildAndTest.yml/badge.svg)](https://github.com/alejandrofsevilla/neural-network/actions/workflows/LinuxBuildAndTest.yml)
 # neural-network
 C++ implementation of neural network class.
-## Usage
-### Requirements
-* C++17 compiler.
-* CMake 3.22.0
-* GoogleTest 1.11.0
-* Eigen 3
-  
-### Member Functions
 ```cpp
 explicit NeuralNetwork(std::size_t numberOfInputs);
 ```
+### Member Functions
 ```cpp
 std::vector<double> NeuralNetwork::computeOutputs(const std::vector<double> &inputs);
 ```
@@ -28,6 +21,12 @@ enum class options::CostFunctionType { Quadratic, CostEntropy };
 enum class options::OptimizationType { GradientDescend, ADAM, SGD };
 ```
 
+### Requirements
+* C++17 compiler.
+* CMake 3.22.0
+* GoogleTest 1.11.0
+* Eigen 3
+  
 ### Build and test
 - Install dependencies.
    ```terminal
