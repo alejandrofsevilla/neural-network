@@ -7,13 +7,13 @@ NeuralNetwork::NeuralNetwork();
 ```
 ### Member Functions
 ```cpp
-std::vector<double> NeuralNetwork::computeOutputs(const std::vector<double> &inputs);
-```
-```cpp
 void NeuralNetwork::addLayer(options::LayerConfig config);
 ```
 ```cpp
 TrainingReport NeuralNetwork::train(options::TrainingConfig config, const TrainingBatch &batch);
+```
+```cpp
+std::vector<double> NeuralNetwork::computeOutputs(const std::vector<double> &inputs);
 ```
 ### Options
 ```cpp
