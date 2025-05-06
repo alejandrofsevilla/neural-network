@@ -68,7 +68,7 @@ struct options::TrainingConfig {
 
    target_link_libraries(${PROJECT_NAME} PRIVATE neural-network)
    ```
-## Implementation
+## Design
 ```mermaid
 classDiagram
     class C_0004723107453516162687["options::ActivationFunctionType"]
