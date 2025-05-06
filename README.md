@@ -2,10 +2,10 @@
 # neural-network
 C++ implementation of neural network class.
 ## Interface
+### Member functions
 ```cpp
 NeuralNetwork::NeuralNetwork();
 ```
-### Member Functions
 ```cpp
 void NeuralNetwork::addLayer(options::LayerConfig config);
 ```
