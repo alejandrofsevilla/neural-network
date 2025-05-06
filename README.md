@@ -21,6 +21,21 @@ enum class options::ActivationFunctionType { Step, Linear, Relu, Sigmoid, TanH }
 enum class options::CostFunctionType { Quadratic, CostEntropy };
 enum class options::OptimizationType { GradientDescend, ADAM, SGD };
 ``` 
+```cpp
+struct options::LayerConfig {
+  std::size_t numberOfNeurons;
+  options::ActivationFunctionType activationFunction;
+};
+``` 
+```cpp
+struct options::TrainingConfig {
+  options::OptimizationType optimization;
+  options::CostFunctionType costFunction;
+  std::size_t maxEpoch;
+  double learnRate;
+  double lossGoal;
+};
+``` 
 ### Build and test
 - Install dependencies.
    ```terminal
