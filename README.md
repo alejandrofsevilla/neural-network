@@ -3,7 +3,7 @@
 C++ implementation of neural network class.
 ## Interface
 ```cpp
-NeuralNetwork::NeuralNetworkcit();
+NeuralNetwork::NeuralNetwork();
 ```
 ### Member Functions
 ```cpp
