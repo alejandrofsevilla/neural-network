@@ -10,14 +10,16 @@
 
 #include <iostream>
 
-NeuralNetwork::NeuralNetwork(std::size_t numberOfInputs)
-    : m_numberOfInputs{numberOfInputs}, m_numberOfOutputs{}, m_layers{} {}
+NeuralNetwork::NeuralNetwork() : m_layers{} {}
 
-NeuralNetwork::~NeuralNetwork() {}
+NeuralNetwork::~NeuralNetwork() = default;
 
 std::vector<double>
 NeuralNetwork::computeOutputs(const std::vector<double> &inputs) {
-  if (inputs.size() != m_numberOfInputs) {
+  if (m_layers.empty()) {
+    return inputs;
+  }
+  if (inputs.size() != m_layers.front().numberOfInputs()) {
     std::cerr << "error: input vector has incorrect dimensions." << std::endl;
     return inputs;
   }
@@ -39,8 +41,11 @@ TrainingReport NeuralNetwork::train(options::TrainingConfig config,
 }
 
 void NeuralNetwork::addLayer(options::LayerConfig config) {
-  m_layers.emplace_back(m_layers.size(),
-                        m_layers.empty() ? m_numberOfInputs : m_numberOfOutputs,
+  if (!m_layers.empty() &&
+      config.numberOfInputs != m_layers.back().numberOfNeurons()) {
+    std::cerr << "error: layer has incorrect dimensions." << std::endl;
+    return;
+  }
+  m_layers.emplace_back(m_layers.size(), config.numberOfInputs,
                         config.numberOfNeurons, config.activationFunction);
-  m_numberOfOutputs = config.numberOfNeurons;
 }

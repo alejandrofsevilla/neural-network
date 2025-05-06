@@ -3,7 +3,7 @@
 C++ implementation of neural network class.
 ## Interface
 ```cpp
-explicit NeuralNetwork(std::size_t numberOfInputs);
+NeuralNetwork::NeuralNetworkcit();
 ```
 ### Member Functions
 ```cpp
@@ -23,6 +23,7 @@ enum class options::OptimizationType { GradientDescend, ADAM, SGD };
 ``` 
 ```cpp
 struct options::LayerConfig {
+  std::size_t numberOfInputs;
   std::size_t numberOfNeurons;
   options::ActivationFunctionType activationFunction;
 };
@@ -87,6 +88,7 @@ classDiagram
     }
     class C_0005162987213334549566["options::LayerConfig"]
     class C_0005162987213334549566 {
+        +numberOfInputs : std::size_t
         +numberOfNeurons : std::size_t
     }
     class C_0009990744508583239417["options::TrainingConfig"]
@@ -197,8 +199,6 @@ classDiagram
         +addLayer(options::LayerConfig config) : void
         +computeOutputs(const std::vector&lt;double&gt; & inputs) : std::vector&lt;double&gt;
         +train(options::TrainingConfig config, const TrainingBatch & batch) : TrainingReport
-        -m_numberOfInputs : const std::size_t
-        -m_numberOfOutputs : std::size_t
     }
     class C_0016586572411026969904["TrainingSample"]
     class C_0016586572411026969904 {

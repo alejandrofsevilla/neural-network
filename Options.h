@@ -8,6 +8,7 @@ enum class CostFunctionType { Quadratic, CostEntropy };
 enum class OptimizationType { GradientDescend, ADAM, SGD };
 
 struct LayerConfig {
+  std::size_t numberOfInputs;
   std::size_t numberOfNeurons;
   options::ActivationFunctionType activationFunction;
 };

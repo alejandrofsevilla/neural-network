@@ -79,9 +79,9 @@ inline auto print(TrainingReport r) {
 
 TEST(NeuralNetworkTest, FunctionCosineWith50NeuronsTanHAndSGDOptimization) {
   auto min{-1.5 * M_PI}, max{2.5 * M_PI};
-  NeuralNetwork nn{1};
-  nn.addLayer({50, options::ActivationFunctionType::TanH});
-  nn.addLayer({1, options::ActivationFunctionType::Linear});
+  NeuralNetwork nn;
+  nn.addLayer({1, 50, options::ActivationFunctionType::TanH});
+  nn.addLayer({50, 1, options::ActivationFunctionType::Linear});
   auto cosineFunction{cosf};
   auto batch{generateBatch(cosineFunction, min, max)};
   print(nn.train({options::OptimizationType::SGD,
@@ -93,9 +93,9 @@ TEST(NeuralNetworkTest, FunctionCosineWith50NeuronsTanHAndSGDOptimization) {
 
 TEST(NeuralNetworkTest, FunctionCubeWith50NeuronsSigmoidAndADAMOptimization) {
   auto min{-2.0}, max{2.0};
-  NeuralNetwork nn{1};
-  nn.addLayer({50, options::ActivationFunctionType::Sigmoid});
-  nn.addLayer({1, options::ActivationFunctionType::Linear});
+  NeuralNetwork nn;
+  nn.addLayer({1, 50, options::ActivationFunctionType::Sigmoid});
+  nn.addLayer({50, 1, options::ActivationFunctionType::Linear});
   auto cubeFunction{std::bind(powf, std::placeholders::_1, 3.0)};
   auto batch{generateBatch(cubeFunction, min, max)};
   print(nn.train({options::OptimizationType::ADAM,
@@ -108,9 +108,9 @@ TEST(NeuralNetworkTest, FunctionCubeWith50NeuronsSigmoidAndADAMOptimization) {
 TEST(NeuralNetworkTest,
      FunctionSqrWith50NeuronsReluAndGradientDescendOptimization) {
   auto min{-2.0}, max{2.0};
-  NeuralNetwork nn{1};
-  nn.addLayer({50, options::ActivationFunctionType::Relu});
-  nn.addLayer({1, options::ActivationFunctionType::Linear});
+  NeuralNetwork nn;
+  nn.addLayer({1, 50, options::ActivationFunctionType::Relu});
+  nn.addLayer({50, 1, options::ActivationFunctionType::Linear});
   auto sqrFunction{std::bind(powf, std::placeholders::_1, 2.0)};
   auto batch{generateBatch(sqrFunction, min, max)};
   print(nn.train({options::OptimizationType::GradientDescend,
@@ -123,10 +123,10 @@ TEST(NeuralNetworkTest,
 TEST(NeuralNetworkTest,
      FunctionSphereWith25NeuronsTanH25NeuronsTanHAndSGDOptimization) {
   auto min1{-1.0}, min2{-1.0}, max1{1.0}, max2{1.0};
-  NeuralNetwork nn{2};
-  nn.addLayer({25, options::ActivationFunctionType::TanH});
-  nn.addLayer({25, options::ActivationFunctionType::TanH});
-  nn.addLayer({1, options::ActivationFunctionType::Linear});
+  NeuralNetwork nn;
+  nn.addLayer({2, 25, options::ActivationFunctionType::TanH});
+  nn.addLayer({25, 25, options::ActivationFunctionType::TanH});
+  nn.addLayer({25, 1, options::ActivationFunctionType::Linear});
   auto sphereFunction{std::bind(
       [](auto x, auto y) { return sqrtf(2. - pow(x, 2.0) - pow(y, 2.0)); },
       std::placeholders::_1, std::placeholders::_2)};

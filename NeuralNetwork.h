@@ -15,7 +15,7 @@ struct TrainingConfig;
 
 class NeuralNetwork {
 public:
-  explicit NeuralNetwork(std::size_t numberOfInputs);
+  NeuralNetwork();
 
   ~NeuralNetwork();
 
@@ -27,7 +27,5 @@ public:
                        const TrainingBatch &batch);
 
 private:
-  const std::size_t m_numberOfInputs;
-  std::size_t m_numberOfOutputs;
   std::vector<Layer> m_layers;
 };
