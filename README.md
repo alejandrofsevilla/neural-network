@@ -1,6 +1,7 @@
 # [![LinuxBuildWorkflow](https://github.com/alejandrofsevilla/neural-network/actions/workflows/LinuxBuild.yml/badge.svg)](https://github.com/alejandrofsevilla/neural-network/actions/workflows/LinuxBuild.yml) [![Testsflow](https://github.com/alejandrofsevilla/neural-network/actions/workflows/LinuxBuildAndTest.yml/badge.svg)](https://github.com/alejandrofsevilla/neural-network/actions/workflows/LinuxBuildAndTest.yml)
 # neural-network
 C++ implementation of neural network class.
+## Interface
 ```cpp
 explicit NeuralNetwork(std::size_t numberOfInputs);
 ```
@@ -19,14 +20,7 @@ TrainingReport NeuralNetwork::train(options::TrainingConfig config, const Traini
 enum class options::ActivationFunctionType { Step, Linear, Relu, Sigmoid, TanH };
 enum class options::CostFunctionType { Quadratic, CostEntropy };
 enum class options::OptimizationType { GradientDescend, ADAM, SGD };
-```
-
-### Requirements
-* C++17 compiler.
-* CMake 3.22.0
-* GoogleTest 1.11.0
-* Eigen 3
-  
+``` 
 ### Build and test
 - Install dependencies.
    ```terminal
@@ -47,6 +41,16 @@ enum class options::OptimizationType { GradientDescend, ADAM, SGD };
 - Run tests.
    ```terminal
    ./build/tests/neural-network-tests
+   ```
+### Include in CMake project
+   ```cmake
+   include(FetchContent)
+   Fetchcontent_Declare(neural-network
+     GIT_REPOSITORY http://github.com/alejandrofsevilla/neural-network.git
+     GIT_TAG "main")
+   FetchContent_Makeavailable(neural-network)
+
+   target_link_libraries(${PROJECT_NAME} PRIVATE neural-network)
    ```
 ## Implementation
 ```mermaid
