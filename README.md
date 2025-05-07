@@ -1,7 +1,7 @@
 # [![LinuxBuildWorkflow](https://github.com/alejandrofsevilla/neural-network/actions/workflows/LinuxBuild.yml/badge.svg)](https://github.com/alejandrofsevilla/neural-network/actions/workflows/LinuxBuild.yml) [![Testsflow](https://github.com/alejandrofsevilla/neural-network/actions/workflows/LinuxBuildAndTest.yml/badge.svg)](https://github.com/alejandrofsevilla/neural-network/actions/workflows/LinuxBuildAndTest.yml)
 # neural-network
 C++ implementation of neural network class.
-## Interface
+## Usage
 ### Member functions
 ```cpp
 NeuralNetwork::NeuralNetwork();
