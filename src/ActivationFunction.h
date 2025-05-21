@@ -3,13 +3,13 @@
 #include <memory>
 
 namespace options {
-enum class ActivationFunctionType;
+enum class ActivationFunction;
 } // namespace options
 
 class ActivationFunction {
 public:
   static std::unique_ptr<ActivationFunction>
-  instance(options::ActivationFunctionType type);
+  instance(options::ActivationFunction type);
 
   virtual ~ActivationFunction() = default;
 

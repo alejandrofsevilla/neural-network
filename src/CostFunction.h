@@ -3,12 +3,12 @@
 #include <memory>
 
 namespace options {
-enum class CostFunctionType;
+enum class CostFunction;
 } // namespace options
 
 class CostFunction {
 public:
-  static std::unique_ptr<CostFunction> instance(options::CostFunctionType type);
+  static std::unique_ptr<CostFunction> instance(options::CostFunction type);
 
   virtual ~CostFunction() = default;
 

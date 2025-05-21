@@ -17,7 +17,7 @@ auto generateGradients(const std::vector<Layer> &layers) {
 } // namespace
 
 GradientDescendOptimizationAlgorithm::GradientDescendOptimizationAlgorithm(
-    options::CostFunctionType costFunction, std::vector<Layer> &layers)
+    options::CostFunction costFunction, std::vector<Layer> &layers)
     : OptimizationAlgorithm{costFunction, layers},
       m_averageGradients{generateGradients(layers)} {}
 

@@ -4,7 +4,7 @@
 #include "Layer.h"
 
 SGDOptimizationAlgorithm::SGDOptimizationAlgorithm(
-    options::CostFunctionType costFunction, std::vector<Layer> &layers)
+    options::CostFunction costFunction, std::vector<Layer> &layers)
     : OptimizationAlgorithm{costFunction, layers} {}
 
 void SGDOptimizationAlgorithm::afterSample() {

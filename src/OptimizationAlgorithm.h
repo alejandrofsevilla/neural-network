@@ -11,15 +11,15 @@ struct TrainingBatch;
 
 namespace options {
 struct TrainingConfig;
-enum class OptimizationType;
-enum class CostFunctionType;
+enum class Optimization;
+enum class CostFunction;
 } // namespace options
 
 class OptimizationAlgorithm {
 public:
   static std::unique_ptr<OptimizationAlgorithm>
-  instance(options::OptimizationType optimization,
-           options::CostFunctionType costFunction, std::vector<Layer> &layers);
+  instance(options::Optimization optimization,
+           options::CostFunction costFunction, std::vector<Layer> &layers);
 
   virtual ~OptimizationAlgorithm() = default;
 
@@ -27,7 +27,7 @@ public:
                      double learnRate, double lossGoal);
 
 protected:
-  OptimizationAlgorithm(options::CostFunctionType costFunction,
+  OptimizationAlgorithm(options::CostFunction costFunction,
                         std::vector<Layer> &layers);
 
   virtual void afterSample();

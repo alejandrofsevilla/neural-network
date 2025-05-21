@@ -4,11 +4,11 @@
 #include <cmath>
 
 std::unique_ptr<CostFunction>
-CostFunction::instance(options::CostFunctionType type) {
+CostFunction::instance(options::CostFunction type) {
   switch (type) {
-  case options::CostFunctionType::Quadratic:
+  case options::CostFunction::Quadratic:
     return std::make_unique<QuadraticCostFunction>();
-  case options::CostFunctionType::CostEntropy:
+  case options::CostFunction::CostEntropy:
     return std::make_unique<CostEntropyCostFunction>();
   default:
     return {};

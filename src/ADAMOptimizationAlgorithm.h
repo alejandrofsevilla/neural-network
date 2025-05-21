@@ -9,12 +9,12 @@ class Layer;
 class CostFunction;
 
 namespace options {
-enum class CostFunctionType;
+enum class CostFunction;
 } // namespace options
 
 class ADAMOptimizationAlgorithm : public OptimizationAlgorithm {
 public:
-  ADAMOptimizationAlgorithm(options::CostFunctionType costFunction,
+  ADAMOptimizationAlgorithm(options::CostFunction costFunction,
                             std::vector<Layer> &layers);
 
 private:

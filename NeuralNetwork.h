@@ -18,7 +18,6 @@ public:
   NeuralNetwork();
 
   ~NeuralNetwork();
-
   std::vector<double> computeOutputs(const std::vector<double> &inputs);
 
   void addLayer(options::LayerConfig config);

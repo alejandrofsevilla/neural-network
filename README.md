@@ -17,21 +17,21 @@ std::vector<double> NeuralNetwork::computeOutputs(const std::vector<double> &inp
 ```
 ### Options
 ```cpp
-enum class options::ActivationFunctionType { Step, Linear, Relu, Sigmoid, TanH };
-enum class options::CostFunctionType { Quadratic, CostEntropy };
-enum class options::OptimizationType { GradientDescend, ADAM, SGD };
+enum class options::ActivationFunction { Step, Linear, Relu, Sigmoid, TanH };
+enum class options::CostFunction { Quadratic, CostEntropy };
+enum class options::Optimization { GradientDescend, ADAM, SGD };
 ``` 
 ```cpp
 struct options::LayerConfig {
   std::size_t numberOfInputs;
   std::size_t numberOfNeurons;
-  options::ActivationFunctionType activationFunction;
+  options::ActivationFunction activationFunction;
 };
 ``` 
 ```cpp
 struct options::TrainingConfig {
-  options::OptimizationType optimization;
-  options::CostFunctionType costFunction;
+  options::Optimization optimization;
+  options::CostFunction costFunction;
   std::size_t maxEpoch;
   double learnRate;
   double lossGoal;
@@ -71,15 +71,15 @@ struct options::TrainingConfig {
 ## Design
 ```mermaid
 classDiagram
-    class C_0004723107453516162687["options::ActivationFunctionType"]
+    class C_0004723107453516162687["options::ActivationFunction"]
     class C_0004723107453516162687 {
         <<enumeration>>
     }
-    class C_0005819293835413443314["options::CostFunctionType"]
+    class C_0005819293835413443314["options::CostFunction"]
     class C_0005819293835413443314 {
         <<enumeration>>
     }
-    class C_0006489356659787961387["options::OptimizationType"]
+    class C_0006489356659787961387["options::Optimization"]
     class C_0006489356659787961387 {
         <<enumeration>>
         GradientDescend

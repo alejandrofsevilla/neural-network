@@ -9,12 +9,12 @@ class Layer;
 class CostFunction;
 
 namespace options {
-enum class CostFunctionType;
+enum class CostFunction;
 } // namespace options
 
 class GradientDescendOptimizationAlgorithm : public OptimizationAlgorithm {
 public:
-  GradientDescendOptimizationAlgorithm(options::CostFunctionType costFunction,
+  GradientDescendOptimizationAlgorithm(options::CostFunction costFunction,
                                        std::vector<Layer> &layers);
 
 private:

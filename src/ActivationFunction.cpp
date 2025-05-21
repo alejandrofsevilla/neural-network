@@ -4,17 +4,17 @@
 #include <cmath>
 
 std::unique_ptr<ActivationFunction>
-ActivationFunction::instance(options::ActivationFunctionType type) {
+ActivationFunction::instance(options::ActivationFunction type) {
   switch (type) {
-  case options::ActivationFunctionType::Step:
+  case options::ActivationFunction::Step:
     return std::make_unique<StepActivationFunction>();
-  case options::ActivationFunctionType::Linear:
+  case options::ActivationFunction::Linear:
     return std::make_unique<LinearActivationFunction>();
-  case options::ActivationFunctionType::Relu:
+  case options::ActivationFunction::Relu:
     return std::make_unique<ReluActivationFunction>();
-  case options::ActivationFunctionType::Sigmoid:
+  case options::ActivationFunction::Sigmoid:
     return std::make_unique<SigmoidActivationFunction>();
-  case options::ActivationFunctionType::TanH:
+  case options::ActivationFunction::TanH:
     return std::make_unique<TanHActivationFunction>();
   default:
     return {};

@@ -3,19 +3,19 @@
 #include <cstddef>
 
 namespace options {
-enum class ActivationFunctionType { Step, Linear, Relu, Sigmoid, TanH };
-enum class CostFunctionType { Quadratic, CostEntropy };
-enum class OptimizationType { GradientDescend, ADAM, SGD };
+enum class ActivationFunction { Step, Linear, Relu, Sigmoid, TanH };
+enum class CostFunction { Quadratic, CostEntropy };
+enum class Optimization { GradientDescend, ADAM, SGD };
 
 struct LayerConfig {
   std::size_t numberOfInputs;
   std::size_t numberOfNeurons;
-  options::ActivationFunctionType activationFunction;
+  options::ActivationFunction activationFunction;
 };
 
 struct TrainingConfig {
-  options::OptimizationType optimization;
-  options::CostFunctionType costFunction;
+  options::Optimization optimization;
+  options::CostFunction costFunction;
   std::size_t maxEpoch;
   double learnRate;
   double lossGoal;

@@ -13,21 +13,21 @@
 #include <iostream>
 #include <random>
 
-OptimizationAlgorithm::OptimizationAlgorithm(
-    options::CostFunctionType costFunction, std::vector<Layer> &layers)
+OptimizationAlgorithm::OptimizationAlgorithm(options::CostFunction costFunction,
+                                             std::vector<Layer> &layers)
     : m_layers{layers}, m_costFunction{CostFunction::instance(costFunction)},
       m_epochCount{0}, m_learnRate{0.0}, m_loss{0.0} {}
 
 std::unique_ptr<OptimizationAlgorithm>
-OptimizationAlgorithm::instance(options::OptimizationType type,
-                                options::CostFunctionType costFunction,
+OptimizationAlgorithm::instance(options::Optimization type,
+                                options::CostFunction costFunction,
                                 std::vector<Layer> &layers) {
   switch (type) {
-  case options::OptimizationType::ADAM:
+  case options::Optimization::ADAM:
     return std::make_unique<ADAMOptimizationAlgorithm>(costFunction, layers);
-  case options::OptimizationType::SGD:
+  case options::Optimization::SGD:
     return std::make_unique<SGDOptimizationAlgorithm>(costFunction, layers);
-  case options::OptimizationType::GradientDescend:
+  case options::Optimization::GradientDescend:
   default:
     return std::make_unique<GradientDescendOptimizationAlgorithm>(costFunction,
                                                                   layers);

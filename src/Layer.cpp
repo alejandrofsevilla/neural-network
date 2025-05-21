@@ -19,7 +19,7 @@ inline auto randomValue(double min, double max) {
 
 Layer::Layer(std::size_t id, std::size_t numberOfInputs,
              std::size_t numberOfNeurons,
-             options::ActivationFunctionType activationFunction)
+             options::ActivationFunction activationFunction)
     : m_id{id}, m_numberOfInputs{numberOfInputs},
       m_numberOfNeurons{numberOfNeurons},
       m_activationFunction{ActivationFunction::instance(activationFunction)},

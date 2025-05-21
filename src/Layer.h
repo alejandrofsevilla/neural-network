@@ -9,13 +9,13 @@ class CostFunction;
 class ActivationFunction;
 
 namespace options {
-enum class ActivationFunctionType;
+enum class ActivationFunction;
 } // namespace options
 
 class Layer {
 public:
   Layer(std::size_t id, std::size_t numberOfInputs, std::size_t numberOfNeurons,
-        options::ActivationFunctionType activationFunction);
+        options::ActivationFunction activationFunction);
 
   std::size_t id() const;
   std::size_t numberOfInputs() const;

@@ -80,12 +80,12 @@ inline auto print(TrainingReport r) {
 TEST(NeuralNetworkTest, FunctionCosineWith50NeuronsTanHAndSGDOptimization) {
   auto min{-1.5 * M_PI}, max{2.5 * M_PI};
   NeuralNetwork nn;
-  nn.addLayer({1, 50, options::ActivationFunctionType::TanH});
-  nn.addLayer({50, 1, options::ActivationFunctionType::Linear});
+  nn.addLayer({1, 50, options::ActivationFunction::TanH});
+  nn.addLayer({50, 1, options::ActivationFunction::Linear});
   auto cosineFunction{cosf};
   auto batch{generateBatch(cosineFunction, min, max)};
-  print(nn.train({options::OptimizationType::SGD,
-                  options::CostFunctionType::Quadratic, 20000, 0.01, 0.0001},
+  print(nn.train({options::Optimization::SGD, options::CostFunction::Quadratic,
+                  20000, 0.01, 0.0001},
                  batch));
   auto tolerance{0.1};
   validate(nn, cosineFunction, min, max, tolerance);
@@ -94,12 +94,12 @@ TEST(NeuralNetworkTest, FunctionCosineWith50NeuronsTanHAndSGDOptimization) {
 TEST(NeuralNetworkTest, FunctionCubeWith50NeuronsSigmoidAndADAMOptimization) {
   auto min{-2.0}, max{2.0};
   NeuralNetwork nn;
-  nn.addLayer({1, 50, options::ActivationFunctionType::Sigmoid});
-  nn.addLayer({50, 1, options::ActivationFunctionType::Linear});
+  nn.addLayer({1, 50, options::ActivationFunction::Sigmoid});
+  nn.addLayer({50, 1, options::ActivationFunction::Linear});
   auto cubeFunction{std::bind(powf, std::placeholders::_1, 3.0)};
   auto batch{generateBatch(cubeFunction, min, max)};
-  print(nn.train({options::OptimizationType::ADAM,
-                  options::CostFunctionType::Quadratic, 20000, 0.005, 0.0001},
+  print(nn.train({options::Optimization::ADAM, options::CostFunction::Quadratic,
+                  20000, 0.005, 0.0001},
                  batch));
   auto tolerance{0.1};
   validate(nn, cubeFunction, min, max, tolerance);
@@ -109,12 +109,12 @@ TEST(NeuralNetworkTest,
      FunctionSqrWith50NeuronsReluAndGradientDescendOptimization) {
   auto min{-2.0}, max{2.0};
   NeuralNetwork nn;
-  nn.addLayer({1, 50, options::ActivationFunctionType::Relu});
-  nn.addLayer({50, 1, options::ActivationFunctionType::Linear});
+  nn.addLayer({1, 50, options::ActivationFunction::Relu});
+  nn.addLayer({50, 1, options::ActivationFunction::Linear});
   auto sqrFunction{std::bind(powf, std::placeholders::_1, 2.0)};
   auto batch{generateBatch(sqrFunction, min, max)};
-  print(nn.train({options::OptimizationType::GradientDescend,
-                  options::CostFunctionType::Quadratic, 20000, 0.05, 0.0001},
+  print(nn.train({options::Optimization::GradientDescend,
+                  options::CostFunction::Quadratic, 20000, 0.05, 0.0001},
                  batch));
   auto tolerance{0.1};
   validate(nn, sqrFunction, min, max, tolerance);
@@ -124,15 +124,15 @@ TEST(NeuralNetworkTest,
      FunctionSphereWith25NeuronsTanH25NeuronsTanHAndSGDOptimization) {
   auto min1{-1.0}, min2{-1.0}, max1{1.0}, max2{1.0};
   NeuralNetwork nn;
-  nn.addLayer({2, 25, options::ActivationFunctionType::TanH});
-  nn.addLayer({25, 25, options::ActivationFunctionType::TanH});
-  nn.addLayer({25, 1, options::ActivationFunctionType::Linear});
+  nn.addLayer({2, 25, options::ActivationFunction::TanH});
+  nn.addLayer({25, 25, options::ActivationFunction::TanH});
+  nn.addLayer({25, 1, options::ActivationFunction::Linear});
   auto sphereFunction{std::bind(
       [](auto x, auto y) { return sqrtf(2. - pow(x, 2.0) - pow(y, 2.0)); },
       std::placeholders::_1, std::placeholders::_2)};
   auto batch{generateBatch(sphereFunction, min1, min2, max1, max2)};
-  print(nn.train({options::OptimizationType::SGD,
-                  options::CostFunctionType::Quadratic, 20000, 0.05, 0.00001},
+  print(nn.train({options::Optimization::SGD, options::CostFunction::Quadratic,
+                  20000, 0.05, 0.00001},
                  batch));
   auto tolerance{0.1};
   validate(nn, sphereFunction, min1, min2, max1, max2, tolerance);
