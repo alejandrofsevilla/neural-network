@@ -7,7 +7,6 @@
 class Layer;
 struct TrainingBatch;
 struct TrainingReport;
-
 namespace options {
 struct LayerConfig;
 struct TrainingConfig;
