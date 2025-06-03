@@ -24,7 +24,6 @@ public:
   double loss() const;
 
   const Eigen::MatrixXd &weights() const;
-
   const Eigen::VectorXd &inputs() const;
   const Eigen::VectorXd &outputs() const;
   const Eigen::VectorXd &errors() const;
