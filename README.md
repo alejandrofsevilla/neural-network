@@ -1,6 +1,6 @@
 # [![LinuxBuildWorkflow](https://github.com/alejandrofsevilla/neural-network/actions/workflows/LinuxBuild.yml/badge.svg)](https://github.com/alejandrofsevilla/neural-network/actions/workflows/LinuxBuild.yml) [![Testsflow](https://github.com/alejandrofsevilla/neural-network/actions/workflows/LinuxBuildAndTest.yml/badge.svg)](https://github.com/alejandrofsevilla/neural-network/actions/workflows/LinuxBuildAndTest.yml)
 # neural-network
-C++ implementation of neural network class usig [Eigen](https://eigen.tuxfamily.org/index.php?title=Main_Page) library for vectorization.
+C++ implementation of neural network class using [Eigen](https://eigen.tuxfamily.org/index.php?title=Main_Page) library for vectorization.
 ## Usage
 ### Member functions
 ```cpp
