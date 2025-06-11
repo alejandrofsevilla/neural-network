@@ -68,175 +68,6 @@ struct options::TrainingConfig {
 
    target_link_libraries(${PROJECT_NAME} PRIVATE neural-network)
    ```
-## Design
-```mermaid
-classDiagram
-    class C_0004723107453516162687["options::ActivationFunction"]
-    class C_0004723107453516162687 {
-        <<enumeration>>
-    }
-    class C_0005819293835413443314["options::CostFunction"]
-    class C_0005819293835413443314 {
-        <<enumeration>>
-    }
-    class C_0006489356659787961387["options::Optimization"]
-    class C_0006489356659787961387 {
-        <<enumeration>>
-        GradientDescend
-        ADAM
-        SGD
-    }
-    class C_0005162987213334549566["options::LayerConfig"]
-    class C_0005162987213334549566 {
-        +numberOfInputs : std::size_t
-        +numberOfNeurons : std::size_t
-    }
-    class C_0009990744508583239417["options::TrainingConfig"]
-    class C_0009990744508583239417 {
-        +learnRate : double
-        +lossGoal : double
-        +maxEpoch : std::size_t
-    }
-    class C_0017517293265978054845["Layer"]
-    class C_0017517293265978054845 {
-        +errors() : [const] const Eigen::VectorXd &
-        +id() : [const] std::size_t
-        +inputs() : [const] const Eigen::VectorXd &
-        +loss() : [const] double
-        +numberOfInputs() : [const] std::size_t
-        +numberOfNeurons() : [const] std::size_t
-        +outputs() : [const] const Eigen::VectorXd &
-        +updateErrors(const Layer & nextLayer) : void
-        +updateErrorsAndLoss(const Eigen::VectorXd & targets, const CostFunction & costFunction) : void
-        +updateOutputs(const Eigen::VectorXd & inputs) : void
-        +updateWeights(double learnRate) : void
-        +updateWeights(const Eigen::MatrixXd & gradients, double learnRate) : void
-        +weights() : [const] const Eigen::MatrixXd &
-        -m_errors : Eigen::VectorXd
-        -m_id : const std::size_t
-        -m_inputs : Eigen::VectorXd
-        -m_loss : double
-        -m_numberOfInputs : const std::size_t
-        -m_numberOfNeurons : const std::size_t
-        -m_outputDerivatives : Eigen::VectorXd
-        -m_outputs : Eigen::VectorXd
-        -m_weights : Eigen::MatrixXd
-    }
-    class C_0016029915442214150756["ActivationFunction"]
-    class C_0016029915442214150756 {
-        <<abstract>>
-        +operator()(double input) : [const] double*
-        +derivative(double input) : [const] double*
-    }
-    class C_0013578780095480796457["StepActivationFunction"]
-    class C_0013578780095480796457 {
-        +operator()(double input) : [const] double
-        +derivative(double input) : [const] double
-    }
-    class C_0011078890997464044819["LinearActivationFunction"]
-    class C_0011078890997464044819 {
-        +operator()(double input) : [const] double
-        +derivative(double input) : [const] double
-    }
-    class C_0002817530414547552801["ReluActivationFunction"]
-    class C_0002817530414547552801 {
-        +operator()(double input) : [const] double
-        +derivative(double input) : [const] double
-    }
-    class C_0011953039370874830196["SigmoidActivationFunction"]
-    class C_0011953039370874830196 {
-        +operator()(double input) : [const] double
-        +derivative(double input) : [const] double
-    }
-    class C_0000064153189652549417["TanHActivationFunction"]
-    class C_0000064153189652549417 {
-        +operator()(double input) : [const] double
-        +derivative(double input) : [const] double
-    }
-    class C_0018195103025728394851["CostFunction"]
-    class C_0018195103025728394851 {
-        <<abstract>>
-        +operator()(double value, double target) : [const] double*
-        +derivative(double value, double target) : [const] double*
-    }
-    class C_0015216133785148867685["QuadraticCostFunction"]
-    class C_0015216133785148867685 {
-        +operator()(double value, double target) : [const] double
-        +derivative(double value, double target) : [const] double
-    }
-    class C_0016477597730260498529["CostEntropyCostFunction"]
-    class C_0016477597730260498529 {
-        +operator()(double value, double target) : [const] double
-        +derivative(double value, double target) : [const] double
-    }
-    class C_0014877256980872623468["OptimizationAlgorithm"]
-    class C_0014877256980872623468 {
-        #afterEpoch() : void
-        #afterSample() : void
-        #backwardPropagate(const std::vector&lt;double&gt; & outputs) : void
-        #forwardPropagate(const std::vector&lt;double&gt; & inputs) : void
-        #preprocess(TrainingBatch & batch) : [const] void
-        +run(TrainingBatch batch, std::size_t maxEpoch, double learnRate, double lossGoal) : TrainingReport
-        #m_epochCount : std::size_t
-        #m_learnRate : double
-        #m_loss : double
-        #m_sampleCount : std::size_t
-    }
-    class C_0011803148689591493735["GradientDescendOptimizationAlgorithm"]
-    class C_0011803148689591493735 {
-        -afterEpoch() : void
-        -afterSample() : void
-        -m_averageGradients : std::vector&lt;Eigen::MatrixXd&gt;
-    }
-    class C_0004972352846766595368["TrainingBatch"]
-    class C_0004972352846766595368 {
-    }
-    class C_0006869410385549763069["TrainingReport"]
-    class C_0006869410385549763069 {
-    }
-    class C_0016902125101895250401["NeuralNetwork"]
-    class C_0016902125101895250401 {
-        +addLayer(options::LayerConfig config) : void
-        +computeOutputs(const std::vector&lt;double&gt; & inputs) : std::vector&lt;double&gt;
-        +train(options::TrainingConfig config, const TrainingBatch & batch) : TrainingReport
-    }
-    class C_0016586572411026969904["TrainingSample"]
-    class C_0016586572411026969904 {
-        +inputs : std::vector&lt;double&gt;
-        +outputs : std::vector&lt;double&gt;
-    }
-    class C_0009936346703037128794["SGDOptimizationAlgorithm"]
-    class C_0009936346703037128794 {
-        -afterSample() : void
-    }
-    class C_0012912509499042389263["ADAMOptimizationAlgorithm"]
-    class C_0012912509499042389263 {
-        -afterSample() : void
-        -computeGradients(std::size_t layerId) : Eigen::MatrixXd
-        -m_momentEstimates : std::vector&lt;Eigen::MatrixX&lt;std::pair&lt;double,double&gt;&gt;&gt;
-    }
-    C_0005162987213334549566 o-- C_0004723107453516162687 : +activationFunction
-    C_0009990744508583239417 o-- C_0006489356659787961387 : +optimization
-    C_0009990744508583239417 o-- C_0005819293835413443314 : +costFunction
-    C_0017517293265978054845 o-- C_0016029915442214150756 : -m_activationFunction
-    C_0016029915442214150756 <|-- C_0013578780095480796457 : 
-    C_0016029915442214150756 <|-- C_0011078890997464044819 : 
-    C_0016029915442214150756 <|-- C_0002817530414547552801 : 
-    C_0016029915442214150756 <|-- C_0011953039370874830196 : 
-    C_0016029915442214150756 <|-- C_0000064153189652549417 : 
-    C_0018195103025728394851 <|-- C_0015216133785148867685 : 
-    C_0018195103025728394851 <|-- C_0016477597730260498529 : 
-    C_0014877256980872623468 --> C_0017517293265978054845 : #m_layers
-    C_0014877256980872623468 o-- C_0018195103025728394851 : #m_costFunction
-    C_0014877256980872623468 <|-- C_0011803148689591493735 : 
-    C_0016902125101895250401 o-- C_0017517293265978054845 : -m_layers
-    C_0014877256980872623468 <|-- C_0009936346703037128794 : 
-    C_0014877256980872623468 <|-- C_0012912509499042389263 : 
-
-%% Generated with clang-uml, version 0.6.0
-%% LLVM version Ubuntu clang version 15.0.7
-
-```
 ## Documentation
 ### List of Symbols
 $\large s$ *= sample*\
@@ -444,10 +275,181 @@ $$ \large \beta_1 = 0.9 $$
 
 $$ \large \beta_2 = 0.999 $$
 
+### Architecture
+```mermaid
+classDiagram
+    class C_0004723107453516162687["options::ActivationFunction"]
+    class C_0004723107453516162687 {
+        <<enumeration>>
+    }
+    class C_0005819293835413443314["options::CostFunction"]
+    class C_0005819293835413443314 {
+        <<enumeration>>
+    }
+    class C_0006489356659787961387["options::Optimization"]
+    class C_0006489356659787961387 {
+        <<enumeration>>
+        GradientDescend
+        ADAM
+        SGD
+    }
+    class C_0005162987213334549566["options::LayerConfig"]
+    class C_0005162987213334549566 {
+        +numberOfInputs : std::size_t
+        +numberOfNeurons : std::size_t
+    }
+    class C_0009990744508583239417["options::TrainingConfig"]
+    class C_0009990744508583239417 {
+        +learnRate : double
+        +lossGoal : double
+        +maxEpoch : std::size_t
+    }
+    class C_0017517293265978054845["Layer"]
+    class C_0017517293265978054845 {
+        +errors() : [const] const Eigen::VectorXd &
+        +id() : [const] std::size_t
+        +inputs() : [const] const Eigen::VectorXd &
+        +loss() : [const] double
+        +numberOfInputs() : [const] std::size_t
+        +numberOfNeurons() : [const] std::size_t
+        +outputs() : [const] const Eigen::VectorXd &
+        +updateErrors(const Layer & nextLayer) : void
+        +updateErrorsAndLoss(const Eigen::VectorXd & targets, const CostFunction & costFunction) : void
+        +updateOutputs(const Eigen::VectorXd & inputs) : void
+        +updateWeights(double learnRate) : void
+        +updateWeights(const Eigen::MatrixXd & gradients, double learnRate) : void
+        +weights() : [const] const Eigen::MatrixXd &
+        -m_errors : Eigen::VectorXd
+        -m_id : const std::size_t
+        -m_inputs : Eigen::VectorXd
+        -m_loss : double
+        -m_numberOfInputs : const std::size_t
+        -m_numberOfNeurons : const std::size_t
+        -m_outputDerivatives : Eigen::VectorXd
+        -m_outputs : Eigen::VectorXd
+        -m_weights : Eigen::MatrixXd
+    }
+    class C_0016029915442214150756["ActivationFunction"]
+    class C_0016029915442214150756 {
+        <<abstract>>
+        +operator()(double input) : [const] double*
+        +derivative(double input) : [const] double*
+    }
+    class C_0013578780095480796457["StepActivationFunction"]
+    class C_0013578780095480796457 {
+        +operator()(double input) : [const] double
+        +derivative(double input) : [const] double
+    }
+    class C_0011078890997464044819["LinearActivationFunction"]
+    class C_0011078890997464044819 {
+        +operator()(double input) : [const] double
+        +derivative(double input) : [const] double
+    }
+    class C_0002817530414547552801["ReluActivationFunction"]
+    class C_0002817530414547552801 {
+        +operator()(double input) : [const] double
+        +derivative(double input) : [const] double
+    }
+    class C_0011953039370874830196["SigmoidActivationFunction"]
+    class C_0011953039370874830196 {
+        +operator()(double input) : [const] double
+        +derivative(double input) : [const] double
+    }
+    class C_0000064153189652549417["TanHActivationFunction"]
+    class C_0000064153189652549417 {
+        +operator()(double input) : [const] double
+        +derivative(double input) : [const] double
+    }
+    class C_0018195103025728394851["CostFunction"]
+    class C_0018195103025728394851 {
+        <<abstract>>
+        +operator()(double value, double target) : [const] double*
+        +derivative(double value, double target) : [const] double*
+    }
+    class C_0015216133785148867685["QuadraticCostFunction"]
+    class C_0015216133785148867685 {
+        +operator()(double value, double target) : [const] double
+        +derivative(double value, double target) : [const] double
+    }
+    class C_0016477597730260498529["CostEntropyCostFunction"]
+    class C_0016477597730260498529 {
+        +operator()(double value, double target) : [const] double
+        +derivative(double value, double target) : [const] double
+    }
+    class C_0014877256980872623468["OptimizationAlgorithm"]
+    class C_0014877256980872623468 {
+        #afterEpoch() : void
+        #afterSample() : void
+        #backwardPropagate(const std::vector&lt;double&gt; & outputs) : void
+        #forwardPropagate(const std::vector&lt;double&gt; & inputs) : void
+        #preprocess(TrainingBatch & batch) : [const] void
+        +run(TrainingBatch batch, std::size_t maxEpoch, double learnRate, double lossGoal) : TrainingReport
+        #m_epochCount : std::size_t
+        #m_learnRate : double
+        #m_loss : double
+        #m_sampleCount : std::size_t
+    }
+    class C_0011803148689591493735["GradientDescendOptimizationAlgorithm"]
+    class C_0011803148689591493735 {
+        -afterEpoch() : void
+        -afterSample() : void
+        -m_averageGradients : std::vector&lt;Eigen::MatrixXd&gt;
+    }
+    class C_0004972352846766595368["TrainingBatch"]
+    class C_0004972352846766595368 {
+    }
+    class C_0006869410385549763069["TrainingReport"]
+    class C_0006869410385549763069 {
+    }
+    class C_0016902125101895250401["NeuralNetwork"]
+    class C_0016902125101895250401 {
+        +addLayer(options::LayerConfig config) : void
+        +computeOutputs(const std::vector&lt;double&gt; & inputs) : std::vector&lt;double&gt;
+        +train(options::TrainingConfig config, const TrainingBatch & batch) : TrainingReport
+    }
+    class C_0016586572411026969904["TrainingSample"]
+    class C_0016586572411026969904 {
+        +inputs : std::vector&lt;double&gt;
+        +outputs : std::vector&lt;double&gt;
+    }
+    class C_0009936346703037128794["SGDOptimizationAlgorithm"]
+    class C_0009936346703037128794 {
+        -afterSample() : void
+    }
+    class C_0012912509499042389263["ADAMOptimizationAlgorithm"]
+    class C_0012912509499042389263 {
+        -afterSample() : void
+        -computeGradients(std::size_t layerId) : Eigen::MatrixXd
+        -m_momentEstimates : std::vector&lt;Eigen::MatrixX&lt;std::pair&lt;double,double&gt;&gt;&gt;
+    }
+    C_0005162987213334549566 o-- C_0004723107453516162687 : +activationFunction
+    C_0009990744508583239417 o-- C_0006489356659787961387 : +optimization
+    C_0009990744508583239417 o-- C_0005819293835413443314 : +costFunction
+    C_0017517293265978054845 o-- C_0016029915442214150756 : -m_activationFunction
+    C_0016029915442214150756 <|-- C_0013578780095480796457 : 
+    C_0016029915442214150756 <|-- C_0011078890997464044819 : 
+    C_0016029915442214150756 <|-- C_0002817530414547552801 : 
+    C_0016029915442214150756 <|-- C_0011953039370874830196 : 
+    C_0016029915442214150756 <|-- C_0000064153189652549417 : 
+    C_0018195103025728394851 <|-- C_0015216133785148867685 : 
+    C_0018195103025728394851 <|-- C_0016477597730260498529 : 
+    C_0014877256980872623468 --> C_0017517293265978054845 : #m_layers
+    C_0014877256980872623468 o-- C_0018195103025728394851 : #m_costFunction
+    C_0014877256980872623468 <|-- C_0011803148689591493735 : 
+    C_0016902125101895250401 o-- C_0017517293265978054845 : -m_layers
+    C_0014877256980872623468 <|-- C_0009936346703037128794 : 
+    C_0014877256980872623468 <|-- C_0012912509499042389263 : 
+
+%% Generated with clang-uml, version 0.6.0
+%% LLVM version Ubuntu clang version 15.0.7
+```
+
 ### References
 - http://neuralnetworksanddeeplearning.com/
 - https://ml-cheatsheet.readthedocs.io/en/latest/nn_concepts.html
 - https://stats.stackexchange.com/questions/154879/a-list-of-cost-functions-used-in-neural-networks-alongside-applications
 - https://en.wikipedia.org/wiki/Activation_function#Table_of_activation_functions
+
+
 
 
