@@ -109,7 +109,7 @@ $$ \large
 \Delta b_{n_l} = - α \cdot O\big(\frac {\partial C}{\partial {b_{n_l}}}\big)
 $$
 
-#### Chain Rule:
+#### Applying the chain rule:
 
 $$ \large
 \frac {\partial C}{\partial {w_{n_{l-1}n_l}}} 
