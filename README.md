@@ -98,7 +98,7 @@ $$
 
 ### Training 
 <p align="justify">
-Errors of the network are reduced by an optimization algorithm $O$ that uses the derivatives of the cost function ${\partial C}/{\partial {w_{n_{l-1}n_l}}}$ and ${\partial C}/{\partial {b_{n_l}}}$ to periodically update the network weights and biases.
+Errors of the network are reduced by an optimization algorithm $O$ that aims to minimize the cost function $C$ by periodically updating the network weights and biases. Any optimization algorithm will requiere to previously calculate the derivatives of the cost function ${\partial C}/{\partial {w_{n_{l-1}n_l}}}$ and ${\partial C}/{\partial {b_{n_l}}}$.
 </p>
 
 $$ \large
