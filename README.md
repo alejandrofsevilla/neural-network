@@ -17,15 +17,13 @@ std::vector<double> NeuralNetwork::computeOutputs(const std::vector<double>&);
 enum class options::ActivationFunction { Step, Linear, Relu, Sigmoid, TanH };
 enum class options::CostFunction { Quadratic, CostEntropy };
 enum class options::Optimization { GradientDescend, ADAM, SGD };
-``` 
-```cpp
+
 struct options::LayerConfig {
   std::size_t numberOfInputs;
   std::size_t numberOfNeurons;
   options::ActivationFunction activationFunction;
 };
-``` 
-```cpp
+
 struct options::TrainingConfig {
   options::Optimization optimization;
   options::CostFunction costFunction;
