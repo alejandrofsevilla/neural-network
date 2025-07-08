@@ -6,9 +6,9 @@ C++ implementation of neural network class with [Eigen](https://eigen.tuxfamily.
 ```cpp
 NeuralNetwork::NeuralNetwork();
 
-void NeuralNetwork::addLayer(options::LayerConfig);
+void NeuralNetwork::addLayer(options::Layer);
 
-TrainingReport NeuralNetwork::train(options::TrainingConfig, const TrainingBatch&);
+TrainingReport NeuralNetwork::train(options::Training, const TrainingBatch&);
 
 std::vector<double> NeuralNetwork::computeOutputs(const std::vector<double>&);
 ```
@@ -18,13 +18,13 @@ enum class options::ActivationFunction { Step, Linear, Relu, Sigmoid, TanH };
 enum class options::CostFunction { Quadratic, CostEntropy };
 enum class options::Optimization { GradientDescend, ADAM, SGD };
 
-struct options::LayerConfig {
+struct options::Layer {
   std::size_t numberOfInputs;
   std::size_t numberOfNeurons;
   options::ActivationFunction activationFunction;
 };
 
-struct options::TrainingConfig {
+struct options::Training {
   options::Optimization optimization;
   options::CostFunction costFunction;
   std::size_t maxEpoch;
@@ -288,12 +288,12 @@ classDiagram
         ADAM
         SGD
     }
-    class C_0005162987213334549566["options::LayerConfig"]
+    class C_0005162987213334549566["options::Layer"]
     class C_0005162987213334549566 {
         +numberOfInputs : std::size_t
         +numberOfNeurons : std::size_t
     }
-    class C_0009990744508583239417["options::TrainingConfig"]
+    class C_0009990744508583239417["options::Training"]
     class C_0009990744508583239417 {
         +learnRate : double
         +lossGoal : double
@@ -398,9 +398,9 @@ classDiagram
     }
     class C_0016902125101895250401["NeuralNetwork"]
     class C_0016902125101895250401 {
-        +addLayer(options::LayerConfig config) : void
+        +addLayer(options::Layer config) : void
         +computeOutputs(const std::vector&lt;double&gt; & inputs) : std::vector&lt;double&gt;
-        +train(options::TrainingConfig config, const TrainingBatch & batch) : TrainingReport
+        +train(options::Training config, const TrainingBatch & batch) : TrainingReport
     }
     class C_0016586572411026969904["TrainingSample"]
     class C_0016586572411026969904 {

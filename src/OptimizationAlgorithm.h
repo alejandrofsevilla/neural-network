@@ -10,7 +10,7 @@ struct TrainingReport;
 struct TrainingBatch;
 
 namespace options {
-struct TrainingConfig;
+struct Training;
 enum class Optimization;
 enum class CostFunction;
 } // namespace options

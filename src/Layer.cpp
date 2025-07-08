@@ -75,9 +75,11 @@ void Layer::updateErrors(const Layer &nextLayer) {
 void Layer::updateErrorsAndLoss(const Eigen::VectorXd &targets,
                                 const CostFunction &costFunction) {
   m_loss = 0;
-  m_errors =
-      m_outputs.binaryExpr(targets, [this, &costFunction](auto o, auto t) {
-        m_loss += costFunction(o, t) / m_numberOfNeurons;
-        return costFunction.derivative(o, t);
-      });
+  m_errors = m_outputs
+                 .binaryExpr(targets,
+                             [this, &costFunction](auto o, auto t) {
+                               m_loss += costFunction(o, t) / m_numberOfNeurons;
+                               return costFunction.derivative(o, t);
+                             })
+                 .cwiseProduct(m_outputDerivatives);
 }

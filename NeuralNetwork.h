@@ -7,9 +7,10 @@
 class Layer;
 struct TrainingBatch;
 struct TrainingReport;
+
 namespace options {
-struct LayerConfig;
-struct TrainingConfig;
+struct Layer;
+struct Training;
 } // namespace options
 
 class NeuralNetwork {
@@ -19,10 +20,9 @@ public:
 
   std::vector<double> computeOutputs(const std::vector<double> &inputs);
 
-  void addLayer(options::LayerConfig config);
+  void addLayer(options::Layer opt);
 
-  TrainingReport train(options::TrainingConfig config,
-                       const TrainingBatch &batch);
+  TrainingReport train(options::Training opt, const TrainingBatch &batch);
 
 private:
   std::vector<Layer> m_layers;

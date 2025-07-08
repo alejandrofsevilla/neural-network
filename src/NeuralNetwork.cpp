@@ -32,20 +32,19 @@ NeuralNetwork::computeOutputs(const std::vector<double> &inputs) {
   return {outputs.cbegin(), outputs.cend()};
 }
 
-TrainingReport NeuralNetwork::train(options::TrainingConfig config,
+TrainingReport NeuralNetwork::train(options::Training opt,
                                     const TrainingBatch &batch) {
-  auto optimizator{OptimizationAlgorithm::instance(
-      config.optimization, config.costFunction, m_layers)};
-  return optimizator->run(batch, config.maxEpoch, config.learnRate,
-                          config.lossGoal);
+  auto optimizator{OptimizationAlgorithm::instance(opt.optimization,
+                                                   opt.costFunction, m_layers)};
+  return optimizator->run(batch, opt.maxEpoch, opt.learnRate, opt.lossGoal);
 }
 
-void NeuralNetwork::addLayer(options::LayerConfig config) {
+void NeuralNetwork::addLayer(options::Layer opt) {
   if (!m_layers.empty() &&
-      config.numberOfInputs != m_layers.back().numberOfNeurons()) {
+      opt.numberOfInputs != m_layers.back().numberOfNeurons()) {
     std::cerr << "error: layer has incorrect dimensions." << std::endl;
     return;
   }
-  m_layers.emplace_back(m_layers.size(), config.numberOfInputs,
-                        config.numberOfNeurons, config.activationFunction);
+  m_layers.emplace_back(m_layers.size(), opt.numberOfInputs,
+                        opt.numberOfNeurons, opt.activationFunction);
 }
