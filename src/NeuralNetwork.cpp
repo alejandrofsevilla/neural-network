@@ -10,12 +10,12 @@
 
 #include <iostream>
 
-NeuralNetwork::NeuralNetwork() : m_layers{} {}
+NeuralNetwork::NeuralNetwork() noexcept : m_layers{} {}
 
-NeuralNetwork::~NeuralNetwork() = default;
+NeuralNetwork::~NeuralNetwork() noexcept = default;
 
 std::vector<double>
-NeuralNetwork::computeOutputs(const std::vector<double> &inputs) {
+NeuralNetwork::computeOutputs(const std::vector<double> &inputs) noexcept {
   if (m_layers.empty()) {
     return inputs;
   }
@@ -33,13 +33,13 @@ NeuralNetwork::computeOutputs(const std::vector<double> &inputs) {
 }
 
 TrainingReport NeuralNetwork::train(options::Training opt,
-                                    const TrainingBatch &batch) {
+                                    const TrainingBatch &batch) noexcept {
   auto optimizator{OptimizationAlgorithm::instance(opt.optimization,
                                                    opt.costFunction, m_layers)};
   return optimizator->run(batch, opt.maxEpoch, opt.learnRate, opt.lossGoal);
 }
 
-void NeuralNetwork::addLayer(options::Layer opt) {
+void NeuralNetwork::addLayer(options::Layer opt) noexcept {
   if (!m_layers.empty() &&
       opt.numberOfInputs != m_layers.back().numberOfNeurons()) {
     std::cerr << "error: layer has incorrect dimensions." << std::endl;

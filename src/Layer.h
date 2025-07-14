@@ -15,25 +15,26 @@ enum class ActivationFunction;
 class Layer {
 public:
   Layer(std::size_t id, std::size_t numberOfInputs, std::size_t numberOfNeurons,
-        options::ActivationFunction activationFunction);
+        options::ActivationFunction activationFunction) noexcept;
 
-  std::size_t id() const;
-  std::size_t numberOfInputs() const;
-  std::size_t numberOfNeurons() const;
+  std::size_t id() const noexcept;
+  std::size_t numberOfInputs() const noexcept;
+  std::size_t numberOfNeurons() const noexcept;
 
-  double loss() const;
+  double loss() const noexcept;
 
-  const Eigen::MatrixXd &weights() const;
-  const Eigen::VectorXd &inputs() const;
-  const Eigen::VectorXd &outputs() const;
-  const Eigen::VectorXd &errors() const;
+  const Eigen::MatrixXd &weights() const noexcept;
+  const Eigen::VectorXd &inputs() const noexcept;
+  const Eigen::VectorXd &outputs() const noexcept;
+  const Eigen::VectorXd &errors() const noexcept;
 
-  void updateWeights(double learnRate);
-  void updateWeights(const Eigen::MatrixXd &gradients, double learnRate);
-  void updateOutputs(const Eigen::VectorXd &inputs);
-  void updateErrors(const Layer &nextLayer);
+  void updateWeights(double learnRate) noexcept;
+  void updateWeights(const Eigen::MatrixXd &gradients,
+                     double learnRate) noexcept;
+  void updateOutputs(const Eigen::VectorXd &inputs) noexcept;
+  void updateErrors(const Layer &nextLayer) noexcept;
   void updateErrorsAndLoss(const Eigen::VectorXd &targets,
-                           const CostFunction &costFunction);
+                           const CostFunction &costFunction) noexcept;
 
 private:
   const std::size_t m_id;

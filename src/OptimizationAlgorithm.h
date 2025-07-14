@@ -19,23 +19,24 @@ class OptimizationAlgorithm {
 public:
   static std::unique_ptr<OptimizationAlgorithm>
   instance(options::Optimization optimization,
-           options::CostFunction costFunction, std::vector<Layer> &layers);
+           options::CostFunction costFunction,
+           std::vector<Layer> &layers) noexcept;
 
-  virtual ~OptimizationAlgorithm() = default;
+  virtual ~OptimizationAlgorithm() noexcept = default;
 
   TrainingReport run(TrainingBatch batch, std::size_t maxEpoch,
-                     double learnRate, double lossGoal);
+                     double learnRate, double lossGoal) noexcept;
 
 protected:
   OptimizationAlgorithm(options::CostFunction costFunction,
-                        std::vector<Layer> &layers);
+                        std::vector<Layer> &layers) noexcept;
 
-  virtual void afterSample();
-  virtual void afterEpoch();
+  virtual void afterSample() noexcept;
+  virtual void afterEpoch() noexcept;
 
-  void forwardPropagate(const std::vector<double> &inputs);
-  void backwardPropagate(const std::vector<double> &outputs);
-  void preprocess(TrainingBatch &batch) const;
+  void forwardPropagate(const std::vector<double> &inputs) noexcept;
+  void backwardPropagate(const std::vector<double> &outputs) noexcept;
+  void preprocess(TrainingBatch &batch) const noexcept;
 
   std::vector<Layer> &m_layers;
   std::unique_ptr<CostFunction> m_costFunction;

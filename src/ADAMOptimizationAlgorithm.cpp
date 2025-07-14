@@ -24,18 +24,18 @@ auto generateMomentEstimates(const std::vector<Layer> &layers) {
 } // namespace
 
 ADAMOptimizationAlgorithm::ADAMOptimizationAlgorithm(
-    options::CostFunction costFunction, std::vector<Layer> &layers)
+    options::CostFunction costFunction, std::vector<Layer> &layers) noexcept
     : OptimizationAlgorithm{costFunction, layers},
       m_momentEstimates{generateMomentEstimates(layers)} {}
 
-void ADAMOptimizationAlgorithm::afterSample() {
+void ADAMOptimizationAlgorithm::afterSample() noexcept {
   std::for_each(m_layers.begin(), m_layers.end(), [this](auto &l) {
     l.updateWeights(computeGradients(l.id()), m_learnRate);
   });
 }
 
 Eigen::MatrixXd
-ADAMOptimizationAlgorithm::computeGradients(std::size_t layerId) {
+ADAMOptimizationAlgorithm::computeGradients(std::size_t layerId) noexcept {
   auto &layer{m_layers.at(layerId)};
   Eigen::MatrixXd gradients{layer.inputs() * layer.errors().transpose()};
   auto gradientsView{gradients.reshaped()};

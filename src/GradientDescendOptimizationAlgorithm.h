@@ -15,11 +15,11 @@ enum class CostFunction;
 class GradientDescendOptimizationAlgorithm : public OptimizationAlgorithm {
 public:
   GradientDescendOptimizationAlgorithm(options::CostFunction costFunction,
-                                       std::vector<Layer> &layers);
+                                       std::vector<Layer> &layers) noexcept;
 
 private:
-  void afterSample() override;
-  void afterEpoch() override;
+  void afterSample() noexcept override;
+  void afterEpoch() noexcept override;
 
   std::vector<Eigen::MatrixXd> m_averageGradients;
 };

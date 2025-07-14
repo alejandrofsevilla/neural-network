@@ -15,12 +15,12 @@ enum class CostFunction;
 class ADAMOptimizationAlgorithm : public OptimizationAlgorithm {
 public:
   ADAMOptimizationAlgorithm(options::CostFunction costFunction,
-                            std::vector<Layer> &layers);
+                            std::vector<Layer> &layers) noexcept;
 
 private:
-  void afterSample() override;
+  void afterSample() noexcept override;
 
-  Eigen::MatrixXd computeGradients(std::size_t layerId);
+  Eigen::MatrixXd computeGradients(std::size_t layerId) noexcept;
 
   std::vector<Eigen::MatrixX<std::pair<double, double>>> m_momentEstimates;
 };

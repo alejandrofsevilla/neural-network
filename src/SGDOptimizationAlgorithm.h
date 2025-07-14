@@ -14,8 +14,8 @@ enum class CostFunction;
 class SGDOptimizationAlgorithm : public OptimizationAlgorithm {
 public:
   SGDOptimizationAlgorithm(options::CostFunction costFunction,
-                           std::vector<Layer> &layers);
+                           std::vector<Layer> &layers) noexcept;
 
 private:
-  void afterSample() override;
+  void afterSample() noexcept override;
 };

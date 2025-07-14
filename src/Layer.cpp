@@ -19,7 +19,7 @@ inline auto randomValue(double min, double max) {
 
 Layer::Layer(std::size_t id, std::size_t numberOfInputs,
              std::size_t numberOfNeurons,
-             options::ActivationFunction activationFunction)
+             options::ActivationFunction activationFunction) noexcept
     : m_id{id}, m_numberOfInputs{numberOfInputs},
       m_numberOfNeurons{numberOfNeurons},
       m_activationFunction{ActivationFunction::instance(activationFunction)},
@@ -32,31 +32,34 @@ Layer::Layer(std::size_t id, std::size_t numberOfInputs,
           std::bind(randomValue, f_weightInitMinValue, f_weightInitMaxValue))},
       m_loss{} {}
 
-std::size_t Layer::id() const { return m_id; }
+std::size_t Layer::id() const noexcept { return m_id; }
 
-std::size_t Layer::numberOfInputs() const { return m_numberOfInputs; }
+std::size_t Layer::numberOfInputs() const noexcept { return m_numberOfInputs; }
 
-std::size_t Layer::numberOfNeurons() const { return m_numberOfNeurons; }
+std::size_t Layer::numberOfNeurons() const noexcept {
+  return m_numberOfNeurons;
+}
 
-double Layer::loss() const { return m_loss; }
+double Layer::loss() const noexcept { return m_loss; }
 
-const Eigen::MatrixXd &Layer::weights() const { return m_weights; }
+const Eigen::MatrixXd &Layer::weights() const noexcept { return m_weights; }
 
-const Eigen::VectorXd &Layer::inputs() const { return m_inputs; }
+const Eigen::VectorXd &Layer::inputs() const noexcept { return m_inputs; }
 
-const Eigen::VectorXd &Layer::outputs() const { return m_outputs; }
+const Eigen::VectorXd &Layer::outputs() const noexcept { return m_outputs; }
 
-const Eigen::VectorXd &Layer::errors() const { return m_errors; }
+const Eigen::VectorXd &Layer::errors() const noexcept { return m_errors; }
 
-void Layer::updateWeights(double learnRate) {
+void Layer::updateWeights(double learnRate) noexcept {
   m_weights -= m_inputs * m_errors.transpose() * learnRate;
 }
 
-void Layer::updateWeights(const Eigen::MatrixXd &gradients, double learnRate) {
+void Layer::updateWeights(const Eigen::MatrixXd &gradients,
+                          double learnRate) noexcept {
   m_weights -= learnRate * gradients;
 }
 
-void Layer::updateOutputs(const Eigen::VectorXd &inputs) {
+void Layer::updateOutputs(const Eigen::VectorXd &inputs) noexcept {
   m_inputs.head(inputs.size()) = inputs;
   Eigen::VectorXd intermediateQuantities{m_inputs.transpose() * m_weights};
   m_outputs = intermediateQuantities.unaryExpr(
@@ -65,7 +68,7 @@ void Layer::updateOutputs(const Eigen::VectorXd &inputs) {
       [this](auto q) { return m_activationFunction->derivative(q); });
 }
 
-void Layer::updateErrors(const Layer &nextLayer) {
+void Layer::updateErrors(const Layer &nextLayer) noexcept {
   auto &nextLayerWeights{nextLayer.weights()};
   m_errors = (nextLayerWeights.topRows(nextLayerWeights.rows() - 1) *
               nextLayer.errors())
@@ -73,7 +76,7 @@ void Layer::updateErrors(const Layer &nextLayer) {
 }
 
 void Layer::updateErrorsAndLoss(const Eigen::VectorXd &targets,
-                                const CostFunction &costFunction) {
+                                const CostFunction &costFunction) noexcept {
   m_loss = 0;
   m_errors = m_outputs
                  .binaryExpr(targets,

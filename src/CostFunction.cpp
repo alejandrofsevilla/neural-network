@@ -4,7 +4,7 @@
 #include <cmath>
 
 std::unique_ptr<CostFunction>
-CostFunction::instance(options::CostFunction type) {
+CostFunction::instance(options::CostFunction type) noexcept {
   switch (type) {
   case options::CostFunction::Quadratic:
     return std::make_unique<QuadraticCostFunction>();
@@ -15,18 +15,22 @@ CostFunction::instance(options::CostFunction type) {
   }
 }
 
-double QuadraticCostFunction::operator()(double value, double target) const {
+double QuadraticCostFunction::operator()(double value,
+                                         double target) const noexcept {
   return 0.5 * pow((value - target), 2.0);
 }
 
-double QuadraticCostFunction::derivative(double value, double target) const {
+double QuadraticCostFunction::derivative(double value,
+                                         double target) const noexcept {
   return value - target;
 }
 
-double CostEntropyCostFunction::operator()(double value, double target) const {
+double CostEntropyCostFunction::operator()(double value,
+                                           double target) const noexcept {
   return -(target * log(value) + (1.0 - target) * log(1.0 - value));
 }
 
-double CostEntropyCostFunction::derivative(double value, double target) const {
+double CostEntropyCostFunction::derivative(double value,
+                                           double target) const noexcept {
   return (value - target) / ((1.0 - value) * target);
 }
