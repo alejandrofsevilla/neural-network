@@ -8,23 +8,22 @@ enum class CostFunction;
 
 class CostFunction {
 public:
-  static std::unique_ptr<CostFunction>
-  instance(options::CostFunction type) noexcept;
+  static std::unique_ptr<CostFunction> instance(options::CostFunction type);
 
-  virtual ~CostFunction() noexcept = default;
+  virtual ~CostFunction() = default;
 
-  virtual double operator()(double value, double target) const noexcept = 0;
-  virtual double derivative(double value, double target) const noexcept = 0;
+  virtual double operator()(double value, double target) const = 0;
+  virtual double derivative(double value, double target) const = 0;
 };
 
 class QuadraticCostFunction : public CostFunction {
 public:
-  double operator()(double value, double target) const noexcept override;
-  double derivative(double value, double target) const noexcept override;
+  double operator()(double value, double target) const override;
+  double derivative(double value, double target) const override;
 };
 
 class CostEntropyCostFunction : public CostFunction {
 public:
-  double operator()(double value, double target) const noexcept override;
-  double derivative(double value, double target) const noexcept override;
+  double operator()(double value, double target) const override;
+  double derivative(double value, double target) const override;
 };

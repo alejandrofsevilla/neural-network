@@ -4,13 +4,13 @@ C++ implementation of neural network class with [Eigen](https://eigen.tuxfamily.
 ## Usage
 ### Member functions
 ```cpp
-NeuralNetwork::NeuralNetwork() noexcept;
+NeuralNetwork::NeuralNetwork();
 
-void NeuralNetwork::addLayer(options::Layer) noexcept;
+void NeuralNetwork::addLayer(options::Layer);
 
-TrainingReport NeuralNetwork::train(options::Training, const TrainingBatch&) noexcept;
+TrainingReport NeuralNetwork::train(options::Training, const TrainingBatch&);
 
-[[nodiscard]] std::vector<double> NeuralNetwork::computeOutputs(const std::vector<double>&) noexcept;
+std::vector<double> NeuralNetwork::computeOutputs(const std::vector<double>&);
 ```
 ### Options
 ```cpp

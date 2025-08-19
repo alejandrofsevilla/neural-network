@@ -15,16 +15,14 @@ struct Training;
 
 class NeuralNetwork {
 public:
-  NeuralNetwork() noexcept;
-  ~NeuralNetwork() noexcept;
+  NeuralNetwork();
+  ~NeuralNetwork();
 
-  void addLayer(options::Layer opt) noexcept;
+  std::vector<double> computeOutputs(const std::vector<double> &inputs);
 
-  [[nodiscard]] std::vector<double>
-  computeOutputs(const std::vector<double> &inputs) noexcept;
+  void addLayer(options::Layer opt);
 
-  TrainingReport train(options::Training opt,
-                       const TrainingBatch &batch) noexcept;
+  TrainingReport train(options::Training opt, const TrainingBatch &batch);
 
 private:
   std::vector<Layer> m_layers;
